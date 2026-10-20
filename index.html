@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ギルティー・インフルエンサー</title>
+<meta name="description" content="上京した25歳無職・欺流亭ことみ。半年・12ターンでフォロワー10万人を目指すInstagram風SNS炎上シミュレーション。写真ガチャ×投稿文4択で、万バズか大炎上か。無料・登録不要。">
+<meta property="og:title" content="ギルティー・インフルエンサー">
+<meta property="og:description" content="半年で10万人いけなかったら田舎送り。写真ガチャ×投稿文4択で万バズか大炎上か。……一見清純な投稿文にも地雷がある。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://red-freegames.github.io/guilty-influencer/">
+<meta property="og:image" content="https://red-freegames.github.io/guilty-influencer/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="ギルティー・インフルエンサー">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ギルティー・インフルエンサー">
+<meta name="twitter:description" content="半年で10万人いけなかったら田舎送り。写真ガチャ×投稿文4択で万バズか大炎上か。">
+<meta name="twitter:image" content="https://red-freegames.github.io/guilty-influencer/og.png">
+<link rel="canonical" href="https://red-freegames.github.io/guilty-influencer/">
+<style>
+/* Instagram風の1カラム・フィード。上部にステータスとステップ表示、中央に投稿カード */
+:root{
+  --bg:#fafafa;--card:#fff;--fg:#262626;--sub:#737373;--line:#dbdbdb;--soft:#efefef;
+  --accent:#0095f6;--fire:#ed4956;--buzz:#e1306c;--calm:#8e8e8e;--ok:#1fa463;--gold:#c9a14a;
+  --grad:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+  --bubble-in:#efefef;--shadow:0 1px 2px rgba(0,0,0,.06);
+  --scrim:rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#000;--card:#0c0c0c;--fg:#f5f5f5;--sub:#a8a8a8;--line:#262626;--soft:#1a1a1a;--bubble-in:#262626;--shadow:none;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#000;--card:#0c0c0c;--fg:#f5f5f5;--sub:#a8a8a8;--line:#262626;--soft:#1a1a1a;--bubble-in:#262626;--shadow:none;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP","Yu Gothic UI",sans-serif;font-size:14px;line-height:1.45}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.app{max-width:500px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px;display:flex;flex-direction:column;gap:14px}
+
+/* ===== Header ===== */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-left,0px)) 10px}
+.tb-row{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:"Brush Script MT","Segoe Script",cursive;font-size:22px;font-weight:600;line-height:1.1}
+.stage{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--sub)}
+.icon-btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:16px}
+.icon-btn:hover{background:var(--soft)}
+.status{display:grid;grid-template-columns:auto 1fr 1fr;gap:12px;align-items:center;margin-top:6px}
+.st-turn{font-weight:800;font-size:13px;line-height:1.25;white-space:nowrap}
+.st-turn small{display:block;font-weight:500;color:var(--sub);font-size:11px}
+.st-box{min-width:0}
+.st-label{display:flex;justify-content:space-between;gap:4px;font-size:11px;color:var(--sub);white-space:nowrap}
+.st-label b{color:var(--fg);font-variant-numeric:tabular-nums;font-size:12px}
+.gauge{height:7px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:3px}
+.gauge i{display:block;height:100%;width:0;border-radius:4px;transition:width .8s ease-out}
+.g-follow i{background:var(--grad)}
+.g-fire i{background:linear-gradient(90deg,#fa7e1e,#ed4956)}
+.g-fire.danger i{animation:danger .5s infinite alternate}
+.fire-count{margin-top:3px;font-size:10.5px;font-weight:800;color:var(--sub);white-space:nowrap;font-variant-numeric:tabular-nums}
+.fire-count.warn{color:var(--fire)}
+.fire-count.patron{color:var(--gold)}
+.res-sheet .r-patron{margin-top:8px;padding:8px 10px;border-radius:10px;background:linear-gradient(135deg,#141414,#3a2c0f);color:#f7e7b4;font-size:12.5px;font-weight:800}
+@keyframes danger{to{filter:brightness(1.6)}}
+.era{display:inline-block;font-size:10px;font-weight:800;padding:1px 7px;border-radius:999px;background:var(--soft);color:var(--sub);margin-top:2px}
+.era.mid{background:#ffe1d1;color:#9a3412}
+.era.late{background:linear-gradient(90deg,#c9a14a,#f7e08a);color:#3a2c0f}
+
+/* プロフィール */
+.profile{display:flex;gap:16px;align-items:center}
+.avatar-ring{width:72px;height:72px;border-radius:50%;background:var(--grad);padding:3px;flex:none}
+.avatar{width:100%;height:100%;border-radius:50%;background:var(--card);border:3px solid var(--card);display:grid;place-items:center;font-size:32px}
+.p-main{flex:1;min-width:0}
+.uname{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:16px;font-weight:600;margin-bottom:4px}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;background:var(--ok)}
+.badge.hot{background:var(--fire)}
+.stats{display:flex;gap:18px}
+.stat{text-align:center;position:relative}
+.stat b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--sub);font-size:12px}
+.bio{font-size:12.5px;color:var(--sub);margin-top:-6px}
+.bio b{color:var(--fg)}
+.delta-float{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-weight:800;font-size:15px;white-space:nowrap;animation:floatUp 1.8s ease-out forwards;pointer-events:none}
+@keyframes floatUp{from{opacity:1;margin-top:0}to{opacity:0;margin-top:-40px}}
+
+/* ステップ表示 */
+.stepper{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.stepper div{padding:7px 4px;border-radius:10px;background:var(--soft);color:var(--sub);text-align:center;font-size:11.5px;font-weight:700;transition:background .2s,color .2s}
+.stepper div.on{background:var(--fg);color:var(--bg)}
+.stepper div.done{color:var(--fg)}
+
+/* スロット */
+.panel{padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.panel-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px;font-weight:700}
+.panel-title small{color:var(--sub);font-weight:400;font-size:11px;text-align:right}
+.reels{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reel-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+.reel-label{font-size:11px;color:var(--sub);text-align:center}
+.reel{height:76px;overflow:hidden;border-radius:12px;background:var(--soft);position:relative;border:1px solid var(--line)}
+.reel::before,.reel::after{content:"";position:absolute;left:0;right:0;height:14px;z-index:2;pointer-events:none}
+.reel::before{top:0;background:linear-gradient(var(--soft),transparent)}
+.reel::after{bottom:0;background:linear-gradient(transparent,var(--soft))}
+.reel.stopped{border-color:transparent;box-shadow:0 0 0 2px #d62976 inset}
+.cell{height:76px;display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 8px}
+.cell .e{font-size:28px;line-height:1}
+.cell .t{font-size:13px;font-weight:700;line-height:1.25}
+.pool{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;font-size:11px;color:var(--sub)}
+.pool span{padding:2px 7px;border-radius:999px;background:var(--soft)}
+.btn-main{width:100%;padding:13px;border-radius:12px;background:var(--grad);color:#fff;font-weight:800;font-size:15px;letter-spacing:.5px;transition:transform .1s,opacity .2s}
+.btn-main:active{transform:scale(.97)}
+.btn-main:disabled{opacity:.45;cursor:not-allowed}
+.btn-dark{background:var(--fg);color:var(--bg)}
+.panel .btn-main{margin-top:12px}
+.spin-status{margin-top:12px;padding:11px;border-radius:12px;background:var(--soft);text-align:center;font-weight:800;font-size:14px}
+.spin-status.rolling{animation:rolling 1s ease-in-out infinite}
+@keyframes rolling{50%{opacity:.55}}
+
+/* 投稿カード */
+.post{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);scroll-margin-top:120px}
+.post-head{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.mini-ring{width:34px;height:34px;border-radius:50%;background:var(--grad);padding:2px;flex:none}
+.mini-ring div{width:100%;height:100%;border-radius:50%;background:var(--card);border:2px solid var(--card);display:grid;place-items:center;font-size:16px}
+.post-head .who{flex:1;min-width:0}
+.post-head b{font-size:13px}
+.post-head .loc{font-size:11px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--sub);white-space:nowrap}
+.photo{position:relative;aspect-ratio:1/1;max-width:100%;overflow:hidden;background:var(--soft)}
+.layer{position:absolute;inset:0}
+.layer svg{width:100%;height:100%;display:block}
+.l-subject{display:grid;place-items:center}
+.l-subject svg{width:60%;height:60%;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+.photo canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.photo .empty{position:absolute;inset:0;display:grid;place-items:center;background:var(--grad);color:#fff;text-align:center;font-weight:800;font-size:17px;z-index:2}
+.photo .empty div{font-size:60px;line-height:1.2}
+.photo.reveal .layer{animation:develop .7s ease-out}
+@keyframes develop{from{filter:brightness(2.2) blur(6px);transform:scale(1.04)}}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.twinkle:nth-child(2n){animation-delay:-.8s}
+@keyframes twinkle{50%{opacity:.25}}
+.flick{transform-origin:60px 46px;animation:flick .25s ease-in-out infinite alternate}
+@keyframes flick{to{transform:scale(1.05,.94)}}
+.post-meta{border-top:1px solid var(--line)}
+.actions{display:flex;align-items:center;gap:14px;padding:8px 12px 2px}
+.actions button{width:26px;height:26px;transition:transform .15s}
+.actions button:active{transform:scale(1.3)}
+.actions svg{width:26px;height:26px;fill:none;stroke:var(--fg);stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round}
+.actions .liked svg{fill:var(--fire);stroke:var(--fire)}
+.actions .spacer{flex:1}
+.likes{padding:2px 12px;font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+.caption{padding:2px 12px 6px;font-size:13px;word-break:break-word}
+.caption b{margin-right:4px}
+.reason{margin:2px 12px 8px;padding:8px 10px;border-radius:10px;font-size:12.5px;line-height:1.5;background:var(--soft);border-left:3px solid var(--calm)}
+.reason span{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;color:var(--sub);margin-bottom:1px}
+.reason.fire{border-left-color:var(--fire)}
+.reason.fire span{color:var(--fire)}
+.reason.buzz{border-left-color:var(--buzz)}
+.reason.buzz span{color:var(--buzz)}
+.res-sheet .r-why{display:block;font-size:11px;font-weight:800;color:var(--sub);margin-top:6px}
+.tag{color:#4f8fe8}
+.comments{padding:4px 0 6px}
+.cmt{display:flex;gap:8px;padding:5px 12px;align-items:flex-start;animation:slideIn .3s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.cmt .av{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700}
+.cmt .body{flex:1;font-size:13px;min-width:0;word-break:break-word}
+.cmt .body small{display:block;color:var(--sub);font-size:11px}
+.cmt.anti .body b{color:var(--fire)}
+.hidden-cmts{margin:2px 12px 12px;padding:9px 12px;border-radius:10px;background:var(--soft);font-size:12.5px;color:var(--sub);font-variant-numeric:tabular-nums}
+.hidden-cmts b{color:var(--fg)}
+.hidden-cmts.pulse b{animation:tick .3s}
+@keyframes tick{50%{color:var(--buzz)}}
+
+/* キャプション4択 */
+.choices{display:grid;gap:8px}
+.cap{display:block;width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-align:left;font-size:14px;line-height:1.5;transition:transform .1s,border-color .15s}
+.cap:hover{border-color:var(--sub)}
+.cap.sel{background:linear-gradient(var(--card),var(--card)) padding-box,var(--grad) border-box;border:2px solid transparent;padding:11px 13px;font-weight:700}
+.cap:active{transform:scale(.98)}
+
+/* ===== Overlays ===== */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--scrim);backdrop-filter:blur(4px);animation:fade .3s}
+@keyframes fade{from{opacity:0}}
+.sheet{width:100%;max-width:420px;max-height:calc(100vh - 32px);overflow-y:auto;background:var(--card);color:var(--fg);border-radius:20px;padding:22px 20px;text-align:center;animation:popIn .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.sheet h1{font-size:24px;font-weight:900;line-height:1.25;margin:6px 0;text-wrap:balance}
+.sheet h2{font-size:21px;font-weight:900;margin:4px 0;text-wrap:balance}
+.sheet p{font-size:13px;line-height:1.7;margin:8px 0;text-align:left}
+.sheet .big{font-size:52px;line-height:1.1}
+.sheet ul{font-size:12.5px;text-align:left;margin:8px 0 12px 18px;line-height:1.7}
+.sheet .btn-main{margin-top:12px}
+.gradtxt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.phase-sheet.mid{border-top:6px solid #fa7e1e}
+.phase-sheet.late{background:linear-gradient(160deg,#141414,#2b2111);color:#f7e7b4}
+.phase-sheet.late p{color:#e9dcb2}
+.newpool{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:6px 0}
+.newpool span{font-size:11.5px;padding:3px 8px;border-radius:999px;background:var(--soft)}
+.phase-sheet.late .newpool span{background:rgba(255,255,255,.1)}
+.res-sheet .r-head{font-size:26px;font-weight:900}
+.res-sheet.buzz .r-head{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.res-sheet.fire .r-head{color:var(--fire)}
+.res-sheet.calm .r-head{color:var(--calm)}
+.res-sheet .r-delta{font-size:32px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ok);margin:4px 0}
+.res-sheet.calm .r-delta{color:var(--calm)}
+.res-sheet .r-flavor{font-size:13px;color:var(--sub)}
+.res-sheet .r-gauge{font-size:13px;font-weight:800;margin-top:8px}
+.res-sheet .r-flavor b{color:var(--fire)}
+.res-sheet .r-warn{margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(237,73,86,.12);color:var(--fire);font-size:12px;font-weight:800}
+/* 結果カード（スクショ用・画像風） */
+.rcard{position:relative;overflow:hidden;isolation:isolate;margin:14px 0 8px;padding:18px 16px 16px;border-radius:20px;text-align:left;box-shadow:0 12px 32px rgba(0,0,0,.35)}
+.rc-deco{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.rc-deco span{position:absolute;line-height:1}
+.rc-cap{margin-top:12px;font-size:10px;font-weight:800;letter-spacing:2px;opacity:.75}
+.rc-title{margin-top:2px;font-size:20px;font-weight:900;line-height:1.3;text-wrap:balance}
+.rc-why{margin-top:2px;font-size:12px;opacity:.8}
+/* ① 芸能スカウト：爽やかなパステル＋ゴールド */
+.rcard.star{color:#3b2a4a;background:linear-gradient(135deg,#fff7e0 0%,#ffe3f1 45%,#dff1ff 100%);border:2px solid #d4af37}
+.rcard.star .rc-title{color:#9a6b00}
+.rcard.star .rc-av{background:linear-gradient(135deg,#f7e08a,#d4af37);color:#fff}
+.rcard.star .rc-stats div{background:rgba(255,255,255,.75);color:#3b2a4a}
+.rcard.star .rc-deco span{color:#d4af37;opacity:.6}
+/* ② パトロン・成金：黒×金の胡散臭いラグジュアリー */
+.rcard.rich{color:#f7e7b4;background:radial-gradient(circle at 85% 0%,#4a3812,#141008 55%,#050403);border:2px solid #c9a14a}
+.rcard.rich .rc-title{background:linear-gradient(90deg,#c9a14a,#fff3c4,#c9a14a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rcard.rich .rc-av{background:#c9a14a;color:#141008}
+.rcard.rich .rc-stats div{background:rgba(201,161,74,.14);border:1px solid rgba(201,161,74,.35)}
+.rcard.rich .rc-deco span{opacity:.2}
+/* ③ ゲームオーバー：青みがかったモノクロ＋規制線 */
+.rcard.down{color:#dfe6ee;background:linear-gradient(160deg,#4b5868,#232a33 60%,#14181d);border:2px solid #5b6878}
+.rcard.down .rc-title{color:#ff9b9b}
+.rcard.down .rc-av{background:#3a4552;color:#dfe6ee}
+.rcard.down .rc-stats div{background:rgba(0,0,0,.28)}
+.rcard.down .rc-deco span{opacity:.18;filter:grayscale(1)}
+.rc-tape{position:absolute;left:-20%;right:-20%;top:60%;height:24px;transform:rotate(-8deg);background:repeating-linear-gradient(45deg,#d8d8d8 0 14px,#2a2a2a 14px 28px);opacity:.2}
+.rc-top{display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:2px;opacity:.85}
+.rc-user{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:800;font-size:14px}
+.rc-av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:17px}
+.rc-num{font-size:44px;font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums}
+.rc-num small{font-size:15px;font-weight:800;margin-left:4px}
+.rc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.rc-stats div{background:rgba(0,0,0,.2);border-radius:10px;padding:6px 2px;font-size:10px;text-align:center}
+.rc-stats b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
+.rc-tag{margin-top:10px;font-size:11px;font-weight:700;opacity:.85}
+.share-hint{margin:4px 0 8px;font-size:12px;font-weight:700;text-align:center;opacity:.85}
+.btn-x{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:12px;background:#000;color:#fff;font-weight:800;font-size:15px;text-decoration:none;border:1px solid #444}
+.btn-x:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.share-text{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.15);font-size:11.5px;line-height:1.6;text-align:left;user-select:all;word-break:break-word}
+.shake{animation:shake .5s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* ===== DM / エンディング ===== */
+.dm{position:fixed;inset:0;z-index:120;background:var(--bg);display:flex;justify-content:center;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);animation:slideUp .5s cubic-bezier(.2,.9,.3,1)}
+@keyframes slideUp{from{transform:translateY(100%)}}
+.dm-inner{width:100%;max-width:500px;height:100%;display:flex;flex-direction:column;background:var(--card);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.dm-head{display:flex;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);font-weight:800;font-size:16px}
+.dm-head .grow{flex:1;min-width:0}
+.dm-head small{display:block;font-weight:400;font-size:11px;color:var(--sub)}
+.dm-search{margin:10px 16px;padding:8px 12px;border-radius:10px;background:var(--soft);color:var(--sub);font-size:13px}
+.dm-tabs{display:flex;gap:18px;padding:4px 16px 8px;font-size:13px;font-weight:700}
+.dm-tabs span{color:var(--sub)}
+.dm-tabs .on{color:var(--fg)}
+.dm-tabs .req{color:var(--accent)}
+.dm-body{flex:1;overflow-y:auto}
+.dm-row{display:flex;align-items:center;gap:12px;padding:10px 16px;width:100%;text-align:left;animation:slideIn .4s ease-out}
+.dm-row:hover{background:var(--soft)}
+.dm-av{width:52px;height:52px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:24px;color:#fff;font-weight:900}
+.dm-row .who{flex:1;min-width:0}
+.dm-row .pv{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dm-row .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none}
+.verified{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:50%;background:var(--accent);color:#fff;font-size:9px;vertical-align:1px;margin-left:2px}
+.dm-empty{padding:44px 20px;text-align:center;color:var(--sub)}
+.dm-empty .big{font-size:52px;opacity:.6}
+.dm-empty h3{color:var(--fg);font-size:17px;margin:10px 0 4px}
+.refresh{width:28px;height:28px;margin:18px auto 0;border-radius:50%;border:3px solid var(--line);border-top-color:var(--sub);animation:rot .9s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.frozen-banner{margin:10px 16px;padding:12px;border-radius:12px;background:rgba(237,73,86,.12);color:var(--fire);font-size:13px;font-weight:700}
+.notify{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:130;width:min(440px,calc(100% - 24px));display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:16px;background:rgba(30,30,30,.94);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:drop .5s cubic-bezier(.2,1.3,.4,1)}
+.notify .ic{width:34px;height:34px;border-radius:9px;background:var(--grad);display:grid;place-items:center;font-size:18px;flex:none}
+.notify small{display:block;color:#bbb;font-size:11px}
+@keyframes drop{from{transform:translate(-50%,-140%)}}
+.chat{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.chat-top{text-align:center;margin:8px 0 14px}
+.chat-top .dm-av{width:76px;height:76px;margin:0 auto 6px;font-size:34px}
+.chat-top b{font-size:16px}
+.chat-top small{display:block;color:var(--sub);font-size:12px}
+.req-note{font-size:11px;color:var(--sub);text-align:center;margin:4px 0 8px}
+.bubble{max-width:82%;padding:9px 13px;border-radius:20px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;animation:pop .3s ease-out}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.bubble.in{align-self:flex-start;background:var(--bubble-in);border-bottom-left-radius:6px}
+.bubble.out{align-self:flex-end;background:linear-gradient(135deg,#7b2ff7,#d62976);color:#fff;border-bottom-right-radius:6px}
+.typing{align-self:flex-start;background:var(--bubble-in);border-radius:20px;padding:12px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--sub);animation:bounce 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{30%{transform:translateY(-5px)}}
+.chat-foot{padding:10px 16px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.chat-foot .row{display:flex;gap:8px}
+.chat-foot .row button{flex:1;padding:11px;border-radius:10px;font-weight:800;font-size:14px}
+.btn-blue{background:var(--accent);color:#fff}
+.btn-gray{background:var(--soft)}
+.chat-foot .q{font-size:12px;color:var(--sub);text-align:center}
+.reveal-box{margin:14px 0 4px;padding:16px;border-radius:16px;text-align:center;animation:popIn .5s cubic-bezier(.2,1.3,.4,1)}
+.reveal-box.light{background:linear-gradient(135deg,#fff6d6,#ffd1e8);color:#3b1e3a}
+.reveal-box.dark{background:linear-gradient(135deg,#141414,#3a2c0f);color:#f7e7b4;box-shadow:inset 0 0 40px rgba(200,0,0,.35)}
+.reveal-box.lose{background:var(--soft)}
+.reveal-box h3{font-size:19px;font-weight:900;margin:4px 0}
+.reveal-box p{font-size:12.5px;line-height:1.7;text-align:left;margin-top:6px}
+.reveal-box .route{display:inline-block;margin-top:6px;padding:5px 14px;border-radius:999px;font-weight:900;font-size:13px;background:rgba(0,0,0,.08)}
+.reveal-box.dark .route{background:rgba(255,255,255,.1)}
+.reveal-box .btn-main{margin-top:12px}
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.scores div{background:rgba(0,0,0,.06);border-radius:10px;padding:6px 4px;font-size:10px}
+.reveal-box.dark .scores div,.stage2 .scores div{background:rgba(255,255,255,.08)}
+.scores b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
+.exile{position:relative;height:90px;margin:10px 0;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#9ad0f5,#d9f0ff 60%,#7cc36b 60%)}
+.exile .tokyo{position:absolute;left:10px;bottom:26px;font-size:40px;animation:fadeAway 4s forwards}
+.exile .home{position:absolute;right:10px;bottom:26px;font-size:34px}
+.exile .rice{position:absolute;right:60px;bottom:22px;font-size:22px}
+.exile .train{position:absolute;bottom:20px;left:-10%;font-size:34px;animation:drive 3.5s ease-in-out forwards}
+@keyframes drive{to{left:72%}}
+@keyframes fadeAway{to{opacity:.15;filter:grayscale(1)}}
+/* STAGE2 予告 */
+.stage2 .inner{margin:auto}
+.stage2{position:fixed;inset:0;z-index:140;display:flex;flex-direction:column;align-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:#0b0b0f;color:#f5f5f5;text-align:center;animation:fade .8s;overflow-y:auto}
+.stage2.dark{background:radial-gradient(circle at 50% 30%,#3a2c0f,#0b0b0f 70%)}
+.stage2.light{background:radial-gradient(circle at 50% 30%,#5b2a6e,#0b0b0f 70%)}
+.stage2 .inner{max-width:400px;width:100%}
+.stage2 .lbl{font-size:12px;font-weight:800;letter-spacing:6px;color:#bbb}
+.stage2 .num{font-size:80px;font-weight:900;line-height:1;margin:6px 0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stage2.dark .num{background:linear-gradient(90deg,#c9a14a,#f7e08a,#c9a14a);-webkit-background-clip:text;background-clip:text}
+.stage2 h2{font-size:20px;font-weight:900;margin:4px 0 2px}
+.stage2 .wait{margin:18px 0 6px;font-size:16px;font-weight:800;letter-spacing:1px}
+.stage2 .dots i{display:inline-block;width:8px;height:8px;margin:0 4px;border-radius:50%;background:#f5f5f5;animation:bounce 1.2s infinite}
+.stage2 .dots i:nth-child(2){animation-delay:.2s}.stage2 .dots i:nth-child(3){animation-delay:.4s}
+.stage2 p{font-size:12.5px;line-height:1.7;color:#ccc;margin-top:10px}
+.stage2 .btn-main{margin-top:18px}
+/* ===== RED FREE GAMES 共通：HOME・他のゲーム・フッター ===== */
+.tb-actions{display:flex;align-items:center;gap:6px}
+.home-btn{min-height:36px;padding:4px 12px;border-radius:99px;border:2px solid var(--fg);font-size:12.5px;font-weight:900;white-space:nowrap;background:var(--card)}
+.home-btn:active{transform:translateY(1px)}
+.more-link{display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:10px;border-radius:12px;border:2px solid var(--fg);background:var(--card);color:var(--fg);font-weight:900;font-size:15px;text-decoration:none}
+.fb-link{display:block;margin-top:8px;padding:8px;text-align:center;font-size:12.5px;font-weight:800;color:var(--sub);text-decoration:underline}
+.stage2 .more-link{background:transparent;color:#f5f5f5;border-color:#f5f5f5}
+.home-ask .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.home-ask .row button{min-height:52px;border-radius:12px;font-weight:900;font-size:15px}
+.home-ask .no{background:var(--soft)}
+.home-ask .yes{background:var(--fg);color:var(--bg)}
+.site-foot{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:20px;font-size:11.5px;font-weight:800;color:var(--sub)}
+.site-foot .coffee{background:#ffdd57;color:#2a1a14;border:2px solid #2a1a14;border-radius:99px;padding:6px 12px;text-decoration:none}
+.site-foot .pv{color:var(--sub);font-weight:600;text-decoration:underline}
+
+/* ===== スマホ最適化（タップ領域・文字サイズ・狭幅レイアウト） ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-x:hidden}
+button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn-main{min-height:52px;font-size:16px}
+.cap{min-height:56px;padding:14px 16px;font-size:15px;line-height:1.55}
+.cap.sel{padding:13px 15px}
+.choices{gap:10px}
+.actions{gap:6px;padding:4px 6px 0}
+.actions button{width:44px;height:44px;display:grid;place-items:center}
+.stepper div{padding:9px 4px;font-size:12px}
+.chat-foot .row button{min-height:50px;font-size:15px}
+.dm-row{min-height:72px}
+.btn-x{min-height:52px;font-size:16px}
+.cmt .body{font-size:14px}
+.caption{font-size:14px}
+.sheet{max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px)}
+@media (max-width:400px){
+  .status{grid-template-columns:1fr 1fr;gap:6px 14px}
+  .st-turn{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+  .st-turn small{display:inline}
+  .st-turn .era{margin-top:0}
+  .profile{gap:12px}
+  .avatar-ring{width:60px;height:60px}
+  .avatar{font-size:26px}
+  .stats{gap:14px}
+  .stat b{font-size:14px}
+  .panel{padding:12px}
+  .panel-title{flex-wrap:wrap}
+  .sheet{padding:20px 16px}
+  .res-sheet .r-delta{font-size:28px}
+  .rc-num{font-size:38px}
+  .stage2 .num{font-size:64px}
+}
+@media (max-width:340px){
+  .cell .t{font-size:11.5px}
+  .cell .e{font-size:22px}
+  .rc-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="tb-row">
+      <div><div class="logo">Guilty Influencer</div><div class="stage">STAGE 1 ・ 下積み編</div></div>
+      <div class="tb-actions">
+        <button class="home-btn" id="homeBtn">🏠 HOME</button>
+        <button class="icon-btn" id="themeBtn" title="テーマ切替" aria-label="テーマ切替">🌓</button>
+      </div>
+    </div>
+    <div class="status">
+      <div class="st-turn"><span id="sTurn">1/12ターン</span><small id="sDate">1ヶ月目・前半</small><span class="era" id="sEra">序盤</span></div>
+      <div class="st-box">
+        <div class="st-label">👥 <b id="sFollow">0</b><span>/10万</span></div>
+        <div class="gauge g-follow"><i id="gFollow"></i></div>
+      </div>
+      <div class="st-box">
+        <div class="st-label">🔥 炎上 <b id="sFire">0%</b></div>
+        <div class="gauge g-fire" id="gFireWrap"><i id="gFire"></i></div>
+        <div class="fire-count" id="sFireN">炎上 0/3回</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="profile">
+    <div class="avatar-ring"><div class="avatar">💅</div></div>
+    <div class="p-main">
+      <div class="uname">kotomi_guilty <span class="badge" id="badge">✓ 平和</span></div>
+      <div class="stats">
+        <div class="stat"><b id="postsN">0</b><span>投稿</span></div>
+        <div class="stat"><b id="followersN">0</b><span>フォロワー</span></div>
+        <div class="stat"><b>48</b><span>フォロー中</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="bio"><b>欺流亭 ことみ</b>（25）上京したて🗼 半年で10万人いけなかったら田舎に帰ります。あと <b id="remain">100,000</b>人</div>
+
+  <div class="stepper" id="stepper"><div data-s="1">① スロット</div><div data-s="2">② キャプション</div><div data-s="3">③ 投稿結果</div></div>
+
+  <!-- STEP1 スロット -->
+  <section class="panel" id="slotSec">
+    <div class="panel-title"><span>📸 今回の写真を撮る</span><small id="slotNote">背景5 × 被写体5</small></div>
+    <div class="reels">
+      <div class="reel-wrap"><div class="reel-label">📍 シチュエーション</div><div class="reel"><div id="r0"></div></div></div>
+      <div class="reel-wrap"><div class="reel-label">🖼 被写体</div><div class="reel"><div id="r1"></div></div></div>
+    </div>
+    <div class="pool" id="pool"></div>
+    <div class="spin-status" id="spinStatus">📸 撮影の準備中…</div>
+  </section>
+
+  <!-- 投稿カード（STEP1〜3共通） -->
+  <article class="post" id="post">
+    <div class="post-head">
+      <div class="mini-ring"><div>💅</div></div>
+      <div class="who"><b>kotomi_guilty</b><div class="loc" id="pLoc">撮影待ち</div></div>
+      <span class="chip" id="pChip">下書き</span>
+    </div>
+    <div class="photo" id="photo">
+      <div class="empty" id="empty"><span><div>🎰</div>スロットを回して<br>写真を撮ろう</span></div>
+      <div class="layer" id="lBg"></div>
+      <div class="layer l-subject" id="lSub"></div>
+      <canvas id="fx" width="600" height="600"></canvas>
+    </div>
+    <div class="post-meta" id="postMeta" hidden>
+      <div class="actions">
+        <button id="likeBtn" aria-label="いいね"><svg viewBox="0 0 24 24"><path d="M12 20.5s-8-4.9-8-10.6A4.4 4.4 0 0 1 12 7.4a4.4 4.4 0 0 1 8 2.5c0 5.7-8 10.6-8 10.6z"/></svg></button>
+        <button aria-label="コメント"><svg viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-3.9-7.1A8.5 8.5 0 0 1 20.5 12zM20.5 20.5l-2-4.6"/></svg></button>
+        <button aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M21.5 3 3 10.2l7.3 3.1L21.5 3zM10.3 13.3 13.6 21 21.5 3"/></svg></button>
+        <span class="spacer"></span>
+        <button aria-label="保存"><svg viewBox="0 0 24 24"><path d="M19 21l-7-6-7 6V3h14z"/></svg></button>
+      </div>
+      <div class="likes" id="likes">いいね！0件</div>
+      <div class="caption" id="caption"></div>
+      <div class="reason" id="reason"></div>
+      <div class="comments" id="comments"></div>
+      <div class="hidden-cmts" id="hiddenCmts" hidden></div>
+    </div>
+  </article>
+
+  <!-- STEP2 キャプション4択 -->
+  <section id="capSec" hidden>
+    <div class="panel">
+      <div class="panel-title"><span>✍️ この写真の投稿文を選ぶ</span><small>4つのうちどれかは燃える…</small></div>
+      <div class="choices" id="choices"></div>
+      <button class="btn-main" id="postBtn" disabled>投稿文を選んでください</button>
+    </div>
+  </section>
+
+  <!-- STEP3 次へ -->
+  <section id="nextSec" hidden>
+    <button class="btn-main btn-dark" id="nextBtn">次へ進む</button>
+  </section>
+
+  <footer class="site-foot">
+    <a class="coffee" href="https://buymeacoffee.com/red_freegames" target="_blank" rel="noopener">開発者にコーヒーを奢る☕</a>
+    <span>配信・動画利用大歓迎！商用利用OK</span>
+    <a class="pv" href="https://red-freegames.github.io/privacy.html" target="_blank" rel="noopener">プライバシー</a>
+  </footer>
+</div>
+
+<div id="modalRoot"></div>
+<div id="dmRoot"></div>
+
+<script>
+/* =====================================================
+   SVG パーツ
+===================================================== */
+const D='fill="#fff"', DS='fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"';
+const W_='fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"';
+const CHANDELIER=`<g ${DS} stroke="#e8c87a" stroke-width="1.6" opacity=".7"><path d="M60 0v10M44 22q16 10 32 0M44 22l4 8M60 26v6M76 22l-4 8"/><circle cx="48" cy="32" r="2"/><circle cx="60" cy="34" r="2"/><circle cx="72" cy="32" r="2"/></g>`;
+
+/* ---------- 背景（シチュエーション） ---------- */
+const BG = {
+  baito:{t:"バイト先",e:"🧾",grad:["#fdfbfb","#b8c6db"],deco:`<rect x="0" y="82" width="120" height="38" fill="#7f8c8d" opacity=".3"/><rect x="80" y="62" width="30" height="22" rx="3" fill="#34495e" opacity=".35"/><rect x="84" y="66" width="22" height="8" fill="#a3e4d7" opacity=".6"/><path d="M10 14h50v18H10z" fill="#e74c3c" opacity=".25"/><text x="35" y="26" font-size="8" font-weight="900" fill="#fff" text-anchor="middle" opacity=".85">STAFF ONLY</text>`},
+  park:{t:"公園",e:"🌳",grad:["#a8e063","#56ab2f"],deco:`<path d="M0 92q30-14 60 0t60 0V120H0z" ${D} opacity=".28"/><g ${D} opacity=".22"><circle cx="18" cy="62" r="13"/><rect x="16" y="70" width="4" height="22"/><circle cx="102" cy="58" r="15"/><rect x="100" y="68" width="4" height="24"/></g><circle cx="96" cy="18" r="8" fill="#fff59d" opacity=".7"/>`},
+  street:{t:"街角",e:"🏙️",grad:["#d7d2cc","#8e9eab"],deco:`<g ${D} opacity=".3"><rect x="4" y="30" width="22" height="70"/><rect x="30" y="16" width="26" height="84"/><rect x="62" y="40" width="20" height="60"/><rect x="86" y="24" width="30" height="76"/></g><rect x="0" y="100" width="120" height="20" fill="#555" opacity=".3"/><path d="M10 110h14M40 110h14M70 110h14M100 110h14" stroke="#fff" stroke-width="2" opacity=".6"/>`},
+  home:{t:"自宅",e:"🏠",grad:["#ffe0c2","#f5b78a"],deco:`<rect x="10" y="12" width="34" height="30" rx="2" ${DS} stroke-width="2.5" opacity=".5"/><path d="M27 12v30M10 27h34" ${DS} stroke-width="2" opacity=".4"/><path d="M70 30h40M70 46h40" ${DS} stroke-width="3" opacity=".4"/><rect x="0" y="96" width="120" height="24" fill="#c98b5e" opacity=".35"/>`},
+  train:{t:"電車内",e:"🚃",grad:["#cfe8ff","#7aa8d8"],deco:`<g ${DS} stroke-width="2" opacity=".55"><path d="M0 12h120"/><path d="M20 12v14M50 12v14M80 12v14M110 12v14"/><circle cx="20" cy="30" r="4"/><circle cx="50" cy="30" r="4"/><circle cx="80" cy="30" r="4"/><circle cx="110" cy="30" r="4"/></g><rect x="6" y="40" width="48" height="34" rx="4" fill="#fff" opacity=".25"/><rect x="66" y="40" width="48" height="34" rx="4" fill="#fff" opacity=".25"/><rect x="0" y="98" width="120" height="22" fill="#2c3e50" opacity=".2"/>`},
+  cinema:{t:"映画館",e:"🎬",grad:["#3a0d12","#0b0b0b"],deco:`<rect x="12" y="8" width="96" height="46" rx="2" fill="#fff" opacity=".2"/><g fill="#7a1420" opacity=".85"><rect x="2" y="84" width="20" height="16" rx="5"/><rect x="26" y="84" width="20" height="16" rx="5"/><rect x="50" y="84" width="20" height="16" rx="5"/><rect x="74" y="84" width="20" height="16" rx="5"/><rect x="98" y="84" width="20" height="16" rx="5"/><rect x="-8" y="102" width="20" height="18" rx="5"/><rect x="16" y="102" width="20" height="18" rx="5"/><rect x="40" y="102" width="20" height="18" rx="5"/><rect x="64" y="102" width="20" height="18" rx="5"/><rect x="88" y="102" width="20" height="18" rx="5"/><rect x="112" y="102" width="20" height="18" rx="5"/></g>`},
+  cafe:{t:"カフェ",e:"☕",grad:["#f3e3cf","#c08a5c"],deco:`<rect x="0" y="92" width="120" height="28" fill="#7a4e2d" opacity=".35"/><g ${DS} stroke-width="2" opacity=".45"><path d="M14 14q6-6 0-12M24 14q6-6 0-12"/></g><path d="M80 18h30v14H80z" fill="#fff" opacity=".3"/><text x="95" y="28" font-size="7" font-weight="700" fill="#7a4e2d" text-anchor="middle" opacity=".7">CAFE</text>`},
+  gym:{t:"ジム",e:"🏋️",grad:["#232526","#4b6cb7"],deco:`<g fill="#fff" opacity=".25"><rect x="8" y="22" width="6" height="18" rx="2"/><rect x="14" y="29" width="30" height="4"/><rect x="44" y="22" width="6" height="18" rx="2"/></g><path d="M70 20h40v60H70z" ${DS} stroke-width="2" opacity=".3"/><rect x="0" y="100" width="120" height="20" fill="#000" opacity=".25"/>`},
+  event:{t:"イベント会場",e:"🎤",grad:["#7f00ff","#e100ff"],deco:`<path d="M10 0l20 120H0V0zM110 0L90 120h30V0z" fill="#fff" opacity=".12"/><path d="M60 0L40 120h40z" fill="#fff" opacity=".1"/><g fill="#fff" opacity=".35"><circle cx="20" cy="108" r="6"/><circle cx="36" cy="110" r="6"/><circle cx="52" cy="108" r="6"/><circle cx="68" cy="110" r="6"/><circle cx="84" cy="108" r="6"/><circle cx="100" cy="110" r="6"/></g>`},
+  night:{t:"夜景スポット",e:"🌃",grad:["#0f2027","#2c5364"],deco:`<g fill="#000" opacity=".45"><rect x="0" y="70" width="16" height="50"/><rect x="18" y="56" width="14" height="64"/><rect x="34" y="78" width="18" height="42"/><rect x="54" y="48" width="12" height="72"/><rect x="68" y="66" width="20" height="54"/><rect x="90" y="58" width="14" height="62"/><rect x="106" y="76" width="14" height="44"/></g><g fill="#ffd96a"><circle class="twinkle" cx="24" cy="64" r="1.2"/><circle class="twinkle" cx="60" cy="56" r="1.2"/><circle class="twinkle" cx="76" cy="74" r="1.2"/><circle class="twinkle" cx="96" cy="66" r="1.2"/><circle class="twinkle" cx="40" cy="86" r="1.2"/><circle class="twinkle" cx="10" cy="80" r="1.2"/></g><circle cx="98" cy="18" r="7" fill="#fff8d0" opacity=".85"/>`},
+  resort:{t:"海外リゾート",e:"🏝️",grad:["#4facfe","#f9e79f"],deco:`<rect y="60" width="120" height="26" fill="#00b4d8" opacity=".55"/><path d="M0 84q60-8 120 0v36H0z" fill="#f6e0a8" opacity=".9"/><path d="M100 120q-4-30 4-58" stroke="#6b4f2a" stroke-width="3" fill="none"/><path d="M104 62q-16-6-26 4M104 62q14-10 22 0M104 62q-6-14-18-16M104 62q8-14 18-12" stroke="#2d6a4f" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="24" cy="24" r="10" fill="#fff6c2" opacity=".9"/>`},
+  luxhotel:{t:"高級ホテル",e:"🏨",grad:["#1a1a2e","#4a3b22"],deco:`${CHANDELIER}<g fill="#e8c87a" opacity=".3"><rect x="6" y="18" width="10" height="84"/><rect x="104" y="18" width="10" height="84"/></g><path d="M0 102h120v18H0z" fill="#fff" opacity=".14"/><path d="M0 102l20 18M30 102l20 18M60 102l20 18M90 102l20 18" stroke="#fff" stroke-width=".8" opacity=".25"/><circle class="twinkle" cx="30" cy="46" r="1.4" fill="#ffd27a"/><circle class="twinkle" cx="90" cy="40" r="1.4" fill="#ffd27a"/>`},
+  dinner:{t:"高級レストラン",e:"🍷",grad:["#3a1c1c","#120808"],deco:`${CHANDELIER}<rect x="0" y="94" width="120" height="26" fill="#fff" opacity=".12"/><circle class="twinkle" cx="16" cy="50" r="1.5" fill="#ffd27a"/><circle class="twinkle" cx="104" cy="44" r="1.5" fill="#ffd27a"/>`},
+  drive:{t:"ドライブ中",e:"🚗",grad:["#ff9966","#ff5e62"],deco:`<path d="M0 0h120v30Q60 18 0 30z" fill="#111" opacity=".55"/><path d="M0 90q60-20 120 0v30H0z" fill="#111" opacity=".6"/><circle cx="30" cy="112" r="26" ${DS} stroke="#222" stroke-width="7" opacity=".8"/><path d="M8 50h104" stroke="#fff" stroke-width="1" opacity=".3"/>`},
+  bedroom:{t:"ホテル・ベッドルーム",e:"🛏️",grad:["#ffdde1","#ee9ca7"],deco:`<rect x="10" y="20" width="100" height="36" rx="10" fill="#fff" opacity=".3"/><rect x="0" y="80" width="120" height="40" fill="#fff" opacity=".45"/><rect x="18" y="66" width="34" height="16" rx="7" fill="#fff" opacity=".6"/><rect x="68" y="66" width="34" height="16" rx="7" fill="#fff" opacity=".6"/>`},
+};
+/* ---------- 被写体 ---------- */
+const SUB = {
+  selfie:{t:"自撮り",e:"🤳",svg:`<rect x="30" y="8" width="60" height="104" rx="12" fill="#222" stroke="#fff" stroke-width="4"/><rect x="36" y="18" width="48" height="84" rx="6" fill="#ffd6e7"/><circle cx="60" cy="56" r="17" fill="#ffe0c7"/><path d="M42 48q18-26 36 0" fill="#5a3b2e"/><circle cx="54" cy="56" r="4.5" fill="#333"/><circle cx="66" cy="56" r="4.5" fill="#333"/><circle cx="55.5" cy="54.5" r="1.5" fill="#fff"/><circle cx="67.5" cy="54.5" r="1.5" fill="#fff"/><path d="M56 66q4 3 8 0" stroke="#e05a7a" stroke-width="2" fill="none" stroke-linecap="round"/><text x="44" y="34" font-size="12" fill="#fff">✦</text><text x="70" y="96" font-size="10" fill="#fff">✦</text>`},
+  friend:{t:"友人",e:"👯",svg:`<g fill="#fff"><circle cx="40" cy="44" r="15"/><path d="M14 108c0-22 12-38 26-38s26 16 26 38z"/></g><g fill="#ffe8f0"><circle cx="80" cy="44" r="15"/><path d="M54 108c0-22 12-38 26-38s26 16 26 38z"/></g><path d="M98 34l4-16M106 36l8-14" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="40" r="6" fill="#fff"/>`},
+  meal:{t:"ご飯",e:"🍛",svg:`<ellipse cx="60" cy="88" rx="50" ry="14" fill="#fff"/><ellipse cx="60" cy="78" rx="34" ry="9" fill="#f4c27a"/><ellipse cx="60" cy="68" rx="34" ry="9" fill="#e8a95b"/><ellipse cx="60" cy="58" rx="34" ry="9" fill="#f4c27a"/><path d="M40 56q20 12 40 0" fill="#fff6c9"/><circle cx="52" cy="48" r="6" fill="#e74c3c"/><circle cx="66" cy="46" r="5" fill="#8e44ad"/><path d="M60 40q4-8 10-6" stroke="#2ecc71" stroke-width="3" fill="none" stroke-linecap="round"/>`},
+  flower:{t:"花",e:"🌷",svg:`<path d="M38 80h44l-6 32H44z" fill="#e8d5b7" stroke="#fff" stroke-width="3"/><path d="M60 80V44M60 64q-14-4-20-14M60 70q12-6 18-16" stroke="#2d6a4f" stroke-width="4" fill="none" stroke-linecap="round"/><g fill="#ff8fab"><circle cx="60" cy="30" r="10"/><circle cx="48" cy="38" r="9"/><circle cx="72" cy="38" r="9"/><circle cx="52" cy="22" r="8"/><circle cx="68" cy="22" r="8"/></g><circle cx="60" cy="31" r="6" fill="#ffd166"/><circle cx="38" cy="50" r="7" fill="#cdb4db"/><circle cx="80" cy="54" r="7" fill="#bde0fe"/>`},
+  memo:{t:"手書きメモ",e:"📝",svg:`<g transform="rotate(-6 60 60)"><rect x="22" y="14" width="76" height="92" rx="4" fill="#fffdf3" stroke="#fff" stroke-width="3"/><path d="M32 34h56M32 48h56M32 62h56M32 76h40" stroke="#c9d6ff" stroke-width="2"/><path d="M34 32q8-6 14 0t14 0 14 0M34 46q10-5 20 0t20 0M34 60q8-5 16 0t12 0" stroke="#6c5b7b" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M76 86c-2-5-9-4-9 1 0 4 9 9 9 9s9-5 9-9c0-5-7-6-9-1z" fill="#ff6b8b"/><rect x="48" y="8" width="24" height="10" fill="#ffd166" opacity=".85"/></g>`},
+  nail:{t:"手元ネイル",e:"💅",svg:`<g fill="#ffd8b8" stroke="#fff" stroke-width="2"><rect x="32" y="30" width="13" height="52" rx="6.5"/><rect x="46" y="18" width="13" height="64" rx="6.5"/><rect x="60" y="20" width="13" height="62" rx="6.5"/><rect x="74" y="32" width="12" height="50" rx="6"/></g><rect x="30" y="62" width="58" height="52" rx="16" fill="#ffd8b8" stroke="#fff" stroke-width="2"/><rect x="14" y="68" width="12" height="36" rx="6" fill="#ffd8b8" stroke="#fff" stroke-width="2" transform="rotate(-35 20 86)"/><g fill="#e63964" stroke="#fff" stroke-width="1"><rect x="34" y="32" width="9" height="13" rx="4.5"/><rect x="48" y="20" width="9" height="13" rx="4.5"/><rect x="62" y="22" width="9" height="13" rx="4.5"/><rect x="76" y="34" width="8" height="12" rx="4"/></g><g fill="#fff" opacity=".8"><rect x="36" y="34" width="2" height="5" rx="1"/><rect x="50" y="22" width="2" height="5" rx="1"/><rect x="64" y="24" width="2" height="5" rx="1"/><rect x="78" y="36" width="2" height="5" rx="1"/></g><g fill="#fff"><text x="88" y="24" font-size="14">✦</text><text x="18" y="40" font-size="10">✦</text></g>`},
+  drink:{t:"ドリンク",e:"🧋",svg:`<path d="M34 34h52l-6 74H40z" fill="#fff" opacity=".95"/><path d="M38 58h44l-4 48H42z" fill="#c8a07a"/><g fill="#3d2b1f"><circle cx="48" cy="98" r="4"/><circle cx="58" cy="100" r="4"/><circle cx="68" cy="97" r="4"/><circle cx="53" cy="92" r="4"/><circle cx="64" cy="91" r="4"/></g><rect x="30" y="28" width="60" height="8" rx="3" fill="#fff" stroke="#ddd" stroke-width="1"/><path d="M66 28l8-22" stroke="#e63964" stroke-width="6" stroke-linecap="round"/>`},
+  pet:{t:"ペット",e:"🐈",svg:`<path d="M28 48l6-30 18 18h16l18-18 6 30c4 8 6 14 6 22 0 22-18 38-40 38S18 92 18 70c0-8 4-14 10-22z" fill="#f4a259" stroke="#fff" stroke-width="3"/><path d="M50 40l4 10M60 38v10M70 40l-4 10" stroke="#d17a2e" stroke-width="3" stroke-linecap="round"/><ellipse cx="46" cy="68" rx="5" ry="7" fill="#222"/><ellipse cx="74" cy="68" rx="5" ry="7" fill="#222"/><circle cx="47.5" cy="66" r="1.6" fill="#fff"/><circle cx="75.5" cy="66" r="1.6" fill="#fff"/><path d="M56 80l4 3 4-3" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M8 76l22 2M8 86l22-2M112 76l-22 2M112 86l-22-2" stroke="#fff" stroke-width="2"/>`},
+  book:{t:"本",e:"📖",svg:`<path d="M60 36c-14-8-32-10-48-6v70c16-4 34-2 48 6z" fill="#fff"/><path d="M60 36c14-8 32-10 48-6v70c-16-4-34-2-48 6z" fill="#f4f1ff"/><path d="M60 36v70" stroke="#c9b8ff" stroke-width="2"/><path d="M22 48h28M22 58h28M22 68h24M22 78h26M70 48h28M70 58h28M70 68h22M70 78h26" stroke="#b9b2d6" stroke-width="2.5" stroke-linecap="round"/><path d="M84 28v26l6-5 6 5V28" fill="#e63964"/>`},
+  sneaker:{t:"スニーカー",e:"👟",svg:`<path d="M12 86c0-12 4-22 10-28l14-6 10 10c8 6 20 9 32 11l22 4c8 2 12 8 12 14v5H12z" fill="#fff" stroke="#ddd" stroke-width="2" stroke-linejoin="round"/><rect x="10" y="90" width="104" height="12" rx="6" fill="#e9ecef" stroke="#fff" stroke-width="2"/><path d="M40 82q24-6 54-2" stroke="#4f5bd5" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M44 64l9-6M50 70l9-6M57 74l9-5" stroke="#999" stroke-width="2.5" stroke-linecap="round"/><rect x="14" y="58" width="10" height="16" rx="3" fill="#e63964"/><path d="M14 96h96" stroke="#ccc" stroke-width="1.5" stroke-dasharray="4 3"/>`},
+  watch:{t:"高級時計",e:"⌚",svg:`<rect x="48" y="4" width="24" height="112" rx="8" fill="#3d2b1f" stroke="#fff" stroke-width="2"/><circle cx="60" cy="60" r="32" fill="#d4af37" stroke="#fff" stroke-width="4"/><circle cx="60" cy="60" r="25" fill="#0f2b46"/><g stroke="#fff" stroke-width="2.5"><path d="M60 38v6M60 76v6M38 60h6M76 60h6"/></g><path d="M60 60V45M60 60l11 6" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="60" r="2.5" fill="#d4af37"/><rect x="92" y="54" width="6" height="12" rx="2" fill="#d4af37"/>`},
+  bag:{t:"ブランドバッグ",e:"👜",svg:`<path d="M40 48V38a20 20 0 0 1 40 0v10" ${W_} stroke-width="6"/><path d="M18 48h84l-8 62H26z" fill="#8b1e3f" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M22 66h76" stroke="#fff" stroke-width="2" opacity=".5"/><rect x="50" y="58" width="20" height="14" rx="3" fill="#d4af37"/><g fill="#d4af37" opacity=".55"><text x="36" y="96" font-size="11">✦</text><text x="60" y="102" font-size="11">✦</text><text x="80" y="92" font-size="11">✦</text></g>`},
+  cash:{t:"札束・金塊",e:"💰",svg:`<g stroke="#fff" stroke-width="3"><rect x="20" y="22" width="80" height="30" rx="4" fill="#27ae60"/><rect x="14" y="36" width="80" height="30" rx="4" fill="#2ecc71"/></g><rect x="50" y="34" width="10" height="34" fill="#f1c40f"/><text x="34" y="56" font-size="14" font-weight="900" fill="#fff" font-family="sans-serif">¥</text><g stroke="#fff" stroke-width="2.5" stroke-linejoin="round"><path d="M14 108l8-18h30l8 18z" fill="#f1c40f"/><path d="M60 108l8-18h30l8 18z" fill="#f1c40f"/><path d="M37 90l8-18h30l8 18z" fill="#ffd54f"/></g>`},
+  car:{t:"高級車",e:"🏎️",svg:`<path d="M6 84c4-10 14-14 26-16l14-12c6-4 14-6 24-6 14 0 22 6 30 14l10 2c4 1 6 4 6 8v10H6z" fill="#e63946" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M50 58c6-3 12-4 20-4 10 0 16 4 22 10H44z" fill="#a8dadc"/><circle cx="32" cy="92" r="12" fill="#222" stroke="#fff" stroke-width="3"/><circle cx="92" cy="92" r="12" fill="#222" stroke="#fff" stroke-width="3"/><circle cx="32" cy="92" r="4" fill="#ccc"/><circle cx="92" cy="92" r="4" fill="#ccc"/><path d="M104 74h6" stroke="#ffd166" stroke-width="3"/>`},
+  roses:{t:"100本のバラ",e:"🌹",svg:`<path d="M30 62l30 54 30-54z" fill="#f5e6d3" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M30 62l30 54M90 62l-30 54" stroke="#e9d5bd" stroke-width="2"/><path d="M48 96q12 6 24 0l-4 8q-8 4-16 0z" fill="#c9a14a"/><g fill="#2d6a4f"><ellipse cx="26" cy="58" rx="8" ry="4" transform="rotate(-30 26 58)"/><ellipse cx="94" cy="58" rx="8" ry="4" transform="rotate(30 94 58)"/></g><g fill="#d90429" stroke="#7a0010" stroke-width="1.2"><circle cx="30" cy="46" r="8"/><circle cx="90" cy="46" r="8"/><circle cx="42" cy="36" r="8"/><circle cx="60" cy="32" r="8"/><circle cx="78" cy="36" r="8"/><circle cx="36" cy="56" r="8"/><circle cx="50" cy="48" r="8"/><circle cx="70" cy="48" r="8"/><circle cx="84" cy="56" r="8"/><circle cx="60" cy="58" r="8"/><circle cx="50" cy="20" r="7"/><circle cx="70" cy="20" r="7"/><circle cx="46" cy="64" r="7"/><circle cx="74" cy="64" r="7"/></g><g fill="#9d0208"><circle cx="30" cy="46" r="3"/><circle cx="90" cy="46" r="3"/><circle cx="42" cy="36" r="3"/><circle cx="60" cy="32" r="3"/><circle cx="78" cy="36" r="3"/><circle cx="36" cy="56" r="3"/><circle cx="50" cy="48" r="3"/><circle cx="70" cy="48" r="3"/><circle cx="84" cy="56" r="3"/><circle cx="60" cy="58" r="3"/><circle cx="50" cy="20" r="2.5"/><circle cx="70" cy="20" r="2.5"/><circle cx="46" cy="64" r="2.5"/><circle cx="74" cy="64" r="2.5"/></g><rect x="78" y="86" width="26" height="15" rx="2" fill="#fff" transform="rotate(8 91 93)"/><text x="91" y="97" font-size="9" font-weight="900" fill="#d90429" text-anchor="middle" transform="rotate(8 91 93)">100</text>`},
+};
+
+/* =====================================================
+   3段階の時期
+   各段階ごとに：出現プール / 結果の確率 / フォロワー増加量（インフレ）
+===================================================== */
+const PHASES = [
+  {key:"early",name:"序盤",label:"🌱 序盤",
+   bgs:["baito","park","street","home","train"], subs:["selfie","friend","meal","flower","memo"],
+   prob:{F:{fire:.75,buzz:.10,calm:.15},B:{buzz:.75,calm:.20,fire:.05},N:{calm:.85,buzz:.10,fire:.05},M:{fire:.75,buzz:.05,calm:.20}},
+   gain:{calm:[100,300],buzz:[1500,3500],fire:[300,800]}, heat:[14,21], mine:.25},
+  {key:"mid",name:"中盤",label:"⚠ 中盤",
+   bgs:["cinema","cafe","gym","event","night"], subs:["nail","drink","pet","book","sneaker"],
+   prob:{F:{fire:.85,buzz:.10,calm:.05},B:{buzz:.72,calm:.13,fire:.15},N:{calm:.80,buzz:.10,fire:.10},M:{fire:.85,buzz:.05,calm:.10}},
+   gain:{calm:[500,1200],buzz:[6000,12000],fire:[1500,3000]}, heat:[20,28], mine:.4},
+  {key:"late",name:"終盤",label:"💸 パトロン降臨期",
+   bgs:["resort","luxhotel","dinner","drive","bedroom"], subs:["watch","bag","cash","car","roses"],
+   prob:{F:{fire:.85,buzz:.15,calm:0},B:{buzz:.72,fire:.20,calm:.08},N:{calm:.80,buzz:.10,fire:.10},M:{fire:.90,buzz:.05,calm:.05}},
+   gain:{calm:[2000,4000],buzz:[18000,40000],fire:[4000,9000]}, heat:[22,32], mine:.45},
+];
+
+/* =====================================================
+   キャプション：75写真 × 4択 ＝ 300個（F=炎上 / B=バズ / N=無風）
+   並び：時期 → 背景（PHASES.bgs順）→ 被写体（PHASES.subs順）
+===================================================== */
+const CAPS = [
+/* ===== 序盤：書式「種類:投稿文>>その種類の結果になったときの理由」 ===== */
+/* バイト先 × 自撮り / 友人 / ご飯 / 花 / 手書きメモ */
+"F:店長いない隙に休憩室で盛れた🤳 サボりも仕事のうち #バイト>>店長がフォロワーにいて、勤務中のサボりがバレた|B:制服マジックで顔面3割増しになる現象に名前つけたい #バイトあるある>>全国のバイト勢から「わかる」が殺到|B:仕込み中の私、顔だけ見たら女優では？（手は玉ねぎ臭い） #自虐>>自虐のオチが効いて「好感度高い」と拡散|N:バイト前の自撮り。今日も頑張ります>>いつもの友達だけがいいねしてくれた",
+"F:バイト仲間と客の悪口で盛り上がった日w #休憩中>>悪口を言われた本人が投稿を見つけて店に通報|F:今日来たクレーマーの顔、友達とモノマネして供養したw>>「客をネタにする店」と店名ごと晒された|B:休憩室で「どっちが先に辞めるか」選手権開催中 #バイト戦友>>バイト戦友あるあるとして共感の嵐|N:バイト仲間と2ショット📸>>バイト仲間同士でいいねし合って終わった",
+"F:まかないって廃棄だから実質タダ飯ｗ #節約術>>「廃棄を持ち帰るのは横領では」と法律クラスタが参戦|B:まかないの盛り付けだけは本気出してる #プロの犯行>>盛り付けがプロ級だと料理アカウントに拾われた|B:店長が作るまかないが店のメニューより美味い問題 #バイト飯>>「その店どこ？」と店長ごとプチバズ|N:今日のまかない🍛>>美味しそうと言われて平和に終了",
+"F:お客さんにもらった花、正直いらないから持って帰ったw>>花をくれたお客さん本人がフォロワーだった|F:常連のおじさんから花束。キモいけど映えるから載せとく💐>>「好意を晒してキモい呼ばわりは最低」と非難轟々|B:バイト最終日、厨房のおっちゃん達が照れながら花くれて泣いた #ありがとう>>泣ける職場エピソードとして大拡散|N:お店に飾ってあるお花🌷>>店の公式アカウントだけがいいねした",
+"F:店長の字が汚すぎて晒すww #読めない>>店長本人に見つかり、翌月からシフトが激減|B:店長からの引き継ぎメモ「がんばれ」だけで草 #バイト>>雑すぎる引き継ぎがネタとしてウケた|B:シフト表の端に描かれた謎の猫がバイト全員の心の支え #バイトあるある>>猫の絵が可愛いとファンアートまで届いた|N:明日のシフトのメモ✍️>>誰の目にも止まらなかった",
+/* 公園 */
+"F:公園で遊んでる子ども達うるさすぎて自撮りに集中できないんだけど>>「公園は子どものための場所」と子育て世代が総攻撃|F:子連れママたちの視線が痛いけど自撮り続行w #強メンタル>>迷惑自撮りとして「公園マナー」の例に晒された|B:公園の木漏れ日フィルター、どのアプリより盛れる説 #天然レフ板>>みんなが真似して検証写真が大量に投稿された|N:公園でひなたぼっこ☀️>>のどかな写真にいいねが少しついた",
+"F:ベンチ3つ占領してピクニック。どかないよ？>>座れなかった高齢者の家族から晒し返された|B:大人になってブランコ全力で漕いだら友達が泣くほど笑ってた #童心>>大人の全力ブランコに「エモい」と共感|B:「公園で缶コーヒー」が一番贅沢って気づいた25歳2人 #大人の休日>>疲れた社会人の心に刺さった|N:友達とお散歩🌳>>友達がいいねしてくれた",
+"F:鳩にパン投げまくったら集まりすぎて地獄w 餌やり禁止？知らん>>餌やり禁止の無視に自治体アカウントまで反応|F:公園で焼肉したら怒られた。ケチすぎん？>>火気厳禁の公園だと特定され大炎上|B:手作りおにぎりの形が全部いびつで逆に愛おしい #不器用弁当>>不器用おにぎりに癒やされる人が続出|N:公園でランチ🍙>>平和なランチ写真として流れていった",
+"F:公園の花きれいだったから何本か摘んで帰った🌼 #お持ち帰り>>「公共の花を盗むな」と通報が相次いだ|B:雑草って呼ばれてる花の方が好きかもしれない #道端の花>>植物好きが花の名前を次々教えてくれた|B:花壇の前で映え狙ったらカマキリと目が合った #自然の洗礼>>カマキリのドヤ顔がミーム化|N:公園のお花が満開🌸>>季節の写真としていいねが少し",
+"F:ベンチに落ちてた誰かの手紙、エモすぎるから晒すね>>「他人の手紙を晒すな」と書いた本人の友人が激怒|F:元カレへの手紙書いてみた。読んでる？笑>>元カレの今カノが参戦して泥沼化|B:公園のベンチで「やりたいことリスト」書いたら全部食べ物だった #食欲>>食欲リストに「わかる」が殺到|N:ベンチで日記を書く時間>>静かな投稿として流れた",
+/* 街角 */
+"F:横断歩道の真ん中で自撮り。車待たせても映え優先🚦>>ドラレコ映像付きで「迷惑自撮り女」と晒された|B:渋谷のど真ん中で自撮りしてたら観光客に一緒に撮ってって言われた #国際交流>>観光客側の投稿とつながって話題に|B:ショーウィンドウを鏡にする女、私です #街角ミラー>>「私も」と共感の自撮りが集まった|N:街角でお出かけ中の自撮り📸>>いつも通りのいいね数",
+"F:路上で大声で歌ってたら通報されかけたw #若気の至り>>近所の住民に「毎晩うるさいのお前か」と特定された|F:すれ違ったカップル、彼女の方が残念すぎて友達と爆笑>>容姿いじりとして総スカンを食らった|B:友達と同じ服で来ちゃって街中ずっと双子扱い #事故コーデ>>双子コーデ事故がほっこりネタに|N:友達と街ブラ>>友達同士でいいねして終了",
+"F:食べ歩きのゴミ、捨てるとこないから植え込みに置いてきた>>ポイ捨ての証拠として商店街アカウントに引用された|B:食べ歩き3軒目、友達に「胃袋どこ」って言われた #食い倒れ>>食べ歩きルートが参考になると保存多数|B:屋台のおっちゃんがおまけしてくれて、人の優しさで泣きそう #下町>>屋台に行列ができるほど拡散|N:食べ歩き🍡>>美味しそうと言われて終わった",
+"F:花屋の前で写真だけ撮って何も買わない女です✌️>>花屋さん本人に「撮影だけは迷惑です」と返信された|F:路上の花屋さん高すぎ。ぼったくりでしょ>>「花の相場を知らないだけ」と花業界から総ツッコミ|B:花屋のお姉さんに「私に似合う花を」って頼んだらサボテン出てきた #どういう意味>>サボテンのオチが大ウケ|N:街角のお花屋さん💐>>おしゃれな写真としていいねが少し",
+"F:道で拾ったメモ「明日こそ告白する」←晒しとくね>>「人の勇気を笑い物にするな」と大炎上|B:電柱の「猫探してます」ポスター、絵が上手すぎて泣いた #見つかりますように>>拡散で猫が見つかったと報告が届いた|B:街で見かけた手書き看板「本日も適当営業」好き #街の名言>>街の名言として保存されまくった|N:街で見つけた手書きの看板>>誰にも刺さらなかった",
+/* 自宅 */
+"F:すっぴんでもこのレベル。努力してない人ごめんね>>「どう見てもメイクしてる」と検証され大炎上|F:部屋汚いけど顔が良いから許して #汚部屋>>背景のゴミ山が拡大されて「衛生的に無理」と叩かれた|B:自撮りの背景に洗濯物が映り込む確率100%説 #生活感>>生活感あるあるとして共感された|N:おうち時間🏠>>静かに流れていった",
+"F:深夜3時まで騒いでたら隣人に壁ドンされたw 負けずに続行>>隣人の反撃投稿の方がバズってしまった|B:友達が泊まりに来て、気づいたら朝まで人生相談 #宅飲み>>「こういう友達大事」と共感された|B:友達に部屋の掃除手伝ってもらったら元カレの写真発掘されて地獄 #大掃除>>地獄エピソードが大ウケ|N:友達が遊びに来てくれた>>友達だけがいいねした",
+"F:自炊とか貧乏人がやることでしょ（今日のは自炊）>>自炊派全員を敵に回した|B:冷蔵庫の残り物で作ったら奇跡の美味さ、二度と再現できない #一期一会飯>>「レシピ教えて」と問い合わせが殺到|B:丁寧な暮らしを目指して作った朝ごはん、焦げた #理想と現実>>理想と現実のギャップに共感|N:今日の夜ごはん🍳>>美味しそうと言われて終了",
+"F:元カレからもらった花、枯れたから捨てるついでに記念撮影w>>「性格悪すぎ」と元カレ側の友人が拡散|F:100均の花を高級店のって言ったらみんな信じててウケる>>騙された友人たちから絶縁宣言された|B:1本の花を飾るだけで部屋が急に「ちゃんとした人」になる #一輪挿し>>一輪挿しを真似する人が続出|N:お部屋にお花を飾りました🌷>>「素敵ですね」と数件",
+"F:親からの手紙。重いから正直読んでない>>「親の気持ちを踏みにじるな」と全世代から非難|B:冷蔵庫に貼った「自分との約束」、1個も守れてなくて笑う #三日坊主>>三日坊主仲間が集まった|B:上京するとき母が鞄に忍ばせてた手紙、今やっと読めた #上京物語>>泣ける上京話として大拡散|N:部屋で今日の目標を書きました✍️>>静かに応援された",
+/* 電車内 */
+"F:満員電車でも自撮りはやめない。隣のおじさん映ってるけど許してw>>写り込んだおじさんの家族が見つけて抗議|F:優先席で自撮り。誰も座らないからいいでしょ>>「優先席の意味分かってる？」とマナー警察が集結|B:電車の窓に映る自分が一番盛れてる現象 #車窓マジック>>車窓自撮りが一時トレンド入り|N:電車移動中🚃>>移動中の1枚としてスルーされた",
+"F:電車で友達と大声で喋ってたらおばさんに注意された。うざっ>>「注意した人が正しい」と全員に言われた|B:終電逃して友達と始発待ち、人生で一番笑った夜 #終電>>青春エピソードとして共感|B:電車で寝てる友達の寝顔、芸術点高すぎる #寝顔>>友達本人がノリノリで引用してバズ|N:友達とお出かけ>>友達がいいねして終了",
+"F:電車でカップ麺食べてみたw 周りの視線最高>>匂いテロとして動画付きで晒された|B:新幹線の駅弁って、食べる前の写真が一番テンション高い #駅弁>>駅弁好きが自慢の1枚を次々送ってきた|B:駅のホームで食べるそばが三ツ星に勝つ説 #立ち食いそば>>立ち食いそば論争で大盛り上がり|N:移動中のおやつ>>おやつ写真として流れた",
+"F:電車で大きい花束持ってたら舌打ちされた。嫉妬？>>「混雑時の大きな花束は迷惑」と逆に叩かれた|F:電車でおばあちゃんに席譲ったら花くれた。いい人アピール成功✌️>>「善行をアピールに使うな」と一気に冷められた|B:花束持って電車乗ると知らない人に「おめでとう」って言われる現象 #優しい世界>>優しい世界エピソードとして拡散|N:お花を持って帰宅中>>いいねが数件",
+"F:前の人のスマホ画面、浮気LINEだったからメモって晒す>>のぞき見とプライバシー侵害で大炎上|B:電車で隣の小学生が書いてた「将来の夢：ねこ」に救われた #ほっこり>>ほっこりエピソードとして拡散|B:通勤電車でネタ帳書いてる。いつか本出す #夢>>夢を追う人たちから応援が集まった|N:電車で読書メモ>>静かに流れた",
+/* ===== 中盤 ===== */
+/* 映画館 × 手元ネイル / ドリンク / ペット / 本 / スニーカー */
+"F:暗い映画館でスマホのライトつけてネイル撮影💅 映えたからOK>>上映中のスマホ点灯で「迷惑客」と晒された|B:ホラー映画が怖すぎて隣の友達の腕掴んだら、ネイルが刺さって二人で叫んだ #ホラー事故>>二重の悲鳴エピソードが大ウケ|B:映画のポスターと同じ色にネイル合わせてきた #推し映画>>配給会社の公式アカウントが引用してくれた|N:映画デートの日の手元💅>>「可愛い」と数件いいね",
+"F:映画館の飲み物高すぎるから持ち込みました👍 #節約>>持ち込み禁止のルール違反で映画館公式から注意喚起|B:映画始まる前にドリンク飲み干す人、私です #待てない>>同類が続々名乗り出た|B:ホラー映画で叫んでドリンク全部こぼした、隣の人ごめんなさい #ホラー耐性ゼロ>>隣の席の人本人が「許す」と返信してバズ|N:映画のお供🥤>>平和に流れた",
+"F:映画館にこっそり猫連れてきたw 静かにしてたしセーフでしょ>>動物を暗い劇場に連れ込んだと愛護団体まで参戦|F:映画館のペット禁止ってペット差別じゃない？>>アレルギー持ちの人たちから猛反論|B:猫の映画観てきたら家の猫が急に愛おしくなって即帰宅 #猫映画>>猫好きの共感が爆発|N:映画のあとは猫と過ごす>>猫好きだけがいいね",
+"F:原作読んでない人と映画観るの苦痛すぎる。にわかは来ないで>>映画から入ったファン全員を敵に回した|B:原作の推しシーンが映画で削られてて劇場で静かに泣いた #原作厨>>原作ファンの同志が集結|B:映画観た帰りに原作買って、結局徹夜で読破 #沼>>出版社の公式アカウントがリポスト|N:原作と映画を見比べ中📚>>読書好きがいいね",
+"F:映画館の前の席にスニーカーのまま足乗せて観たら快適すぎた👟>>前の席の人に見つかり「あれお前か」と怒りの返信|B:映画のキャラと同じスニーカー履いていったら、隣の席の人も同じだった #運命>>偶然すぎる一致が話題に|B:暗い館内でスニーカーの反射材だけ光ってて、足だけ幽霊になってた #ホラー>>足だけ幽霊がミーム化|N:今日の足元👟 映画の日>>足元コーデとして数件いいね",
+/* カフェ */
+"F:新作ネイル見せたくて、店員さんの前でずっとカップ持ち替えてた💅 #アピール>>店員の「接客中ずっと手を見せられた」投稿が先にバズってた|F:隣の席の人の爪ボロボロで見てられなかった。ケアしよ？>>他人の手元を勝手に品評したと大炎上|B:ネイルの色とラテアートの色がたまたま一致して店員さんと拍手した #奇跡>>奇跡の一致にほっこり|N:カフェで手元ショット💅>>「可愛い」と数件",
+"F:インスタ用に頼んだだけだから一口も飲んでない #映え>>「フードロス」「店に失礼」と大炎上|F:このカフェの店員、ラテアートの才能なさすぎて晒す>>頑張る新人店員を晒したと店のファンが激怒|B:ラテアート頼んだら全力で猫描いてくれた…けど顔が完全におじさん #ラテアート>>おじさん猫ラテがミーム化|N:今日のカフェラテ☕>>いつも通りのいいね",
+"F:犬NGのカフェに犬連れてった。だって家族だもん>>店のルール無視で店名ごと晒された|B:猫カフェで1匹も寄ってこなくて、店員さんに慰められた #猫に嫌われる体質>>猫に嫌われる仲間が集結|B:看板犬が私のケーキだけ狙ってくる #食いしん坊>>看板犬のファンが急増|N:看板猫ちゃん🐈>>猫好きがいいね",
+"F:カフェで難しい本読んでる私、知的すぎて誰も話しかけてこないw>>「知的アピールが鼻につく」と読書家界隈から総ツッコミ|F:店員さんに「何読んでるんですか」って聞かれた。ナンパうざ>>親切な店員をナンパ扱いしたと非難|B:カフェで読書してる風の写真撮ったら本が上下逆だった #気づいたの今>>自虐ネタとして大ウケ|N:カフェで読書の時間📖>>読書好きがいいね",
+"F:カフェのソファにスニーカーのまま足乗せてくつろぎ中👟 #自分の部屋感覚>>土足でソファに乗るなと店のファンが激怒|B:真っ白スニーカーでカフェ行ったらラテこぼして一瞬でカフェ色になった #ラテ染め>>「ラテ染め」がネタとしてバズ|B:カフェの床タイルとスニーカーの柄が完全に同化した #擬態>>同化写真が謎にウケた|N:カフェ巡りの足元👟>>足元写真として数件いいね",
+/* ジム */
+"F:ジムでネイル守るためにダンベルは指2本で持つ派💅 筋トレ（笑）>>危ない持ち方でトレーナー界隈から集中砲火|B:ベンチプレスしたらネイルが1本飛んで、トレーナーが真剣に探してくれた #ジムの優しさ>>トレーナーの優しさが話題に|B:筋トレ用にネイル短くしたら、スマホが全然打てなくなった #長さの代償>>ネイル短くしたあるあるで共感|N:トレーニング後の手元💅>>数件のいいね",
+"F:プロテイン？太るから飲まない。痩せてる人には分からないか>>筋トレ界隈とダイエット界隈を同時に敵に回した|B:プロテインのチョコ味、普通にデザートとして優秀 #筋トレ女子>>メーカー公式から感謝のリプが来た|B:ジム行く前にタピオカ飲んで「プラマイゼロ」理論 #言い訳>>言い訳理論に「天才」と賛同|N:トレーニング後の一杯🥤>>数件のいいね",
+"F:ジムに犬連れてきた🐶 トレーナーより懐いてるし問題なし>>ペット禁止のジムだと会員が通報|F:うちの犬、他の家のデブ犬と違ってムキムキで草>>他の飼い主たちの怒りを買った|B:筋トレしてたら猫が背中に乗ってきて負荷が倍に #猫トレ>>猫トレ動画を求める声が殺到|N:ジム帰りに愛犬とお散歩>>犬好きがいいね",
+"F:筋トレしない人って人生負け組だと思う。この本読め>>運動できない事情のある人たちから大反発|B:「1日5分で痩せる」本読みながらポテチ食べてる #矛盾>>矛盾っぷりに「仲間」と共感|B:ランニングマシンで本読もうとしたら3秒で吹っ飛んだ #危険>>吹っ飛び実況がウケた|N:トレーニングの本で勉強中>>数件のいいね",
+"F:ジムの土足禁止エリアに外履きスニーカーで上がった。汚れてないし問題ないでしょ👟>>会員が写真付きで告発|B:新しいスニーカーでランニングマシン乗ったら、張り切りすぎて10分でリタイア #形から入る>>形から入る勢が集結|B:ジムのロッカーで、左右違うスニーカー持ってきたのに気づいた #寝ぼけ>>左右違いスニーカーのオチがウケた|N:ジム用の新しいスニーカー👟>>数件のいいね",
+/* イベント会場 */
+"F:推しの握手会、ネイルで推しの手を引っかいちゃったかも💅 まあ記念ってことで>>「推しを傷つけて記念とは」とファン総出で炎上|B:推しカラーのネイルにしたら、推しに「その色いいね」って言われて気絶 #推し事>>同担から祝福が殺到|B:ライブでネイルにステージの光が反射して、私が人間ペンライトになってた #人間ペンライト>>人間ペンライトがミーム化|N:イベント用の推しネイル💅>>同担がいいね",
+"F:フェスで酔っぱらって知らない人のテントで寝てたw #自由人>>テントの持ち主が「不法侵入」と投稿|F:イベントのドリンク高すぎ。運営ぼったくりすぎでしょ>>運営の苦労を知る人たちから反発|B:フェス飯とビールの組み合わせ、人類の到達点 #夏フェス>>フェス好きの共感が爆発|N:イベント会場で乾杯🍹>>数件のいいね",
+"F:ペット禁止のイベントに犬連れて入れた。ルール緩すぎ>>主催者が投稿を見つけて公式に注意喚起|B:ドッグイベントでうちの子だけ芸を全部無視して寝てた #マイペース>>マイペース犬にファンがついた|B:保護猫の譲渡会に行ったら、私が猫に選ばれた #運命>>保護猫団体が引用して大拡散|N:ペットイベントに参加しました🐾>>動物好きがいいね",
+"F:サイン会で作家さんにタメ口きいたら引かれた。気さくに接しただけなのに>>作家のファンから「失礼すぎる」と非難|F:即売会で買った本、高く売れそうだからフリマに出す>>転売目的が作者本人に見つかった|B:推し作家のサイン会、緊張しすぎて自分の名前書き間違えた #推し事>>作家本人が「覚えてます」と返信|N:ブックフェアで本を買いました>>読書好きがいいね",
+"F:フェスで最前列取るために、前の人のスニーカー踏みまくって進んだ👟>>踏まれた側の投稿と照合されて特定|B:フェスで泥だらけになったスニーカー、洗ったら思い出まで落ちた気がする #夏フェス>>エモいと共感が集まった|B:イベント会場で友達とはぐれたけど、目印は私の蛍光スニーカーだった #目印>>蛍光スニーカーがネタになった|N:今日のイベントの足元👟>>数件のいいね",
+/* 夜景スポット */
+"F:夜景より私のネイルのほうがキラキラしてる💅 夜景さんごめんね>>「夜景に謝れ」と大喜利の的にされた|F:夜景スポットで隣のカップルの彼女のネイル、剥げてて萎えた>>他人の手元をけなしたと総攻撃|B:夜景バックに手元ショット撮ろうとしたら、ネイルにピントが合わず夜景だけ綺麗に撮れた #ピント迷子>>ピント迷子写真がウケた|N:夜景と手元💅>>数件のいいね",
+"F:夜景スポットで缶チューハイ飲み散らかしてきた。片付けは誰かがやるでしょ>>ゴミ放置の現場写真と並べて晒された|B:100万ドルの夜景に100円の缶コーヒー、これが私のバランス感覚 #庶民>>庶民派センスに共感|B:夜景見ながら飲むホットココア、人生で一番エモかった #冬の夜>>エモい冬の夜として拡散|N:夜景と一杯🍹>>数件のいいね",
+"F:立入禁止の柵越えて猫と夜景撮った。最高の1枚>>立入禁止区域への侵入で通報された|B:夜景より猫を見てる人、私です #猫優先>>猫優先派が集結|B:愛犬と夜景見に来たら犬が完全に寝てた #興味なし>>寝てる犬が可愛すぎるとバズ|N:愛犬と夜のお散歩🌃>>数件のいいね",
+"F:夜景見ながら読書してる私、エモすぎて泣ける。凡人には分からない世界>>「凡人」発言で一般人全員を敵に回した|F:夜景スポットでスマホのライトつけて本読んでたらカップルに睨まれた。知らん>>雰囲気ぶち壊しだとカップル側が投稿|B:夜景を見ながら読む詩集、ページめくるたびに泣いてる #情緒>>詩集の作者が引用してくれた|N:夜の読書タイム📖>>数件のいいね",
+"F:夜景スポットの柵にスニーカーで上がって撮影👟 落ちなかったからセーフ>>危険行為の見本として注意喚起に使われた|B:夜景デートにスニーカーで行ったら、相手が革靴で坂道に苦戦してた #スニーカーの勝利>>「スニーカー最強」と共感|B:光るスニーカーで夜景見に行ったら、私が一番光ってた #人間イルミネーション>>人間イルミネーションがネタ化|N:夜景散歩の足元👟>>数件のいいね",
+/* ===== 終盤 ===== */
+/* 海外リゾート × 高級時計 / ブランドバッグ / 札束・金塊 / 高級車 / 100本のバラ */
+"F:プールに時計ごと飛び込んだ。壊れたら新しいの買うし>>「物を大切にしない成金」と大炎上|B:リゾートで時計外したら日焼け跡が高級時計の形になってた #日焼け跡ブランド>>日焼け跡ブランドがミーム化|B:時間を忘れるためにリゾート来たのに、時計ばっか撮ってる #矛盾>>矛盾っぷりがウケた|N:南の島で過ごす時間🏝️>>「羨ましい」と数件",
+"F:ビーチにブランドバッグ置きっぱなしで泳いでたら砂まみれ。また買えばいいか>>「また買えばいい」の一言で金銭感覚が炎上|F:このバッグ持ってリゾートに来られない人の気持ち、正直わからない🌴 #ご褒美>>格差を煽ったと全方位から叩かれた|B:ハイブランドのバッグにビーチの砂が入って一生出てこない #リゾートあるある>>リゾートあるあるとして共感|N:お気に入りのバッグとリゾートでのんびり👜>>数件のいいね",
+"F:ビーチで札束扇子やってみた💸 現地の子どもにあげたら群がってきたw>>現地の子どもを見世物にしたと国際的に炎上|B:両替したら札束が分厚すぎてお金持ちごっこできた（中身は全部小額紙幣） #両替マジック>>見栄のオチが「正直で好き」とウケた|B:「お金で買えない景色だね」って言いながら全部パトロンのお金 #正直>>正直すぎる告白がバズった|N:旅先のお買い物>>数件のいいね",
+"F:現地でスーパーカー借りてビーチ爆走。スピード違反？ここ海外だし>>現地の交通当局がリポストする事態に|F:地元の人の車ボロすぎて逆に映える笑>>現地の人を見下したと大炎上|B:オープンカー借りたら風で髪型が爆発して写真全部ホラー #オープンカーの罠>>爆発ヘアがミーム化|N:海沿いドライブ🚗>>「羨ましい」と数件",
+"F:ビーチに100本のバラ。送り主？言えるわけないじゃん🤫 #匂わせ>>送り主探しが始まり、パトロン疑惑で炎上|F:バラ100本もらったことない人っているの？🌹>>もらったことのない人全員を敵に回した|B:南国で100本のバラもらったら、暑さで全部しおれてドライフラワーになった #リゾートの洗礼>>悲しいオチが大ウケ|N:海辺にバラ🌹>>数件のいいね",
+/* 高級ホテル */
+"F:このホテル、私の時計より安い客ばっかりで場違い感ある⌚>>他の宿泊客を見下したとホテルの常連が激怒|F:ラウンジで時計自慢してたら外国人に声かけられた。日本の男とは格が違う>>日本の男性全員を敵に回した|B:ラウンジで時計自慢しようとしたら、隣の人の時計がうちの家賃10年分だった #上には上が>>上には上がいるオチがウケた|N:ホテルのラウンジで一息>>数件のいいね",
+"F:ドアマンに荷物持たせて当然。チップ？知らない>>ホテルスタッフへの態度が悪いと接客業界から非難|B:高級ホテルのロビーで、ブランドバッグよりホテルの紙袋を大事に持ってる #紙袋コレクター>>紙袋コレクター仲間が集結|B:高級ホテルに泊まるときもバッグの中身はコンビニおにぎり #庶民の血>>庶民の血に共感が殺到|N:ホテルにチェックイン🏨>>数件のいいね",
+"F:スイートのベッドに札束並べてみた💴 これが努力の結果>>「努力ってパトロンでしょ」と検証され大炎上|F:スタッフにチップ1万円あげたら態度変わってウケた。所詮お金>>スタッフを見下したとホテル業界から非難|B:札束の写真撮ろうとしたら全部で3枚しかなくて扇子にならなかった #見栄の限界>>見栄の限界にほっこり|N:ホテルでのんびり>>数件のいいね",
+"F:ホテルの車寄せ、私の車停めるから他の車どいてほしい>>他の客への迷惑をホテルの常連が告発|B:車寄せに高級車で乗り付けて、降りるのに5分かかった #車高低すぎ>>降りられない動画を求める声が殺到|B:ドアマンに「運転お上手ですね」って言われたけど、まだエンジンのかけ方わからない #借り物>>借り物の正直告白がウケた|N:ホテルに到着🚗>>数件のいいね",
+"F:部屋に届いた100本のバラ。「誰から？」って聞かないのが大人のマナーだよ🌹>>匂わせが過ぎてパトロン特定班が動き出した|B:100本のバラ、花瓶に入りきらなくてバスタブに浮かべた #バラ風呂>>バラ風呂が「やってみたい」と話題に|B:バラ100本の数え直し3回目、99本しかない #1本どこ>>1本どこ問題で大喜利が始まった|N:お部屋にバラが届きました>>数件のいいね",
+/* 高級レストラン */
+"F:ディナー中もずっと時計が映るように左手で食べてる⌚>>マナー違反の時計アピールとしてまとめられた|B:ナイフとフォーク使うたび時計がカチャカチャ鳴って一番うるさい客になった #ガチャガチャ>>自虐の音ネタがウケた|B:コース料理が長すぎて時計見たら3時間経ってた #時間泥棒>>高級コースあるあるで共感|N:ディナータイム🍽️>>数件のいいね",
+"F:店員が私のバッグ床に置こうとしたからクレーム入れた。価値わかってない>>過剰なクレームだと飲食業界から非難|F:隣の席の人のバッグ偽物だった。恥ずかしくないのかな>>他人の持ち物を晒したと大炎上|B:高級レストランでバッグ専用の椅子が出てきて、私よりバッグの待遇がいい #椅子>>バッグ専用椅子ネタがウケた|N:素敵なディナー🍷>>数件のいいね",
+"F:お会計、札束で払ってみた💴 店員さん数えるの大変そうでウケた>>店員を困らせて笑ったと大炎上|B:「お会計は気にしないで」って言われたのに、メニューに値段がなくて気になりすぎて味がしない #時価>>時価あるあるで共感|B:ディナーで札束出したら「カードでお願いします」って言われた #令和>>令和の現実にツッコミが殺到|N:大切な人とディナー。お会計用に多めに用意してきた>>数件のいいね",
+"F:レストランの前に路駐。高級車だから許されるでしょ>>路駐の証拠写真が近隣住民から上がった|F:タクシーで来てる人たち、可哀想😢 #車で来た>>タクシー利用者と運転手を同時に敵に回した|B:高級車で来たけど駐車が下手すぎてシェフが誘導してくれた #神シェフ>>神シェフとして店ごとバズった|N:レストランまでドライブ>>数件のいいね",
+"F:ディナーの最後にサプライズで100本のバラ🌹 相手はまだ秘密 #匂わせ>>店の予約記録から相手を推理する人が続出|F:お店の人に「すごいですね」って言われたけど、私にとっては普通かな>>「普通かな」の一言が鼻につくと炎上|B:バラ100本抱えてタクシー乗ったら、運転手さんに「プロポーズ成功おめでとう」って言われた #違います>>運転手さんの勘違いがほっこり|N:素敵なディナーとお花>>数件のいいね",
+/* ドライブ中 */
+"F:運転しながら時計の写真撮ってみた⌚ 片手運転もプロなら余裕>>運転中のスマホ操作で警察の公式アカウントが注意喚起|B:ドライブ中に「今何時？」って聞かれて時計見せたら、時計の値段の話で1時間盛り上がった #時計沼>>時計好きが集まった|B:高級時計つけて運転したら、日焼けで時計の跡だけ白くなった #片腕日焼け>>片腕日焼け仲間が集結|N:ドライブ中🚗>>数件のいいね",
+"F:助手席にバッグ置くから、友達は後部座席ね>>友達よりバッグ優先と人間性を疑われた|F:ドライブスルーの店員、私のバッグ見て態度変わったのウケる>>店員を見下したとバイト経験者が総攻撃|B:カーブのたびにバッグが転がって、守るのに必死で景色見てない #バッグ優先>>本末転倒っぷりがウケた|N:お出かけドライブ👜>>数件のいいね",
+"F:車の窓から札束ばら撒いてみたw 拾う人たち必死すぎ>>人をバカにした迷惑行為としてニュースになった|B:料金所でお札が全部高額すぎてお釣りが足りなくなった #料金所>>料金所の人の困り顔が目に浮かぶとウケた|B:ドライブ中お金の話しかしない私に、パトロンが「景色も見て」って言った #反省>>正直なパトロンネタがウケた|N:ドライブのお供>>数件のいいね",
+"F:高速で200km出してみた🚗💨 #スピード狂>>速度違反の自白として通報が殺到|F:軽自動車に煽られたから煽り返した。格の違い教えてあげた>>あおり運転の自白として大炎上|B:高級車の運転席、ボタン多すぎて窓開けたつもりがシートが倒れた #操作不能>>操作不能ネタがウケた|N:新しい車でドライブ🏎️>>数件のいいね",
+"F:助手席に100本のバラ。運転してる人？知らなくていいよ🌹>>運転手の正体探しが始まりパトロン疑惑が再燃|B:後部座席がバラで埋まって、車内が完全に花屋 #移動式フラワーショップ>>移動式花屋がネタになった|B:バラ100本積んで信号待ちしてたら、隣の車の子どもにずっと手を振られた #バラの車>>ほっこりエピソードとして拡散|N:お花と一緒にドライブ🌹>>数件のいいね",
+/* ホテル・ベッドルーム */
+"F:ベッドに時計並べて寝る。どれつけていくか迷う朝が幸せ⌚ #贅沢な悩み>>贅沢自慢が鼻につくと炎上|F:昨日の夜、誰といたかは時計だけが知ってる… #匂わせ>>匂わせが露骨すぎると全方位から叩かれた|B:高級時計つけたまま寝たら頬にロゴの跡がついた #ブランド顔>>ブランド顔がミーム化|N:おやすみなさい🌙>>数件のいいね",
+"F:ベッドに並べたバッグ、全部もらい物。モテる女は辛い👜>>「もらい物」発言でパトロン疑惑が炎上|B:ベッドにバッグ並べて「添い寝」写真撮ってたら清掃の人に見られた #気まずい>>気まずいエピソードが大ウケ|B:ブランドバッグの箱が多すぎて、ベッドで寝る場所がなくなった #本末転倒>>本末転倒っぷりがウケた|N:お部屋でゆっくり>>数件のいいね",
+"F:札束のベッドで寝てみた💴 寝心地は最悪だけど気分は最高>>お金の出どころ探しが始まり大炎上|F:ベッドの上の札束、誰からもらったかはナイショ🤫 #パトロン>>自らパトロンを匂わせて総ツッコミ|B:札束を枕の下に入れて寝たら、金運より首を痛めた #金運>>金運ネタがウケた|N:ホテルの部屋でまったり>>数件のいいね",
+"F:ベッドルームから見える私の車。駐車場で一番目立ってる🚗 #格差>>「#格差」タグで格差を煽ったと炎上|B:高級車のキーをベッドで失くして、シーツの中を2時間捜索 #探し物>>探し物あるあるで共感|B:ホテルのベッドが高級車のシートより沈まなくて、車で寝ればよかった説 #謎理論>>謎理論がウケた|N:ドライブのあとはゆっくり休憩>>数件のいいね",
+"F:ベッドに散らばる100本分のバラの花びら。昨日の夜のことは秘密🤫 #匂わせ>>露骨な匂わせで相手探しが過熱|F:バラ100本くらいで喜ぶ女じゃないけど、一応載せとく>>「素直に喜べ」と全方位から叩かれた|B:花びらをベッドに散らしたら、寝返りで全部背中に貼り付いた #ロマンスの代償>>ロマンスの代償がミーム化|N:お部屋がバラの香り🌹>>数件のいいね",
+];
+
+/* =====================================================
+   地雷キャプション（M）：一見普通・清純なのに理不尽に大炎上する
+   どの写真と組み合わさっても不自然にならない文面だけにしている
+   {sub}=被写体名（why の中だけで使用）
+===================================================== */
+const MINES = [
+  [ // 序盤
+    {t:"今日の1枚。通りすがりの人の服が昭和っぽくて逆にエモかった☺️",why:"知らない人の服を勝手にイジったと特定され大炎上"},
+    {t:"みんな大好き♡いつも本当にありがとう！",why:"「みんなって誰？友達多いマウントか？」と曲解された"},
+    {t:"今日も普通の一日。普通が一番幸せだよね🍀",why:"「普通に暮らせない人もいるんですけど」と正義の引用リポストが殺到"},
+    {t:"お母さんいつもありがとう💐 大好き",why:"「母の日でもないのに親自慢？」「親がいない人の気持ち考えて」と炎上"},
+    {t:"朝5時起きで今日も活動開始！早起きって気持ちいいね☀️",why:"「朝弱い人を見下してる」と夜型界隈が団結"},
+    {t:"子どもって本当に可愛いよね。将来は大家族がいいな♡",why:"「望んでも叶わない人への配慮がない」と炎上"},
+    {t:"誰でも頑張れば夢は叶うよ✨ 一緒に頑張ろう！",why:"「努力できない環境の人もいる」と生存者バイアス論争が勃発"},
+    {t:"今日はノーメイク🙈 たまにはいいよね",why:"「どう見てもフルメイク」と拡大検証画像が出回った"},
+  ],
+  [ // 中盤
+    {t:"今日会った店員さん、笑顔が素敵だったので勝手に紹介しちゃいます☺️",why:"店員の個人情報を無断で出したと肖像権警察が集結"},
+    {t:"映え目的じゃなくて、本当に好きなものだけ載せてます🕊️",why:"「映え狙いの人を見下してる」と同業インフルエンサーが一斉に反応"},
+    {t:"自分へのご褒美って大事。頑張った日は少しくらい贅沢していいよね💐",why:"「その“少し”が庶民の1ヶ月分」と金銭感覚が炎上"},
+    {t:"平日の昼から遊べる自由な働き方って最高☕",why:"「社畜を煽ってる」と平日勤務勢が激怒"},
+    {t:"いいねの数とか気にしてないよ〜！見てくれる人がいるだけで幸せ♡",why:"過去に「いいね少ない」と嘆いた投稿が掘り起こされた"},
+    {t:"隣の席のカップル、仲良しで微笑ましかった♡",why:"「盗み聞き・盗み見してたの？」とプライバシー炎上"},
+    {t:"地元の友達、みんな結婚しててすごいな〜私はまだ自由に生きます✌️",why:"既婚者と独身者の両方から同時に叩かれた"},
+    {t:"物を大切にする人が好き。ずっと大事にしたいな🌿",why:"先月「飽きたから捨てた」と書いた投稿が発掘され「嘘つき」認定"},
+  ],
+  [ // 終盤
+    {t:"ここまで来られたのは応援してくれたみんなのおかげ。みんな大好き♡",why:"「本当はパトロンのおかげだろ」と一斉ツッコミ"},
+    {t:"ここ、思ってたより普通だった。でも感謝🙏",why:"「贅沢に慣れすぎ」「普通の基準どうなってるの」と大炎上"},
+    {t:"頑張った自分へのご褒美。自分を褒めてあげたい🌷",why:"「何を頑張ったの？」と半年分の投稿が検証された"},
+    {t:"物より思い出派です🕊️",why:"写真に{sub}が写っていて説得力ゼロと大喜利が始まった"},
+    {t:"人生って、結局は人とのご縁だよね✨",why:"「コネ自慢」「縁＝パトロン」とまとめサイトに載った"},
+    {t:"こういう時間、意外とみんな過ごせるよ！一度は体験してみて☺️",why:"「みんな」の範囲が狭すぎると格差論争に発展"},
+    {t:"スタッフさんが優しすぎて、思わず一緒に写真撮ってもらっちゃった♡",why:"勤務中のスタッフを顔出しさせたと運営会社が声明を出す騒ぎに"},
+    {t:"お金じゃ買えないものを大切にしたい。今日もありがとう🌙",why:"写真の{sub}の値段が特定され「お金で買えるものしか写ってない」と炎上"},
+  ],
+];
+
+/* 想定と違う結果になったときの理由（理不尽でもOK） */
+const OFF = {
+  fire:[
+    "ウケ狙いが「寒い」「不快」と一部に捕捉され、引用リポストで燃え広がった",
+    "「これって誰かへの当てつけ？」という深読みが拡散された（そんなつもりはない）",
+    "同じハッシュタグの別の炎上案件に巻き込まれ、なぜか一緒に叩かれた",
+    "「最近調子乗ってない？」という空気だけで燃えた",
+    "写り込んだ物が「偽物では」と（誤って）指摘され、検証班が動き出した",
+    "3年前の何気ない投稿が掘り起こされ、今回の投稿ごと燃えた",
+  ],
+  buzz:[
+    "性格の悪さが一周回って「正直で好き」とウケた",
+    "なぜかネタ投稿としておすすめ欄に載った",
+    "有名人がたまたま引用して、一気に拡散された",
+  ],
+  calm:[
+    "タイミング悪く大きなニュースに埋もれた",
+    "誰にも刺さらず、いいねは身内だけだった",
+    "アルゴリズムにスルーされた",
+  ],
+};
+
+function capsFor(p,b,s){
+  const list=CAPS[p*25+b*5+s].split("|").map(x=>{const [t,res]=x.slice(2).split(">>");return {type:x[0],t,res};});
+  // 時期に応じた確率で、炎上かバズの枠を1つ地雷に差し替える（無風は残す）
+  if(Math.random()<PHASES[p].mine){
+    const sub=SUB[PHASES[p].subs[s]].t;
+    const m=pick(MINES[p]);
+    const nF=list.filter(x=>x.type==="F").length;
+    const target=list.findIndex(x=>x.type===(nF===2?"F":"B"));
+    list[target]={type:"M",t:m.t,res:m.why.replace(/\{sub\}/g,sub)};
+  }
+  return list;
+}
+// 結果に応じた理由。想定どおりならその選択肢専用の理由、外れたら理不尽な理由
+function reasonFor(cap,type){
+  const expect={F:"fire",M:"fire",B:"buzz",N:"calm"}[cap.type];
+  return expect===type ? cap.res : pick(OFF[type]);
+}
+
+/* =====================================================
+   コメント（常に軽めのものを3件だけ表示）
+===================================================== */
+const NAMES1=["mofu","kuro","yuki","neet","sakura","tanaka","shiro","anti","nemui","gal","ojisan","oshi","riko","hanage","takoyaki","ramen","yami","pon","kenta","mina"];
+const NAMES2=["_x","_official",".gram","__","_2525","_life","_desu","0721","_chan","_88","_ura","_sub"];
+const COLORS=["#f39c12","#e74c3c","#9b59b6","#3498db","#1abc9c","#e67e22","#2ecc71","#d62976","#34495e","#16a085"];
+const LIGHT={
+  buzz:["草","天才すぎる","わかる〜","これは伸びる","保存した","おすすめから来ました","センスの塊","朝から笑った","友達に送った","推せる","今年一笑った","フォローしました！"],
+  fire:["性格悪w","炎上中w","消した方がいいよ","魚拓とった","これはアウト","引くわ…","擁護不可能","スクショ回ってきた","特定班まだ？","謝罪文はよ"],
+  calm:["いいね押しといた","かわいい","…","がんばって","おかん：ちゃんと食べてる？","いいね","✨"]
+};
+
+/* =====================================================
+   状態
+===================================================== */
+const GOAL=100000, TURNS=12, START=300, PATRON_FIRES=3;
+let S, phase="title", photo=null, opts=[], pickIdx=null;
+let animId=null, likeTimer=null, hidTimer=null, cmtTimers=[], liked=false, likeNow=0, lastType="";
+
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const rr=([a,b])=>a+Math.random()*(b-a);
+const pick=a=>a[rnd(a.length)];
+const fmt=n=>Math.round(n).toLocaleString("ja-JP");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const tagify=t=>t.replace(/(#[^\s#]+)/g,'<span class="tag">$1</span>');
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const EMOJI_FONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const phaseOf=t=>t<=4?0:t<=8?1:2;
+let gradSeq=0;
+const bgSVG=b=>{const id="g"+(gradSeq++);return `<svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${id}" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="${b.grad[0]}"/><stop offset="1" stop-color="${b.grad[1]}"/></linearGradient></defs><rect width="120" height="120" fill="url(#${id})"/>${b.deco}</svg>`;};
+const subSVG=s=>`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${s.svg}</svg>`;
+function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0,buzzN:0,fireN:0,mineN:0,used:new Set()}; }
+
+/* ===== テーマ ===== */
+(function(){
+  let t=null; try{t=localStorage.getItem("gi_s1_theme")}catch(e){}
+  if(t) document.documentElement.dataset.theme=t;
+  $("themeBtn").onclick=()=>{
+    const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+    const next=cur==="dark"?"light":"dark";
+    document.documentElement.dataset.theme=next;
+    try{localStorage.setItem("gi_s1_theme",next)}catch(e){}
+  };
+})();
+
+/* ===== 表示 ===== */
+function setStep(n){
+  document.querySelectorAll("#stepper div").forEach(d=>{const s=+d.dataset.s;d.className=s===n?"on":s<n?"done":"";});
+  $("slotSec").hidden=n!==1;
+  $("capSec").hidden=n!==2;
+  $("nextSec").hidden=n!==3;
+  $("postMeta").hidden=n!==3;
+}
+function renderStatus(){
+  const t=Math.min(S.turn,TURNS), P=PHASES[phaseOf(t)];
+  $("sTurn").textContent=`${t}/${TURNS}ターン`;
+  $("sDate").textContent=`${Math.ceil(t/2)}ヶ月目・${t%2?"前半":"後半"}`;
+  $("sEra").textContent=P.label; $("sEra").className="era "+P.key;
+  $("sFollow").textContent=fmt(S.followers);
+  $("gFollow").style.width=Math.min(100,S.followers/GOAL*100)+"%";
+  $("sFire").textContent=Math.round(S.gauge)+"%";
+  $("gFire").style.width=S.gauge+"%";
+  $("gFireWrap").classList.toggle("danger",S.gauge>=70);
+  const fc=$("sFireN");
+  if(S.fireN>=PATRON_FIRES){ fc.className="fire-count patron"; fc.textContent=`💎 炎上${S.fireN}回・パトロン行き`; }
+  else { fc.className="fire-count"+(S.fireN===PATRON_FIRES-1?" warn":""); fc.textContent=`炎上 ${S.fireN}/${PATRON_FIRES}回`; }
+  $("followersN").textContent=fmt(S.followers);
+  $("postsN").textContent=S.posts;
+  $("remain").textContent=S.followers>=GOAL?"0（達成！）":fmt(GOAL-S.followers);
+  const b=$("badge");
+  if(S.gauge>=60){b.className="badge hot";b.textContent="🔥炎上中";}
+  else if(S.gauge>=30){b.className="badge hot";b.textContent="⚠ くすぶり中";}
+  else {b.className="badge";b.textContent="✓ 平和";}
+  $("slotNote").textContent=`${P.name}：背景5 × 被写体5`;
+  $("pool").innerHTML=P.bgs.map(k=>`<span>${BG[k].e} ${BG[k].t}</span>`).join("")+P.subs.map(k=>`<span>${SUB[k].e} ${SUB[k].t}</span>`).join("");
+}
+function animateFollowers(from,to){
+  const els=[$("followersN"),$("sFollow")], t0=performance.now();
+  (function step(now){
+    const p=Math.min(1,(now-t0)/1400), k=1-Math.pow(1-p,3);
+    els.forEach(el=>el.textContent=fmt(from+(to-from)*k));
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+  if(to!==from){
+    const f=document.createElement("div");
+    f.className="delta-float"; f.style.color="var(--ok)";
+    f.textContent="+"+fmt(to-from);
+    $("followersN").parentElement.appendChild(f);
+    setTimeout(()=>f.remove(),1900);
+  }
+}
+
+/* ===== リール ===== */
+const CELL_H=76;
+const cellHTML=it=>`<div class="cell"><div class="e">${it.e}</div><div class="t">${it.t}</div></div>`;
+function initReels(){ const P=PHASES[phaseOf(S.turn)]; $("r0").innerHTML=cellHTML(BG[P.bgs[0]]); $("r1").innerHTML=cellHTML(SUB[P.subs[0]]); }
+function spinReel(i,list,target,dur){
+  const strip=$("r"+i);
+  strip.parentElement.classList.remove("stopped");
+  const seq=[]; for(let k=0;k<20+i*8;k++) seq.push(pick(list));
+  seq.push(list[target]);
+  strip.innerHTML=strip.lastElementChild.outerHTML+seq.map(cellHTML).join("");
+  strip.style.transition="none"; strip.style.transform="translateY(0)";
+  void strip.offsetHeight;
+  strip.style.transition=`transform ${dur}ms cubic-bezier(.12,.75,.22,1.03)`;
+  strip.style.transform=`translateY(${-seq.length*CELL_H}px)`;
+  return new Promise(res=>setTimeout(()=>{
+    strip.style.transition="none"; strip.innerHTML=cellHTML(list[target]); strip.style.transform="translateY(0)";
+    strip.parentElement.classList.add("stopped"); res();
+  },dur+30));
+}
+
+/* ===== 判定エフェクト（Canvas） ===== */
+const fx=$("fx"), ctx=fx.getContext("2d"), W=fx.width;
+function emoji(ch,x,y,size,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.font=`${size}px ${EMOJI_FONT}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(ch,x,y);ctx.restore();}
+function stopEffect(){ cancelAnimationFrame(animId); ctx.clearRect(0,0,W,W); }
+function startEffect(type){
+  stopEffect();
+  const t0=performance.now(), parts=[], N=type==="buzz"?55:type==="fire"?70:8;
+  for(let i=0;i<N;i++) parts.push({x:Math.random()*W,y:W*.3+Math.random()*W,v:1.5+Math.random()*3.5,s:18+Math.random()*40,ph:Math.random()*6,ch:pick(["❤️","❤️","💖","💕","✨"])});
+  const flames=[]; if(type==="fire") for(let i=0;i<26;i++) flames.push({x:i*(W/25),h:100+Math.random()*160,ph:Math.random()*6});
+  (function frame(now){
+    const t=(now-t0)/1000; ctx.clearRect(0,0,W,W);
+    if(type==="buzz"){
+      ctx.fillStyle=`rgba(255,80,160,${.08+.04*Math.sin(t*3)})`;ctx.fillRect(0,0,W,W);
+      for(const p of parts){p.y-=p.v;if(p.y<-40){p.y=W+40;p.x=Math.random()*W;}emoji(p.ch,p.x+Math.sin(t*2+p.ph)*20,p.y,p.s,.85);}
+    }else if(type==="fire"){
+      ctx.fillStyle=`rgba(200,0,0,${.22+.08*Math.sin(t*9)})`;ctx.fillRect(0,0,W,W);
+      for(const f of flames){
+        const h=f.h*(.75+.3*Math.sin(t*8+f.ph)), x=f.x+Math.sin(t*5+f.ph)*8;
+        const g=ctx.createRadialGradient(x,W,5,x,W-h*.4,h);
+        g.addColorStop(0,"rgba(255,255,180,.95)");g.addColorStop(.3,"rgba(255,170,0,.85)");g.addColorStop(.65,"rgba(255,40,0,.6)");g.addColorStop(1,"rgba(120,0,0,0)");
+        ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,W,44,h,0,0,7);ctx.fill();
+      }
+      for(const p of parts){p.y-=p.v*1.4;if(p.y<0){p.y=W;p.x=Math.random()*W;}ctx.fillStyle=`rgba(255,${120+rnd(120)},0,${p.y/W})`;ctx.fillRect(p.x+Math.sin(t*4+p.ph)*10,p.y,3,3);}
+    }else{
+      ctx.fillStyle="rgba(60,60,70,.35)";ctx.fillRect(0,0,W,W);
+      parts.forEach((p,i)=>{const y=W*.75-((t*30+i*60)%300);ctx.fillStyle=`rgba(255,255,255,${Math.max(0,(y-W*.25)/300)})`;ctx.font=`bold ${20+i*4}px sans-serif`;ctx.fillText("z",W*.72+i*12+Math.sin(t+i)*8,y);});
+    }
+    animId=requestAnimationFrame(frame);
+  })(t0);
+}
+
+/* =====================================================
+   STEP1：スロット
+===================================================== */
+async function spin(){
+  if(phase!=="spin"||$("modalRoot").innerHTML) return;
+  phase="spinning";
+  const game=S;   // 回転中にHOMEで最初からやり直した場合、古いスピンの結果は捨てる
+  const st=$("spinStatus"); st.textContent="🎰 スロット回転中…"; st.classList.add("rolling");
+  const p=phaseOf(S.turn), P=PHASES[p];
+  const bl=P.bgs.map(k=>BG[k]), sl=P.subs.map(k=>SUB[k]);
+  // 1ゲーム中に同じ「時期×背景×被写体」は二度と出さない
+  const free=[];
+  for(let b=0;b<5;b++) for(let s=0;s<5;s++) if(!S.used.has(`${p}-${b}-${s}`)) free.push([b,s]);
+  const [b,s]=pick(free);
+  S.used.add(`${p}-${b}-${s}`);
+  await Promise.all([spinReel(0,bl,b,1100),spinReel(1,sl,s,1600)]);
+  if(game!==S) return;
+  st.classList.remove("rolling"); st.textContent=`📸 撮影完了！（この時期の残り ${free.length-1}通り）`;
+  photo={p,b,s,bg:bl[b],sub:sl[s]};
+  // 確定した写真を大きく表示
+  $("empty").hidden=true;
+  $("lBg").innerHTML=bgSVG(photo.bg); $("lSub").innerHTML=subSVG(photo.sub);
+  $("photo").classList.remove("reveal"); void $("photo").offsetWidth; $("photo").classList.add("reveal");
+  $("pLoc").textContent=`📍 ${photo.bg.t} × ${photo.sub.e} ${photo.sub.t}`;
+  $("pChip").textContent="下書き";
+  await sleep(700);
+  showChoices();
+}
+
+/* =====================================================
+   STEP2：キャプション4択（写真専用）
+===================================================== */
+function showChoices(){
+  opts=shuffle(capsFor(photo.p,photo.b,photo.s));
+  pickIdx=null;
+  $("choices").innerHTML=opts.map((o,i)=>`<button class="cap" data-i="${i}">${tagify(o.t)}</button>`).join("");
+  $("postBtn").disabled=true; $("postBtn").textContent="投稿文を選んでください";
+  phase="choose"; setStep(2);
+  $("post").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("choices").addEventListener("click",e=>{
+  const b=e.target.closest(".cap"); if(!b||phase!=="choose") return;
+  pickIdx=+b.dataset.i;
+  document.querySelectorAll(".cap").forEach(x=>x.classList.toggle("sel",x===b));
+  $("postBtn").disabled=false; $("postBtn").textContent="この投稿文で投稿する";
+});
+
+/* =====================================================
+   判定：キャプションの種類 × 時期で結果を抽選
+===================================================== */
+function judge(capType,p,gauge){
+  const pr={...PHASES[p].prob[capType]};
+  pr.fire=Math.min(.95,pr.fire+gauge*.002);   // ゲージが高いほど燃えやすい
+  const tot=pr.fire+pr.buzz+pr.calm; let x=Math.random()*tot;
+  const type=(x-=pr.fire)<0?"fire":(x-=pr.buzz)<0?"buzz":"calm";
+  const G=PHASES[p];
+  const delta=Math.round(rr(G.gain[type]));        // 炎上でも知名度でフォロワーは増える
+  // 炎上は1回で+14〜32%。地雷は理不尽なのでさらに+4%
+  const heat=type==="fire"?Math.round(rr(G.heat))+(capType==="M"?4:0):type==="buzz"?-6:-12;
+  return {type,delta,heat};
+}
+
+/* =====================================================
+   STEP3：投稿結果・フィード
+===================================================== */
+function post(){
+  if(phase!=="choose"||pickIdx==null) return;
+  phase="posting"; $("postBtn").disabled=true;
+  const cap=opts[pickIdx], p=photo.p;
+  const res=judge(cap.type,p,S.gauge);
+  const before=S.followers, g0=S.gauge;
+  S.followers+=res.delta; S.gauge=clamp(S.gauge+res.heat,0,100); S.posts++;
+  if(cap.type==="F") S.fireChoice++;
+  if(res.type==="buzz") S.buzzN++; if(res.type==="fire") S.fireN++;
+  const mineHit=cap.type==="M"&&res.type==="fire";
+  if(mineHit) S.mineN++;
+  track("post",{turn:S.turn,phase:PHASES[p].key,caption:cap.type,result:res.type});
+
+  // フィードに反映
+  setStep(3);
+  $("pChip").textContent=`${S.turn}投稿目`;
+  $("caption").innerHTML=`<b>kotomi_guilty</b>${tagify(cap.t)}`;
+  const why=reasonFor(cap,res.type);
+  const rs=$("reason");
+  rs.className="reason "+res.type;
+  rs.innerHTML=`<span>${{fire:mineHit?"💣 地雷・炎上理由":"🔥 炎上理由",buzz:"✨ バズった理由",calm:"💤 無風だった理由"}[res.type]}</span>${why}`;
+  liked=false; $("likeBtn").classList.remove("liked");
+  startEffect(res.type);
+  const likes=res.type==="buzz"?Math.round(res.delta*rr([1.5,3])):res.type==="fire"?Math.round(res.delta*rr([.3,.8])):rnd(40)+5;
+  animateLikes(likes,res.type);
+  showComments(res.type,res.delta);
+  renderStatus(); animateFollowers(before,S.followers);
+  $("nextBtn").textContent=S.gauge>=100||S.turn>=TURNS?"結果を見る":"次へ進む";
+  if(res.type==="fire"){ $("post").classList.add("shake"); setTimeout(()=>$("post").classList.remove("shake"),600); }
+
+  // 結果ポップアップ
+  const gd=Math.round(S.gauge-g0);
+  const head=mineHit?"💣 地雷を踏んだ…":{buzz:"🎉 万バズ達成！",fire:"🔥 炎上中…",calm:"💤 無風…"}[res.type];
+  const label={fire:"炎上理由",buzz:"バズった理由",calm:"無風だった理由"}[res.type];
+  const flavor=`${mineHit?"普通の投稿のはずが…<br>":""}<span class="r-why">${label}</span><b>${why}</b>`;
+  openModal(`<div class="r-head">${head}</div>
+    <div class="r-delta">+${fmt(res.delta)}人</div>
+    <div class="r-flavor">${flavor}</div>
+    <div class="r-gauge" style="color:${gd>0?"var(--fire)":"var(--ok)"}">🔥 炎上ゲージ ${gd>0?"+":""}${gd}%（現在 ${Math.round(S.gauge)}%）</div>
+    ${S.gauge>=100?`<div class="r-warn">アカウント停止まで、あと0%</div>`:S.gauge>=60?`<div class="r-warn">⚠ あと1回燃えたらアカウント停止の危険</div>`:""}
+    ${res.type==="fire"&&S.fireN===PATRON_FIRES?`<div class="r-patron">💎 patron_kurokawa があなたをフォローしました<br><small>炎上${PATRON_FIRES}回。10万人に届けば、パトロンからの「お誘い」が確定</small></div>`
+      :res.type==="fire"&&S.fireN===PATRON_FIRES-1?`<div class="r-warn">💎 炎上${S.fireN}回目。あと1回燃えるとパトロンに目を付けられる…</div>`:""}
+    <button class="btn-main" id="seeFeed">フィードを見る</button>`,"res-sheet "+res.type);
+  $("seeFeed").onclick=()=>{ closeModal(); phase="result"; $("post").scrollIntoView({behavior:"smooth",block:"start"}); };
+}
+function animateLikes(target,type){
+  clearInterval(likeTimer); likeNow=0; lastType=type;
+  likeTimer=setInterval(()=>{likeNow=Math.min(target,likeNow+Math.ceil(target/40));setLikes();if(likeNow>=target)clearInterval(likeTimer);},50);
+}
+function setLikes(){ $("likes").textContent=`いいね！${fmt(likeNow+(liked?1:0))}件`+(lastType==="fire"?"（ほぼアンチ）":""); }
+$("likeBtn").onclick=()=>{ liked=!liked; $("likeBtn").classList.toggle("liked",liked); setLikes(); };
+function addComment(text,type){
+  const n=pick(NAMES1)+pick(NAMES2);
+  const el=document.createElement("div");
+  el.className="cmt"+(type==="fire"?" anti":"");
+  el.innerHTML=`<div class="av" style="background:${pick(COLORS)}">${n[0].toUpperCase()}</div><div class="body"><b>${n}</b> ${text}<small>今 · 返信する</small></div>`;
+  $("comments").appendChild(el);
+}
+// コメントは常に3件だけ表示。バズ時は「未表示のコメント」の数字だけが増えていく
+function showComments(type,delta){
+  cmtTimers.forEach(clearTimeout); cmtTimers=[]; clearInterval(hidTimer);
+  $("comments").innerHTML=""; const hc=$("hiddenCmts"); hc.hidden=true;
+  const pool=shuffle([...LIGHT[type]]);
+  [0,1,2].forEach(i=>cmtTimers.push(setTimeout(()=>addComment(pool[i],type),400+i*450)));
+  if(type==="buzz"){
+    let n=0; const target=Math.round(delta*rr([.15,.3]));
+    hc.hidden=false; hc.innerHTML=`未表示のコメントが <b>0</b>件 あります…`;
+    hidTimer=setInterval(()=>{
+      n=Math.min(target,n+Math.ceil(Math.random()*target/25));
+      hc.innerHTML=`未表示のコメントが <b>${fmt(n)}</b>件 あります…`;
+      hc.classList.remove("pulse"); void hc.offsetWidth; hc.classList.add("pulse");
+      if(n>=target) clearInterval(hidTimer);
+    },180);
+  }else if(type==="fire"){
+    hc.hidden=false; hc.innerHTML=`⚠ 一部のコメントは非表示になっています`;
+  }
+}
+
+/* ===== 次のターンへ ===== */
+function nextTurn(){
+  if(phase!=="result") return;
+  if(S.gauge>=100) return openDM("frozen");
+  // DMの分岐：10万人達成時、炎上3回以上なら強制的にパトロン（裏ルート）
+  if(S.turn>=TURNS) return openDM(S.followers>=GOAL?(S.fireN>=PATRON_FIRES?"patron":"scout"):"none");
+  S.turn++;
+  resetForSpin();
+  const t=S.turn;
+  // 節目だけ演出を挟み、それ以外は即オートスロット
+  if(t===5||t===9) phaseModal(phaseOf(t)); else autoSpin();
+}
+function autoSpin(){ phase="spin"; const game=S; setTimeout(()=>{ if(game===S) spin(); },450); }
+function resetForSpin(){
+  stopEffect(); clearInterval(likeTimer); clearInterval(hidTimer); cmtTimers.forEach(clearTimeout);
+  photo=null; $("empty").hidden=false; $("lBg").innerHTML=""; $("lSub").innerHTML="";
+  $("pLoc").textContent="撮影待ち"; $("pChip").textContent="下書き";
+  $("comments").innerHTML=""; $("hiddenCmts").hidden=true;
+  $("spinStatus").textContent="📸 撮影の準備中…"; $("spinStatus").classList.remove("rolling");
+  document.querySelectorAll(".reel").forEach(r=>r.classList.remove("stopped"));
+  renderStatus(); initReels(); setStep(1);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =====================================================
+   モーダル
+===================================================== */
+function openModal(html,cls=""){ $("modalRoot").innerHTML=`<div class="modal"><div class="sheet ${cls}">${html}</div></div>`; }
+function closeModal(){ $("modalRoot").innerHTML=""; }
+function titleModal(){
+  phase="title";
+  openModal(`<div class="big">💅🗼</div>
+    <div class="stage">STAGE 1 ・ 下積み編</div>
+    <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
+    <p>上京してきた25歳無職、<b>欺流亭 ことみ</b>（@kotomi_guilty）。<br>猶予は<b>半年・全12ターン</b>。それまでに<b>フォロワー10万人</b>を達成できなければ、東京を追放されて田舎に強制送還――。</p>
+    <ul>
+      <li>① スロットが<b>自動で回って写真</b>が決まる（同じ写真は二度と出ない）</li>
+      <li>② その写真専用の<b>投稿文4択</b>から1つ選ぶ</li>
+      <li>③ <b>万バズ / 炎上 / 無風</b>の結果を確認して次へ</li>
+      <li>4択のどれかは必ず燃える。炎上でもフォロワーは増えるが、🔥ゲージ100%で即アウト</li>
+      <li>💣 一見普通の投稿文に<b>地雷</b>が混ざっていることがある。ネットは理不尽</li>
+      <li>💎 <b>炎上3回以上</b>で10万人に届くと、届くDMが変わる…？</li>
+      <li>時期が進むほど、バズも炎上もインフレしていく</li>
+    </ul>
+    <button class="btn-main" id="startBtn">下積み生活をはじめる</button>
+    <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a>
+    <a class="fb-link" href="${feedbackUrl()}" target="_blank" rel="noopener">💬 要望・バグ報告はこちら</a>`);
+  $("startBtn").onclick=()=>{ closeModal(); track("game_start"); autoSpin(); };
+}
+function phaseModal(p){
+  phase="modal";
+  const P=PHASES[p];
+  const pool=`<div class="newpool">${P.bgs.map(k=>`<span>${BG[k].e} ${BG[k].t}</span>`).join("")}</div><div class="newpool">${P.subs.map(k=>`<span>${SUB[k].e} ${SUB[k].t}</span>`).join("")}</div>`;
+  const body = p===1
+    ? `<div class="big">📈⚠️</div><h2>3ヶ月目：中盤戦</h2>
+       <p>フォロワーが増えて、行ける場所も撮れるものも変わってきた。バズの伸びは序盤の約4倍。<br><b>ただし油断は禁物。</b>1回の炎上でゲージが20〜30%跳ね上がり、一見無難な<b>地雷</b>も序盤より多く混ざる。燃えるたびにパトロンの目にも留まりやすくなる。</p>${pool}
+       <button class="btn-main" id="okBtn">気を引き締める</button>`
+    : `<div class="big">💎🍷</div><h2>5ヶ月目：パトロン降臨</h2>
+       <p>ある夜、知らないアカウントから「いつも見てるよ」とだけDMが届いた。翌日、海外行きのチケットとブランドの紙袋が部屋に届いた。</p>
+       <p>写真のプールがすべて<b>超高級</b>に入れ替わる。バズればフォロワーは桁違いに増えるが、炎上も桁違い。</p>${pool}
+       <button class="btn-main" id="okBtn">パトロンの連絡を見る</button>`;
+  openModal(body,"phase-sheet "+P.key);
+  $("okBtn").onclick=()=>{ closeModal(); autoSpin(); };
+}
+
+/* =====================================================
+   エンディング：DMガチャ → STAGE2予告 / 田舎送り
+===================================================== */
+const SENDERS={
+  scout:{id:"stella_creative_jp",name:"Stella Creative｜新人開発部",color:"linear-gradient(135deg,#f6d365,#fda085)",ic:"S",company:"株式会社ステラ・クリエイティブ",person:"新人開発部の星野"},
+  patron:{id:"luna_creative_jp",name:"Luna Creative｜新規事業部",color:"linear-gradient(135deg,#a18cd1,#fbc2eb)",ic:"L",company:"株式会社ルナ・クリエイティブ",person:"新規事業部の月岡"},
+};
+const offerMessages=s=>[
+  `はじめまして。突然のご連絡失礼いたします。\n${s.company}、${s.person}と申します。`,
+  `半年ほど前から、ことみ様の投稿を拝見しておりました。\nフォロワー10万人達成、本当におめでとうございます🎉`,
+  `ことみ様の「人の心を動かす力」は、なかなか出会えない才能だと感じております。`,
+  `つきましては、弊社の新しいプロジェクトの"顔"として、ぜひ一度お力をお借りできないかと考えております。`,
+  `活動に必要な費用・住まい・衣装などは、すべて弊社でサポートさせていただきます。\nまずは一度、都内のオフィスでお話しできませんか？☕️`,
+];
+const REVEAL={
+  scout:{msgs:["ありがとうございます！それでは改めて、正式なご案内です📄","弊社は俳優・タレントのマネジメント事務所です。来月の新人オーディション最終審査に、特別推薦枠でご参加いただきたく存じます。","当日はマネージャーが同行いたします。契約書は必ずご家族とご確認くださいね。"],
+    cls:"light",icon:"🎬🌟",title:"芸能プロダクションからのスカウト",route:"表舞台・芸能界編",
+    text:"本物のスカウトだった。ことみは震える手で「よろしくお願いします」と返信した。半年間の投稿が、表舞台への切符になった。"},
+  patron:{msgs:["ありがとうございます！それでは改めて、正式なご案内です📄","弊社のプロジェクトは「ことみ様プロデュースの美容サロン会員権」の販売です。まずは初期パートナー費用として、198万円をご用意いただけますか？","ご安心ください。フォロワー様を3名ご紹介いただくごとに、すぐ回収できる仕組みです💎\nちなみに、例の「パトロン」の方も、ことみ様にお会いしたいそうですよ。"],
+    cls:"dark",icon:"💴🕶️",title:"パトロン・怪しいビジネスからの勧誘",route:"裏社会・カス成金編",
+    text:"丁寧な文面の裏にいたのは、あのパトロンだった。燃やして稼いだ半年間の代償を、ことみはこれから払うことになる。"},
+};
+function dmShell(inner){ $("dmRoot").innerHTML=`<div class="dm"><div class="dm-inner">${inner}</div></div>`; }
+const scoreCells=()=>`<div>フォロワー<b>${fmt(S.followers)}</b></div><div>万バズ<b>${S.buzzN}回</b></div><div>炎上<b>${S.fireN}回</b></div>`;
+const scoresHTML=()=>`<div class="scores">${scoreCells()}</div>`;
+
+/* ===== 結果カード ＋ Xシェア ===== */
+const man=n=>n>=10000?`${(Math.floor(n/1000)/10).toLocaleString("ja-JP")}万人`:`${fmt(n)}人`;
+// シェア文に入れるゲームURL（本番の公開URL）
+const GAME_URL="https://red-freegames.github.io/guilty-influencer/";
+// リザルトカード3種：star=芸能スカウト / rich=パトロン・成金 / down=ゲームオーバー
+const CARDS={
+  scout:{cls:"star",clear:true,icon:"🎬",title:"芸能界からのスカウト",deco:["✦","★","✧","✦","★"]},
+  patron:{cls:"rich",clear:true,icon:"💴",title:"パトロンの飼い犬・カス成金",deco:["💴","💰","💎","💴","🥂"]},
+  none:{cls:"down",icon:"🚃",title:"東京追放（田舎送り）／炎上敗北",why:"10万人に届かず、半年で上京生活終了",deco:["🚓","🌾","📉","🚃","🔥"]},
+  frozen:{cls:"down",icon:"🚓",title:"東京追放（田舎送り）／炎上敗北",why:"炎上でアカウント停止",deco:["🚓","🔥","🧊","🚨","🔥"]},
+};
+function tweetText(kind){
+  const C=CARDS[kind], tags="#ギルティーインフルエンサー #インディーゲーム";
+  return C.clear
+    ? `半年の下積みでフォロワー【${man(S.followers)}】を達成し、【${C.title}】を獲得しました…！✨ ${tags} ${GAME_URL}`
+    : `半年の下積みで炎上してフォロワーを失い、東京を追放されました（田舎送り）…😭 ${tags} ${GAME_URL}`;
+}
+function shareHTML(kind){
+  const C=CARDS[kind], text=tweetText(kind);
+  const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(text);
+  const pos=[[6,8,22],[82,5,30],[88,46,18],[3,62,26],[64,84,22]];
+  const deco=C.deco.map((d,i)=>`<span style="left:${pos[i][0]}%;top:${pos[i][1]}%;font-size:${pos[i][2]}px">${d}</span>`).join("");
+  return `<div class="rcard ${C.cls}">
+      <div class="rc-deco">${C.cls==="down"?'<div class="rc-tape"></div>':""}${deco}</div>
+      <div class="rc-top"><span>GUILTY INFLUENCER</span><span>STAGE 1 RESULT</span></div>
+      <div class="rc-user"><div class="rc-av">💅</div><div>@kotomi_guilty<br><small style="font-weight:600;opacity:.8">欺流亭 ことみ ・ ${Math.min(S.turn,TURNS)}/12ターン</small></div></div>
+      <div class="rc-cap">獲得称号</div>
+      <div class="rc-title">${C.icon} ${C.title}</div>
+      ${C.why?`<div class="rc-why">${C.why}</div>`:""}
+      <div class="rc-cap">最終フォロワー</div>
+      <div class="rc-num">${man(S.followers).replace(/人$/,"")}<small>人</small></div>
+      <div class="rc-stats"><div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>地雷<b>${S.mineN}</b></div><div>炎上G<b>${Math.round(S.gauge)}%</b></div></div>
+      <div class="rc-tag">#ギルティーインフルエンサー</div>
+    </div>
+    <div class="share-hint">📸 このカードをスクショしてXに投稿しよう！</div>
+    <a class="btn-x" href="${url}" target="_blank" rel="noopener">𝕏 で投稿する</a>
+    <div class="share-text">${text}</div>`;
+}
+async function openDM(kind){
+  phase="end"; stopEffect(); closeModal();
+  track("game_end",{ending:kind,followers:S.followers,turn:S.turn,fires:S.fireN});
+  const head=`<div class="dm-head"><span>‹</span><div class="grow">kotomi_guilty<small>半年後 ・ 6ヶ月目の終わり</small></div><span>✎</span></div><div class="dm-search">🔍 検索</div>`;
+  if(kind==="frozen"||kind==="none"){
+    dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span>リクエスト</span></div>
+      ${kind==="frozen"?`<div class="frozen-banner">⚠ このアカウントはコミュニティガイドラインに違反したため停止されています。</div>`:""}
+      <div class="dm-body"><div class="dm-empty" id="dmEmpty"><div class="big">✉️</div><h3>メッセージはありません</h3><div>新着メッセージを確認中…</div><div class="refresh"></div></div></div>`);
+    await sleep(3500);
+    $("dmEmpty").innerHTML=`<div class="big">📭</div><h3>……何も、届かなかった。</h3>
+      <div class="reveal-box lose"><div style="font-size:36px">🚃🌾</div><h3 style="color:var(--fire)">東京追放・田舎強制送還</h3>
+        <div class="exile"><span class="tokyo">🗼</span><span class="train">🚃</span><span class="rice">🌾🌾</span><span class="home">🏚️</span></div>
+        <p>${kind==="frozen"?"炎上ゲージが限界を超え、アカウントは停止。誰からも連絡は来なかった。":`半年が経った。フォロワーは${fmt(S.followers)}人。10万人には届かなかった。`}<br>実家に帰ると、母が何も言わずに肉じゃがを出してくれた。ことみのスマホには、まだ下書きの投稿が1件残っている。</p>
+        ${shareHTML(kind)}<button class="btn-main" id="againBtn">もう一度、上京する</button>
+        <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
+    $("againBtn").onclick=restart; return;
+  }
+  const s=SENDERS[kind];
+  dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span class="req">リクエスト (1)</span></div>
+    <div class="dm-body" id="dmBody"><div class="dm-empty"><div class="big">✉️</div><h3>メッセージはありません</h3><div class="refresh"></div></div></div>`);
+  await sleep(2200);
+  const n=document.createElement("div"); n.className="notify";
+  n.innerHTML=`<div class="ic">✉️</div><div><b>新しいメッセージリクエスト</b><small>${s.id}：はじめまして。突然のご連絡失礼いたします…</small></div>`;
+  document.body.appendChild(n); setTimeout(()=>n.remove(),3500);
+  $("dmBody").innerHTML=`<button class="dm-row" id="openReq"><div class="dm-av" style="background:${s.color}">${s.ic}</div><div class="who"><b>${s.id}</b><span class="verified">✓</span><div class="pv">はじめまして。突然のご連絡失礼いたします。</div></div><span class="dot"></span></button><div class="req-note" style="margin-top:20px">タップしてメッセージを開く</div>`;
+  $("openReq").onclick=()=>openChat(kind);
+}
+async function openChat(kind){
+  const s=SENDERS[kind];
+  dmShell(`<div class="dm-head"><span>‹</span><div class="dm-av" style="background:${s.color};width:32px;height:32px;font-size:14px">${s.ic}</div><div class="grow">${s.id}<span class="verified">✓</span><small>${s.name}</small></div><span>ⓘ</span></div>
+    <div class="chat" id="chat"><div class="chat-top"><div class="dm-av" style="background:${s.color}">${s.ic}</div><b>${s.name}</b><small>${s.id} ・ フォロワー 2.4万人 ・ 投稿 312件</small></div>
+    <div class="req-note">このアカウントはあなたをフォローしていません。メッセージリクエストです。</div></div>
+    <div class="chat-foot" id="chatFoot"><div class="q">相手が入力中…</div></div>`);
+  for(const m of offerMessages(s)) await say(m);
+  $("chatFoot").innerHTML=`<div class="q">これって…どっちのスカウト？？</div><div class="row"><button class="btn-blue" id="yesBtn">返信する</button></div>`;
+  $("yesBtn").onclick=async()=>{
+    $("chatFoot").innerHTML=`<div class="q">返信を送信中…</div>`;
+    await say("ぜひお話を聞かせてください！よろしくお願いします🙇‍♀️","out");
+    const R=REVEAL[kind];
+    for(const m of R.msgs) await say(m);
+    await sleep(600);
+    const box=document.createElement("div"); box.className="reveal-box "+R.cls;
+    box.innerHTML=`<div style="font-size:40px">${R.icon}</div><h3>${R.title}</h3><span class="route">STAGE 2 ▶ ${R.route}</span><p>${R.text}</p>${scoresHTML()}<button class="btn-main" id="toStage2">STAGE 2 へ進む</button>`;
+    $("chat").appendChild(box); box.scrollIntoView({behavior:"smooth",block:"start"});
+    $("chatFoot").innerHTML=`<div class="q">${kind==="scout"?"🌟 STAGE 1 クリア！（表ルート）":"💴 STAGE 1 クリア……？（裏ルート）"}</div>`;
+    $("toStage2").onclick=()=>stage2Screen(kind);
+  };
+}
+async function say(text,dir="in"){
+  const chat=$("chat");
+  if(dir==="in"){
+    const t=document.createElement("div"); t.className="typing"; t.innerHTML="<i></i><i></i><i></i>";
+    chat.appendChild(t); chat.scrollTop=chat.scrollHeight;
+    await sleep(600+Math.min(1400,text.length*20)); t.remove();
+  }else await sleep(500);
+  const b=document.createElement("div"); b.className="bubble "+dir; b.textContent=text;
+  chat.appendChild(b); chat.scrollTop=chat.scrollHeight;
+  await sleep(300);
+}
+function stage2Screen(kind){
+  const R=REVEAL[kind];
+  const el=document.createElement("div"); el.className="stage2 "+R.cls; el.id="stage2";
+  el.innerHTML=`<div class="inner">
+    <div class="lbl">NEXT STAGE</div>
+    <div class="num">STAGE 2</div>
+    <h2>${R.route}</h2>
+    <div class="wait">公開までお待ちください</div>
+    <div class="dots"><i></i><i></i><i></i></div>
+    <p>${kind==="scout"?"オーディション会場の扉の向こうで、ことみの新しい半年が始まる。":"パトロンの待つ会員制ラウンジで、ことみの新しい半年が始まる。"}</p>
+    ${shareHTML(kind)}
+    <button class="btn-main" id="againBtn">STAGE 1 を最初からプレイ</button>
+    <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
+  document.body.appendChild(el);
+  $("againBtn").onclick=restart;
+}
+function restart(){ $("dmRoot").innerHTML=""; $("stage2")?.remove(); startGame(); }
+
+/* =====================================================
+   RED FREE GAMES 共通（他のゲーム・要望フォーム・アクセス解析・HOME）
+===================================================== */
+const SITE_URL="https://red-freegames.github.io/";
+// 要望・バグ報告フォーム（RED FREE GAMES 共通のGoogleフォーム）。
+// 「対象のゲーム」の選択肢に同じ名前（ギルティー・インフルエンサー）を追加すると、選択済みの状態で開く
+const FEEDBACK_VIEW="https://docs.google.com/forms/d/e/1FAIpQLSfJ2DevI46AJiB_kUAmPGOvckFRqzzSP_iCVd5qiikxr9SIOg/viewform";
+const feedbackUrl=()=>`${FEEDBACK_VIEW}?usp=pp_url&entry.2056875219=${encodeURIComponent("ギルティー・インフルエンサー")}`;
+// アクセス解析（Googleアナリティクス4）。本番（github.io）でだけ計測し、画面には何も出さない
+const GA_ID="G-FC7LD0DJTQ";
+(function initAnalytics(){
+  if(!GA_ID || !/\.github\.io$/.test(location.hostname)) return;
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=function(){ dataLayer.push(arguments); };
+  gtag("js",new Date()); gtag("config",GA_ID,{page_title:"ギルティー・インフルエンサー"});
+  const s=document.createElement("script"); s.async=true;
+  s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA_ID);
+  document.head.appendChild(s);
+})();
+// ゲーム内の出来事を記録する（失敗しても遊びには影響させない）
+const track=(name,params)=>{ try{ if(window.gtag) gtag("event",name,params||{}); }catch(e){} };
+
+// HOME：プレイ中は確認を挟んでタイトルに戻る
+$("homeBtn").onclick=()=>{
+  if(phase==="title"||$("modalRoot").innerHTML) return;
+  openModal(`<div class="home-ask"><h2>タイトルに戻りますか？</h2><p style="text-align:center">進行状況はリセットされます</p>
+    <div class="row"><button class="no" id="homeNo">続ける</button><button class="yes" id="homeYes">🏠 戻る</button></div></div>`);
+  $("homeNo").onclick=closeModal;
+  $("homeYes").onclick=()=>{ closeModal(); track("home_return",{turn:S.turn}); restart(); };
+};
+
+/* ===== 起動 ===== */
+function startGame(){
+  S=newState(); stopEffect();
+  resetForSpin(); setStep(1); titleModal();
+}
+$("postBtn").onclick=post;
+$("nextBtn").onclick=nextTurn;
+startGame();
+</script>
+</body>
+</html>
