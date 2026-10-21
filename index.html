@@ -83,11 +83,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .delta-float{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-weight:800;font-size:15px;white-space:nowrap;animation:floatUp 1.8s ease-out forwards;pointer-events:none}
 @keyframes floatUp{from{opacity:1;margin-top:0}to{opacity:0;margin-top:-40px}}
 
-/* ステップ表示 */
-.stepper{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.stepper div{padding:7px 4px;border-radius:10px;background:var(--soft);color:var(--sub);text-align:center;font-size:11.5px;font-weight:700;transition:background .2s,color .2s}
-.stepper div.on{background:var(--fg);color:var(--bg)}
-.stepper div.done{color:var(--fg)}
 
 /* スロット */
 .panel{padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
@@ -371,7 +366,6 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .choices{gap:10px}
 .actions{gap:6px;padding:4px 6px 0}
 .actions button{width:44px;height:44px;display:grid;place-items:center}
-.stepper div{padding:9px 4px;font-size:12px}
 .chat-foot .row button{min-height:50px;font-size:15px}
 .dm-row{min-height:72px}
 .btn-x{min-height:52px;font-size:16px}
@@ -440,7 +434,6 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   </section>
   <div class="bio"><b>欺流亭 ことみ</b>（25）上京したて🗼 半年で10万人いけなかったら田舎に帰ります。あと <b id="remain">100,000</b>人</div>
 
-  <div class="stepper" id="stepper"><div data-s="1">① スロット</div><div data-s="2">② キャプション</div><div data-s="3">③ 投稿結果</div></div>
 
   <!-- STEP1 スロット -->
   <section class="panel" id="slotSec">
@@ -818,7 +811,6 @@ function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0
 
 /* ===== 表示 ===== */
 function setStep(n){
-  document.querySelectorAll("#stepper div").forEach(d=>{const s=+d.dataset.s;d.className=s===n?"on":s<n?"done":"";});
   $("slotSec").hidden=n!==1;
   $("capSec").hidden=n!==2;
   $("nextSec").hidden=n!==3;
