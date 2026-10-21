@@ -252,12 +252,12 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .rc-stats div{background:rgba(0,0,0,.2);border-radius:10px;padding:6px 2px;font-size:10px;text-align:center}
 .rc-stats b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
 .rc-tag{margin-top:10px;font-size:11px;font-weight:700;opacity:.85}
-.share-hint{margin:4px 0 8px;font-size:12px;font-weight:700;text-align:center;opacity:.85}
 .btn-x{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:12px;background:#000;color:#fff;font-weight:800;font-size:15px;text-decoration:none;border:1px solid #444}
 .btn-x:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .share-text{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.15);font-size:11.5px;line-height:1.6;text-align:left;user-select:all;word-break:break-word;white-space:pre-wrap}
-.btn-share{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin-top:8px;border-radius:12px;background:var(--grad);color:#fff;font-weight:800;font-size:16px}
-.btn-share[hidden]{display:none}
+.share-preview{margin:6px 0 10px}
+.share-preview img{display:block;width:100%;max-width:100%;aspect-ratio:1200/630;border-radius:12px;border:1px solid rgba(127,127,127,.35)}
+.share-preview figcaption{margin-top:6px;font-size:12px;font-weight:700;text-align:center;opacity:.85}
 .shake{animation:shake .5s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 
@@ -1170,22 +1170,11 @@ function tweetText(kind){
     ? `半年の下積みでフォロワー【${man(S.followers)}】を達成し、【${C.title}】を獲得しました…！✨（万バズ${S.buzzN}回・炎上${S.fireN}回）\n${tags}\n${shareUrl(kind)}`
     : `半年の下積みで炎上してフォロワーを失い、東京を追放されました（田舎送り）…😭（最終フォロワー${man(S.followers)}・炎上${S.fireN}回）\n${tags}\n${shareUrl(kind)}`;
 }
-// スマホでは共有シートから画像ファイルを添付してシェアできる（対応端末だけボタンを出す）
-function canShareImage(){
-  try{ return !!(navigator.canShare && navigator.canShare({files:[new File([""],"t.jpg",{type:"image/jpeg"})]})); }catch(e){ return false; }
-}
-function initShareButtons(){
-  if(canShareImage()) document.querySelectorAll(".btn-share").forEach(b=>b.hidden=false);
-}
-document.addEventListener("click",async e=>{
-  const b=e.target.closest(".btn-share"); if(!b) return;
-  const kind=b.dataset.kind;
-  try{
-    const blob=await fetch(shareImg(kind)).then(r=>r.blob());
-    const file=new File([blob],`guilty-influencer-${kind}.jpg`,{type:"image/jpeg"});
-    await navigator.share({files:[file],text:tweetText(kind)});
-    track("share_image",{ending:kind});
-  }catch(err){ /* キャンセル時などは何もしない */ }
+// 𝕏 でシェア：PCもスマホもワンクリックで X の投稿画面（スマホは X アプリ）を直接開く。
+// 画像ファイルは Web Intent では添付できないため、投稿文末尾のシェア用ページURLから
+// 称号＋イラストの画像カードを X に表示させる
+document.addEventListener("click",e=>{
+  const a=e.target.closest(".btn-x"); if(a) track("share_x",{ending:a.dataset.kind});
 });
 function shareHTML(kind){
   const C=CARDS[kind], text=tweetText(kind);
@@ -1206,9 +1195,8 @@ function shareHTML(kind){
       <div class="rc-stats"><div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>地雷<b>${S.mineN}</b></div><div>炎上G<b>${Math.round(S.gauge)}%</b></div></div>
       <div class="rc-tag">#ギルティーインフルエンサー</div>
     </div>
-    <div class="share-hint">📸 このカードをスクショしてXに投稿しよう！</div>
-    <a class="btn-x" href="${url}" target="_blank" rel="noopener">𝕏 で投稿する</a>
-    <button class="btn-share" data-kind="${kind}" hidden>📷 画像付きでシェア</button>
+    <figure class="share-preview"><img src="${shareImg(kind)}" alt="Xに表示される画像カード：獲得称号「${C.title}」"><figcaption>𝕏 でシェアすると、この画像がカードで表示されます</figcaption></figure>
+    <a class="btn-x" href="${url}" target="_blank" rel="noopener" data-kind="${kind}">𝕏 でシェア</a>
     <div class="share-text">${text}</div>`;
 }
 async function openDM(kind){
@@ -1226,7 +1214,7 @@ async function openDM(kind){
         <p>${kind==="frozen"?"炎上ゲージが限界を超え、アカウントは停止。誰からも連絡は来なかった。":`半年が経った。フォロワーは${fmt(S.followers)}人。10万人には届かなかった。`}<br>実家に帰ると、母が何も言わずに肉じゃがを出してくれた。ことみのスマホには、まだ下書きの投稿が1件残っている。</p>
         ${shareHTML(kind)}<button class="btn-main" id="againBtn">もう一度、上京する</button>
         <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
-    $("againBtn").onclick=restart; initShareButtons(); return;
+    $("againBtn").onclick=restart; return;
   }
   const s=SENDERS[kind];
   dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span class="req">リクエスト (1)</span></div>
@@ -1285,7 +1273,6 @@ function stage2Screen(kind){
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
   document.body.appendChild(el);
   $("againBtn").onclick=restart;
-  initShareButtons();
 }
 function restart(){ $("dmRoot").innerHTML=""; $("stage2")?.remove(); startGame(); }
 
