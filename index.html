@@ -215,25 +215,37 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* ① 芸能スカウト：爽やかなパステル＋ゴールド */
 .rcard.star{color:#3b2a4a;background:linear-gradient(135deg,#fff7e0 0%,#ffe3f1 45%,#dff1ff 100%);border:2px solid #d4af37}
 .rcard.star .rc-title{color:#9a6b00}
-.rcard.star .rc-av{background:linear-gradient(135deg,#f7e08a,#d4af37);color:#fff}
 .rcard.star .rc-stats div{background:rgba(255,255,255,.75);color:#3b2a4a}
 .rcard.star .rc-deco span{color:#d4af37;opacity:.6}
 /* ② パトロン・成金：黒×金の胡散臭いラグジュアリー */
 .rcard.rich{color:#f7e7b4;background:radial-gradient(circle at 85% 0%,#4a3812,#141008 55%,#050403);border:2px solid #c9a14a}
 .rcard.rich .rc-title{background:linear-gradient(90deg,#c9a14a,#fff3c4,#c9a14a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.rcard.rich .rc-av{background:#c9a14a;color:#141008}
 .rcard.rich .rc-stats div{background:rgba(201,161,74,.14);border:1px solid rgba(201,161,74,.35)}
 .rcard.rich .rc-deco span{opacity:.2}
 /* ③ ゲームオーバー：青みがかったモノクロ＋規制線 */
 .rcard.down{color:#dfe6ee;background:linear-gradient(160deg,#4b5868,#232a33 60%,#14181d);border:2px solid #5b6878}
 .rcard.down .rc-title{color:#ff9b9b}
-.rcard.down .rc-av{background:#3a4552;color:#dfe6ee}
 .rcard.down .rc-stats div{background:rgba(0,0,0,.28)}
 .rcard.down .rc-deco span{opacity:.18;filter:grayscale(1)}
 .rc-tape{position:absolute;left:-20%;right:-20%;top:60%;height:24px;transform:rotate(-8deg);background:repeating-linear-gradient(45deg,#d8d8d8 0 14px,#2a2a2a 14px 28px);opacity:.2}
 .rc-top{display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:2px;opacity:.85}
 .rc-user{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:800;font-size:14px}
-.rc-av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:17px}
+/* 主人公の顔画像（アイコン・結果カード・お知らせ画面） */
+.face{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover;object-position:50% 30%}
+.avatar,.mini-ring div{overflow:hidden;padding:0}
+.rc-head{display:flex;gap:12px;align-items:flex-start}
+.rc-head .rc-main{flex:1;min-width:0}
+.rc-portrait{flex:none;width:104px;height:104px;margin-top:10px;border-radius:50%;object-fit:cover;object-position:50% 30%;border:3px solid currentColor;box-shadow:0 6px 18px rgba(0,0,0,.3);background:#ccc}
+.rcard.star .rc-portrait{border-color:#d4af37}
+.rcard.rich .rc-portrait{border-color:#c9a14a}
+.rcard.down .rc-portrait{border-color:#5b6878}
+.sheet-face{width:112px;height:112px;margin:0 auto 6px;border-radius:50%;object-fit:cover;object-position:50% 30%;display:block;border:3px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,var(--grad) border-box}
+.phase-sheet.late .sheet-face{background:linear-gradient(#141414,#141414) padding-box,linear-gradient(135deg,#c9a14a,#f7e08a) border-box}
+.face-swap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.face-swap .sheet-face{margin:0}
+.face-swap .old{width:72px;height:72px;opacity:.6;filter:grayscale(.4)}
+.face-swap span{font-size:22px;font-weight:900}
+@media (max-width:400px){.rc-portrait{width:84px;height:84px}}
 .rc-num{font-size:44px;font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums}
 .rc-num small{font-size:15px;font-weight:800;margin-left:4px}
 .rc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
@@ -243,7 +255,9 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .share-hint{margin:4px 0 8px;font-size:12px;font-weight:700;text-align:center;opacity:.85}
 .btn-x{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:12px;background:#000;color:#fff;font-weight:800;font-size:15px;text-decoration:none;border:1px solid #444}
 .btn-x:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.share-text{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.15);font-size:11.5px;line-height:1.6;text-align:left;user-select:all;word-break:break-word}
+.share-text{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.15);font-size:11.5px;line-height:1.6;text-align:left;user-select:all;word-break:break-word;white-space:pre-wrap}
+.btn-share{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin-top:8px;border-radius:12px;background:var(--grad);color:#fff;font-weight:800;font-size:16px}
+.btn-share[hidden]{display:none}
 .shake{animation:shake .5s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 
@@ -414,7 +428,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   </header>
 
   <section class="profile">
-    <div class="avatar-ring"><div class="avatar">💅</div></div>
+    <div class="avatar-ring"><div class="avatar"><img id="avatarImg" class="face" src="img/kotomi-early.jpg" alt="欺流亭 ことみ"></div></div>
     <div class="p-main">
       <div class="uname">kotomi_guilty <span class="badge" id="badge">✓ 平和</span></div>
       <div class="stats">
@@ -442,7 +456,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <!-- 投稿カード（STEP1〜3共通） -->
   <article class="post" id="post">
     <div class="post-head">
-      <div class="mini-ring"><div>💅</div></div>
+      <div class="mini-ring"><div><img id="miniAvatar" class="face" src="img/kotomi-early.jpg" alt=""></div></div>
       <div class="who"><b>kotomi_guilty</b><div class="loc" id="pLoc">撮影待ち</div></div>
       <span class="chip" id="pChip">下書き</span>
     </div>
@@ -768,7 +782,26 @@ const EMOJI_FONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-s
 const phaseOf=t=>t<=4?0:t<=8?1:2;
 let gradSeq=0;
 const bgSVG=b=>{const id="g"+(gradSeq++);return `<svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${id}" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="${b.grad[0]}"/><stop offset="1" stop-color="${b.grad[1]}"/></linearGradient></defs><rect width="120" height="120" fill="url(#${id})"/>${b.deco}</svg>`;};
-const subSVG=s=>`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${s.svg}</svg>`;
+/* 主人公の顔画像：時期（early/mid/late）とエンディング（scout/patron/down）で切り替える */
+const AVATAR={
+  early:"img/kotomi-early.jpg",   // 序盤：地味で素朴な田舎顔
+  mid:"img/kotomi-mid.jpg",       // 中盤：少し垢抜けたトレンドメイク
+  late:"img/kotomi-late.jpg",     // 終盤：バチバチメイク・成金
+  scout:"img/kotomi-scout.jpg",   // 芸能界ルート：清純タレント
+  patron:"img/kotomi-patron.jpg", // パトロンルート：港区・成金
+  down:"img/kotomi-down.jpg",     // 東京追放：どん底・スッピン無気力
+};
+Object.values(AVATAR).forEach(src=>{ const i=new Image(); i.src=src; });   // 先読みして切り替え時のちらつきを防ぐ
+let currentFace=AVATAR.early;
+function setAvatar(src){
+  if(currentFace===src) return;
+  currentFace=src;
+  $("avatarImg").src=src; $("miniAvatar").src=src;
+}
+// 自撮り写真は、スマホ画面の中にその時点のことみの顔を写す
+const subSVG=s=>s===SUB.selfie
+  ? `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="scr"><rect x="36" y="18" width="48" height="84" rx="6"/></clipPath></defs><rect x="30" y="8" width="60" height="104" rx="12" fill="#222" stroke="#fff" stroke-width="4"/><image href="${currentFace}" x="15" y="18" width="90" height="84" preserveAspectRatio="xMidYMid slice" clip-path="url(#scr)"/><circle cx="60" cy="13" r="1.6" fill="#555"/><text x="40" y="30" font-size="11" fill="#fff">✦</text><text x="72" y="98" font-size="9" fill="#fff">✦</text></svg>`
+  : `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${s.svg}</svg>`;
 function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0,buzzN:0,fireN:0,mineN:0,used:new Set()}; }
 
 /* ===== テーマ ===== */
@@ -796,6 +829,7 @@ function renderStatus(){
   $("sTurn").textContent=`${t}/${TURNS}ターン`;
   $("sDate").textContent=`${Math.ceil(t/2)}ヶ月目・${t%2?"前半":"後半"}`;
   $("sEra").textContent=P.label; $("sEra").className="era "+P.key;
+  setAvatar(AVATAR[P.key]);
   $("sFollow").textContent=fmt(S.followers);
   $("gFollow").style.width=Math.min(100,S.followers/GOAL*100)+"%";
   $("sFire").textContent=Math.round(S.gauge)+"%";
@@ -1055,7 +1089,7 @@ function openModal(html,cls=""){ $("modalRoot").innerHTML=`<div class="modal"><d
 function closeModal(){ $("modalRoot").innerHTML=""; }
 function titleModal(){
   phase="title";
-  openModal(`<div class="big">💅🗼</div>
+  openModal(`<img class="sheet-face" src="${AVATAR.early}" alt="欺流亭 ことみ">
     <div class="stage">STAGE 1 ・ 下積み編</div>
     <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
     <p>上京してきた25歳無職、<b>欺流亭 ことみ</b>（@kotomi_guilty）。<br>猶予は<b>半年・全12ターン</b>。それまでに<b>フォロワー10万人</b>を達成できなければ、東京を追放されて田舎に強制送還――。</p>
@@ -1078,10 +1112,11 @@ function phaseModal(p){
   const P=PHASES[p];
   const pool=`<div class="newpool">${P.bgs.map(k=>`<span>${BG[k].e} ${BG[k].t}</span>`).join("")}</div><div class="newpool">${P.subs.map(k=>`<span>${SUB[k].e} ${SUB[k].t}</span>`).join("")}</div>`;
   const body = p===1
-    ? `<div class="big">📈⚠️</div><h2>3ヶ月目：中盤戦</h2>
+    ? `<div class="face-swap"><img class="sheet-face old" src="${AVATAR.early}" alt=""><span>→</span><img class="sheet-face" src="${AVATAR.mid}" alt="垢抜けたことみ"></div><h2>3ヶ月目：中盤戦</h2>
+       <p style="text-align:center;margin-top:0"><b>ことみ、ちょっと垢抜けた。</b></p>
        <p>フォロワーが増えて、行ける場所も撮れるものも変わってきた。バズの伸びは序盤の約4倍。<br><b>ただし油断は禁物。</b>1回の炎上でゲージが20〜30%跳ね上がり、一見無難な<b>地雷</b>も序盤より多く混ざる。燃えるたびにパトロンの目にも留まりやすくなる。</p>${pool}
        <button class="btn-main" id="okBtn">気を引き締める</button>`
-    : `<div class="big">💎🍷</div><h2>5ヶ月目：パトロン降臨</h2>
+    : `<div class="face-swap"><img class="sheet-face old" src="${AVATAR.mid}" alt=""><span>→</span><img class="sheet-face" src="${AVATAR.late}" alt="成金メイクのことみ"></div><h2>5ヶ月目：パトロン降臨</h2>
        <p>ある夜、知らないアカウントから「いつも見てるよ」とだけDMが届いた。翌日、海外行きのチケットとブランドの紙袋が部屋に届いた。</p>
        <p>写真のプールがすべて<b>超高級</b>に入れ替わる。バズればフォロワーは桁違いに増えるが、炎上も桁違い。</p>${pool}
        <button class="btn-main" id="okBtn">パトロンの連絡を見る</button>`;
@@ -1121,17 +1156,37 @@ const man=n=>n>=10000?`${(Math.floor(n/1000)/10).toLocaleString("ja-JP")}万人`
 const GAME_URL="https://red-freegames.github.io/guilty-influencer/";
 // リザルトカード3種：star=芸能スカウト / rich=パトロン・成金 / down=ゲームオーバー
 const CARDS={
-  scout:{cls:"star",clear:true,icon:"🎬",title:"芸能界からのスカウト",deco:["✦","★","✧","✦","★"]},
-  patron:{cls:"rich",clear:true,icon:"💴",title:"パトロンの飼い犬・カス成金",deco:["💴","💰","💎","💴","🥂"]},
-  none:{cls:"down",icon:"🚃",title:"東京追放（田舎送り）／炎上敗北",why:"10万人に届かず、半年で上京生活終了",deco:["🚓","🌾","📉","🚃","🔥"]},
-  frozen:{cls:"down",icon:"🚓",title:"東京追放（田舎送り）／炎上敗北",why:"炎上でアカウント停止",deco:["🚓","🔥","🧊","🚨","🔥"]},
+  scout:{cls:"star",clear:true,face:"scout",icon:"🎬",title:"芸能界からのスカウト",deco:["✦","★","✧","✦","★"]},
+  patron:{cls:"rich",clear:true,face:"patron",icon:"💴",title:"パトロンの飼い犬・カス成金",deco:["💴","💰","💎","💴","🥂"]},
+  none:{cls:"down",face:"down",icon:"🚃",title:"東京追放（田舎送り）／炎上敗北",why:"10万人に届かず、半年で上京生活終了",deco:["🚓","🌾","📉","🚃","🔥"]},
+  frozen:{cls:"down",face:"down",icon:"🚓",title:"東京追放（田舎送り）／炎上敗北",why:"炎上でアカウント停止",deco:["🚓","🔥","🧊","🚨","🔥"]},
 };
+// エンディングごとのシェア用ページ（X に貼ると称号＋イラストの画像カードが表示される）
+const shareUrl=kind=>`${GAME_URL}s/${kind}.html`;
+const shareImg=kind=>`img/share-${kind}.jpg`;
 function tweetText(kind){
   const C=CARDS[kind], tags="#ギルティーインフルエンサー #インディーゲーム";
   return C.clear
-    ? `半年の下積みでフォロワー【${man(S.followers)}】を達成し、【${C.title}】を獲得しました…！✨ ${tags} ${GAME_URL}`
-    : `半年の下積みで炎上してフォロワーを失い、東京を追放されました（田舎送り）…😭 ${tags} ${GAME_URL}`;
+    ? `半年の下積みでフォロワー【${man(S.followers)}】を達成し、【${C.title}】を獲得しました…！✨（万バズ${S.buzzN}回・炎上${S.fireN}回）\n${tags}\n${shareUrl(kind)}`
+    : `半年の下積みで炎上してフォロワーを失い、東京を追放されました（田舎送り）…😭（最終フォロワー${man(S.followers)}・炎上${S.fireN}回）\n${tags}\n${shareUrl(kind)}`;
 }
+// スマホでは共有シートから画像ファイルを添付してシェアできる（対応端末だけボタンを出す）
+function canShareImage(){
+  try{ return !!(navigator.canShare && navigator.canShare({files:[new File([""],"t.jpg",{type:"image/jpeg"})]})); }catch(e){ return false; }
+}
+function initShareButtons(){
+  if(canShareImage()) document.querySelectorAll(".btn-share").forEach(b=>b.hidden=false);
+}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest(".btn-share"); if(!b) return;
+  const kind=b.dataset.kind;
+  try{
+    const blob=await fetch(shareImg(kind)).then(r=>r.blob());
+    const file=new File([blob],`guilty-influencer-${kind}.jpg`,{type:"image/jpeg"});
+    await navigator.share({files:[file],text:tweetText(kind)});
+    track("share_image",{ending:kind});
+  }catch(err){ /* キャンセル時などは何もしない */ }
+});
 function shareHTML(kind){
   const C=CARDS[kind], text=tweetText(kind);
   const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(text);
@@ -1140,10 +1195,12 @@ function shareHTML(kind){
   return `<div class="rcard ${C.cls}">
       <div class="rc-deco">${C.cls==="down"?'<div class="rc-tape"></div>':""}${deco}</div>
       <div class="rc-top"><span>GUILTY INFLUENCER</span><span>STAGE 1 RESULT</span></div>
-      <div class="rc-user"><div class="rc-av">💅</div><div>@kotomi_guilty<br><small style="font-weight:600;opacity:.8">欺流亭 ことみ ・ ${Math.min(S.turn,TURNS)}/12ターン</small></div></div>
+      <div class="rc-head"><div class="rc-main">
+      <div class="rc-user"><div>@kotomi_guilty<br><small style="font-weight:600;opacity:.8">欺流亭 ことみ ・ ${Math.min(S.turn,TURNS)}/12ターン</small></div></div>
       <div class="rc-cap">獲得称号</div>
       <div class="rc-title">${C.icon} ${C.title}</div>
       ${C.why?`<div class="rc-why">${C.why}</div>`:""}
+      </div><img class="rc-portrait" src="${AVATAR[C.face]}" alt="欺流亭 ことみ"></div>
       <div class="rc-cap">最終フォロワー</div>
       <div class="rc-num">${man(S.followers).replace(/人$/,"")}<small>人</small></div>
       <div class="rc-stats"><div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>地雷<b>${S.mineN}</b></div><div>炎上G<b>${Math.round(S.gauge)}%</b></div></div>
@@ -1151,6 +1208,7 @@ function shareHTML(kind){
     </div>
     <div class="share-hint">📸 このカードをスクショしてXに投稿しよう！</div>
     <a class="btn-x" href="${url}" target="_blank" rel="noopener">𝕏 で投稿する</a>
+    <button class="btn-share" data-kind="${kind}" hidden>📷 画像付きでシェア</button>
     <div class="share-text">${text}</div>`;
 }
 async function openDM(kind){
@@ -1168,7 +1226,7 @@ async function openDM(kind){
         <p>${kind==="frozen"?"炎上ゲージが限界を超え、アカウントは停止。誰からも連絡は来なかった。":`半年が経った。フォロワーは${fmt(S.followers)}人。10万人には届かなかった。`}<br>実家に帰ると、母が何も言わずに肉じゃがを出してくれた。ことみのスマホには、まだ下書きの投稿が1件残っている。</p>
         ${shareHTML(kind)}<button class="btn-main" id="againBtn">もう一度、上京する</button>
         <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
-    $("againBtn").onclick=restart; return;
+    $("againBtn").onclick=restart; initShareButtons(); return;
   }
   const s=SENDERS[kind];
   dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span class="req">リクエスト (1)</span></div>
@@ -1227,6 +1285,7 @@ function stage2Screen(kind){
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
   document.body.appendChild(el);
   $("againBtn").onclick=restart;
+  initShareButtons();
 }
 function restart(){ $("dmRoot").innerHTML=""; $("stage2")?.remove(); startGame(); }
 
