@@ -384,6 +384,30 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .end2 .end-face{width:132px;height:132px;margin:4px auto 6px;display:block;border-radius:50%;object-fit:cover;object-position:50% 30%;border:4px solid #d4af37;box-shadow:0 8px 28px rgba(0,0,0,.45)}
 .end2.dark .end-face{border-color:#5b6878}
 .end2 h2{font-size:24px}
+/* ===== HOME：モード選択 ===== */
+.modes{display:flex;flex-direction:column;gap:10px;margin:12px 0 4px}
+.mode{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:16px;text-align:left;color:#fff;transition:transform .1s;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.mode:active{transform:scale(.98)}
+.mode img{width:58px;height:58px;flex:none;border-radius:50%;object-fit:cover;object-position:50% 30%;border:2px solid rgba(255,255,255,.85)}
+.mode .mtxt{display:flex;flex-direction:column;min-width:0;line-height:1.35}
+.mode small{font-size:10.5px;font-weight:900;letter-spacing:1.5px;opacity:.85}
+.mode b{font-size:17px;font-weight:900}
+.mode span span,.mode .mtxt>span{font-size:11.5px;opacity:.92}
+.mode em{font-style:normal;font-size:11.5px;font-weight:800;margin-top:3px;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.22);align-self:flex-start}
+.mode.m1{background:linear-gradient(135deg,#feda75,#fa7e1e 45%,#d62976)}
+.mode.m2{background:linear-gradient(135deg,#f6a5c0,#b06ab3 55%,#4f5bd5)}
+.mode.m3{background:radial-gradient(circle at 85% 0%,#5a4316,#1a1208 60%,#050403);color:#f7e7b4;border:1.5px solid #c9a14a}
+/* ===== STAGE 2 裏ルート ===== */
+.era.minato{background:linear-gradient(90deg,#ff4fd8,#7c4dff);color:#fff}
+.era.rise{background:linear-gradient(90deg,#c9a14a,#f7e08a);color:#3a2c0f}
+.era.empress{background:linear-gradient(90deg,#4a148c,#c9a14a);color:#fff}
+.res-sheet .r-kuso{margin-top:8px;padding:8px 10px;border-radius:10px;background:#3e2723;color:#ffe0b2;font-size:12.5px;font-weight:700;line-height:1.55}
+.res-sheet .r-kuso b{display:block;color:#fff;font-size:13.5px}
+.phase-sheet.rise{background:linear-gradient(160deg,#141414,#2b2111);color:#f7e7b4}
+.phase-sheet.empress{background:linear-gradient(160deg,#1a0a2e,#2b2111);color:#f7e7b4}
+.phase-sheet.rise p,.phase-sheet.empress p{color:#e9dcb2}
+.phase-sheet.rise .newpool span,.phase-sheet.empress .newpool span{background:rgba(255,255,255,.1)}
+.end2.dark .end-face{border-color:#c9a14a}
 /* ===== スマホ最適化（タップ領域・文字サイズ・狭幅レイアウト） ===== */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{overflow-x:hidden}
@@ -776,13 +800,13 @@ SUB.kyoen.svg=SUB.friend.svg;
 const PHASES2 = [
   {key:"rookie",name:"新人期",label:"🌱 新人期",
    bgs:["lesson","studio","gakuya","audition","handshake"], subs:["script","sashiire","kyoen","selfie","fanletter"],
-   prob:PHASES[0].prob, gain:{calm:[3300,6600],buzz:[27500,55000],fire:[5000,10000]}, heat:[14,21], mine:.25},
+   prob:PHASES[0].prob, gain:{calm:[3600,7300],buzz:[30000,60500],fire:[5000,10000]}, heat:[14,21], mine:.25},
   {key:"break",name:"ブレイク期",label:"⚡ ブレイク期",
    bgs:["location","variety","magazine","radio","fanmeet"], subs:["costume","bouquet","manager","bento","poster"],
-   prob:PHASES[1].prob, gain:{calm:[8800,16500],buzz:[66000,132000],fire:[10000,20000]}, heat:[20,28], mine:.4},
+   prob:PHASES[1].prob, gain:{calm:[9700,18200],buzz:[72600,145200],fire:[10000,20000]}, heat:[20,28], mine:.4},
   {key:"top",name:"トップ期",label:"👑 トップ期",
    bgs:["redcarpet","butai","press","awards","cm"], subs:["trophy","dress","flash","producer","cmproduct"],
-   prob:PHASES[2].prob, gain:{calm:[22000,44000],buzz:[165000,308000],fire:[25000,50000]}, heat:[22,32], mine:.45},
+   prob:PHASES[2].prob, gain:{calm:[24200,48400],buzz:[181500,338800],fire:[25000,50000]}, heat:[22,32], mine:.45},
 ];
 
 /* 投稿文：75写真 × 4択（書式は STAGE 1 と同じ「種類:投稿文>>理由」） */
@@ -916,6 +940,181 @@ const MINES2 = [
   ],
 ];
 
+/* =====================================================
+   STAGE 2 裏ルート：裏社会・カス成金編のデータ
+   港区デビュー期／成り上がり期／女帝期 × 背景5 × 被写体5
+===================================================== */
+Object.assign(BG,{
+  lounge:{t:"会員制ラウンジ",e:"🍸",grad:["#3b1d4a","#12081a"],deco:`<rect y="78" width="120" height="42" fill="#5a2d1a" opacity=".85"/><rect y="74" width="120" height="6" fill="#c9a14a" opacity=".8"/><g opacity=".75"><rect x="12" y="34" width="7" height="26" rx="2" fill="#7cc"/><rect x="24" y="30" width="7" height="30" rx="2" fill="#c66"/><rect x="36" y="36" width="7" height="24" rx="2" fill="#cc6"/><rect x="84" y="32" width="7" height="28" rx="2" fill="#9c6"/><rect x="96" y="28" width="7" height="32" rx="2" fill="#c8c"/></g><path d="M6 62h108" stroke="#c9a14a" stroke-width="2" opacity=".6"/><circle class="twinkle" cx="60" cy="16" r="2" fill="#ffd27a"/>`},
+  towerman:{t:"タワマンの部屋",e:"🏙️",grad:["#0d1b2a","#1b263b"],deco:`<g fill="#000" opacity=".55"><rect x="6" y="60" width="14" height="60"/><rect x="22" y="44" width="12" height="76"/><rect x="38" y="70" width="16" height="50"/><rect x="58" y="50" width="10" height="70"/><rect x="72" y="64" width="18" height="56"/><rect x="94" y="40" width="12" height="80"/></g><g fill="#ffd96a"><circle class="twinkle" cx="26" cy="54" r="1.2"/><circle class="twinkle" cx="62" cy="60" r="1.2"/><circle class="twinkle" cx="98" cy="50" r="1.2"/><circle class="twinkle" cx="44" cy="80" r="1.2"/><circle class="twinkle" cx="80" cy="72" r="1.2"/></g><path d="M0 0v120M40 0v120M80 0v120M120 0v120M0 0h120" stroke="#cfd8dc" stroke-width="3" opacity=".5"/>`},
+  sushi:{t:"高級寿司店",e:"🍣",grad:["#f5e6c8","#c9a36b"],deco:`<rect x="10" y="0" width="100" height="26" fill="#2b2b4a" opacity=".85"/><path d="M35 0v26M60 0v26M85 0v26" stroke="#fff" stroke-width="1.5" opacity=".5"/><rect y="78" width="120" height="42" fill="#e8d0a0"/><rect y="74" width="120" height="6" fill="#a87c45"/><rect x="20" y="56" width="80" height="16" rx="2" fill="#fff" opacity=".4"/>`},
+  brandshop:{t:"ブランド店",e:"🛍️",grad:["#fbf7f0","#e6d8c3"],deco:`<g fill="none" stroke="#b89b72" stroke-width="2" opacity=".7"><path d="M6 30h40M6 56h40M74 30h40M74 56h40"/></g><g opacity=".7"><rect x="10" y="16" width="12" height="14" rx="2" fill="#8b1e3f"/><rect x="28" y="18" width="12" height="12" rx="2" fill="#222"/><rect x="80" y="16" width="12" height="14" rx="2" fill="#c9a14a"/><rect x="96" y="42" width="12" height="14" rx="2" fill="#8b1e3f"/><rect x="14" y="42" width="14" height="14" rx="2" fill="#c9a14a"/></g><rect y="96" width="120" height="24" fill="#d9c7a8" opacity=".6"/>`},
+  nightpool:{t:"ナイトプール",e:"🌙",grad:["#1a0b3b","#0b1a3b"],deco:`<rect y="64" width="120" height="56" fill="#00b4d8" opacity=".45"/><path d="M0 72q15-4 30 0t30 0 30 0 30 0" stroke="#7df9ff" stroke-width="2" fill="none" opacity=".7"/><circle cx="26" cy="92" r="10" fill="none" stroke="#ff4fd8" stroke-width="5" opacity=".85"/><circle cx="92" cy="100" r="9" fill="none" stroke="#ffe14f" stroke-width="5" opacity=".85"/><g fill="#ff4fd8" opacity=".6"><circle class="twinkle" cx="20" cy="20" r="2"/><circle class="twinkle" cx="100" cy="26" r="2"/></g>`},
+  jet:{t:"プライベートジェット",e:"🛩️",grad:["#f3ede2","#cdbfa8"],deco:`<path d="M0 10q60-14 120 0" stroke="#fff" stroke-width="6" fill="none" opacity=".6"/><g fill="#9ec9f0" stroke="#fff" stroke-width="3"><rect x="10" y="22" width="18" height="26" rx="9"/><rect x="51" y="22" width="18" height="26" rx="9"/><rect x="92" y="22" width="18" height="26" rx="9"/></g><rect y="86" width="120" height="34" fill="#7a5c3a" opacity=".5"/><rect x="6" y="70" width="40" height="22" rx="8" fill="#f8f3ea" opacity=".9"/><rect x="74" y="70" width="40" height="22" rx="8" fill="#f8f3ea" opacity=".9"/>`},
+  cruiser:{t:"クルーザー",e:"🛥️",grad:["#74d0f1","#0077b6"],deco:`<rect y="58" width="120" height="62" fill="#023e8a" opacity=".45"/><path d="M0 64q20-5 40 0t40 0 40 0" stroke="#fff" stroke-width="2" fill="none" opacity=".6"/><path d="M0 96h120" stroke="#fff" stroke-width="3" opacity=".9"/><path d="M10 96v24M40 96v24M70 96v24M100 96v24" stroke="#fff" stroke-width="2" opacity=".8"/><circle cx="96" cy="20" r="9" fill="#fff6c2" opacity=".9"/>`},
+  casino:{t:"海外カジノ",e:"🎰",grad:["#0b3d2e","#04140f"],deco:`<ellipse cx="60" cy="100" rx="64" ry="28" fill="#1b7a4a" opacity=".85"/><circle cx="60" cy="96" r="16" fill="#5a2d1a" stroke="#c9a14a" stroke-width="2"/><circle cx="60" cy="96" r="6" fill="#c9a14a"/><g fill="#d32f2f"><circle cx="24" cy="94" r="4"/><circle cx="96" cy="96" r="4"/></g><g fill="#ffd27a"><circle class="twinkle" cx="16" cy="18" r="2"/><circle class="twinkle" cx="40" cy="10" r="2"/><circle class="twinkle" cx="80" cy="12" r="2"/><circle class="twinkle" cx="104" cy="20" r="2"/></g>`},
+  villa:{t:"海外ヴィラ",e:"🌴",grad:["#ffd9a0","#7fd1c7"],deco:`<rect y="76" width="120" height="44" fill="#4fc3f7" opacity=".7"/><path d="M0 80q30-4 60 0t60 0" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/><path d="M14 76V40" stroke="#6b4f2a" stroke-width="3"/><path d="M14 40q-12-4-16 6M14 40q12-8 20 0M14 40q-4-10-14-10M14 40q6-12 16-8" stroke="#2d6a4f" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M70 40l20-14 20 14v36H70z" fill="#fff" opacity=".55"/>`},
+  party:{t:"誕生日パーティー",e:"🎂",grad:["#ffc2d6","#ff8fb1"],deco:`<g opacity=".85"><circle cx="16" cy="22" r="9" fill="#ffd54f"/><circle cx="34" cy="14" r="8" fill="#81d4fa"/><circle cx="96" cy="18" r="9" fill="#ce93d8"/><circle cx="108" cy="32" r="7" fill="#fff"/></g><path d="M16 31l2 20M34 22l-1 22M96 27l-2 22" stroke="#fff" stroke-width="1"/><path d="M0 4q30 16 60 4t60 4" stroke="#fff" stroke-width="2" fill="none" stroke-dasharray="3 3"/><rect y="96" width="120" height="24" fill="#fff" opacity=".3"/>`},
+  salon:{t:"自分のサロン",e:"💅",grad:["#f3e5f5","#ce93d8"],deco:`<ellipse cx="60" cy="40" rx="26" ry="32" fill="#fff" opacity=".45" stroke="#c9a14a" stroke-width="3"/><rect y="92" width="120" height="28" fill="#fff" opacity=".35"/><text x="60" y="112" font-size="8" font-weight="900" fill="#7b1fa2" text-anchor="middle" opacity=".7">KOTOMI SALON</text>`},
+  seminar:{t:"セミナー会場",e:"🎤",grad:["#1e2a44","#0c1424"],deco:`<rect x="14" y="8" width="92" height="46" fill="#fff" opacity=".85"/><path d="M24 44l18-14 14 8 22-20 18 10" stroke="#e53935" stroke-width="3" fill="none"/><g fill="#90a4ae" opacity=".55"><rect x="8" y="80" width="18" height="12" rx="3"/><rect x="30" y="80" width="18" height="12" rx="3"/><rect x="52" y="80" width="18" height="12" rx="3"/><rect x="74" y="80" width="18" height="12" rx="3"/><rect x="96" y="80" width="18" height="12" rx="3"/><rect x="18" y="98" width="18" height="12" rx="3"/><rect x="40" y="98" width="18" height="12" rx="3"/><rect x="62" y="98" width="18" height="12" rx="3"/><rect x="84" y="98" width="18" height="12" rx="3"/></g>`},
+  mansion:{t:"豪邸",e:"🏛️",grad:["#f5f0e6","#cbbf9f"],deco:`${CHANDELIER}<path d="M20 120l20-40h40l20 40z" fill="#fff" opacity=".6"/><path d="M40 80h40" stroke="#c9a14a" stroke-width="2"/><g fill="#fff" opacity=".5"><rect x="4" y="20" width="10" height="80"/><rect x="106" y="20" width="10" height="80"/></g>`},
+  launch:{t:"新商品発表会",e:"✨",grad:["#2a0f2e","#0d0410"],deco:`<rect x="10" y="8" width="100" height="50" fill="#fff" opacity=".1" stroke="#c9a14a" stroke-width="2"/><text x="60" y="38" font-size="11" font-weight="900" fill="#e6c46a" text-anchor="middle">NEW</text><path d="M20 0l20 90H0zM100 0l20 90H80z" fill="#fff" opacity=".1"/><rect y="88" width="120" height="32" fill="#000" opacity=".4"/>`},
+  heliport:{t:"ヘリポート",e:"🚁",grad:["#a1c4fd","#c2e9fb"],deco:`<ellipse cx="60" cy="98" rx="56" ry="18" fill="#455a64" opacity=".8"/><ellipse cx="60" cy="98" rx="40" ry="12" fill="none" stroke="#ffeb3b" stroke-width="3"/><text x="60" y="104" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">H</text><g fill="#fff" opacity=".8"><ellipse cx="24" cy="22" rx="14" ry="5"/><ellipse cx="90" cy="34" rx="16" ry="5"/></g>`},
+});
+Object.assign(SUB,{
+  champagne:{t:"シャンパン",e:"🍾",svg:`<path d="M30 112h24V58c0-8-6-12-6-22V18h-12v18c0 10-6 14-6 22z" fill="#1b5e20" stroke="#fff" stroke-width="3"/><rect x="36" y="10" width="12" height="10" fill="#e6c46a"/><rect x="30" y="66" width="24" height="22" fill="#e6c46a"/><path d="M76 40h28l-4 26a10 10 0 0 1-20 0z" fill="#fff8c4" stroke="#fff" stroke-width="3"/><path d="M90 76v26M80 104h20" stroke="#fff" stroke-width="3" stroke-linecap="round"/><g fill="#fff"><circle cx="86" cy="52" r="1.6"/><circle cx="94" cy="58" r="1.6"/><circle cx="90" cy="46" r="1.4"/></g>`},
+  blackcard:{t:"ブラックカード",e:"💳",svg:`<g transform="rotate(-10 60 60)"><rect x="14" y="30" width="92" height="60" rx="8" fill="#111" stroke="#c9a14a" stroke-width="3"/><rect x="24" y="46" width="16" height="12" rx="2" fill="#e6c46a"/><path d="M24 74h50" stroke="#888" stroke-width="3" stroke-dasharray="6 3"/><text x="96" y="82" font-size="8" font-weight="900" fill="#c9a14a" text-anchor="end">BLACK</text></g>`},
+  patronhand:{t:"パトロンの手元",e:"🤵",svg:`<path d="M0 64h40l14-6h30c6 0 8 8 2 9H64l30 2c6 0 6 9 0 9H62l28 2c6 0 6 9 0 9H60l22 2c6 0 6 8 0 8H46c-6 0-10-2-14-4H0z" fill="#e8b88f" stroke="#fff" stroke-width="2"/><rect x="0" y="56" width="26" height="46" fill="#212121"/><rect x="24" y="60" width="12" height="38" rx="3" fill="#d4af37" stroke="#fff" stroke-width="1.5"/><g fill="#d4af37" stroke="#fff" stroke-width="1"><rect x="74" y="66" width="6" height="11" rx="2"/><rect x="76" y="78" width="6" height="11" rx="2"/></g><circle cx="79" cy="70" r="2" fill="#e3f2fd"/>`},
+  heels:{t:"ハイヒール",e:"👠",svg:`<path d="M16 64c18 4 34 20 48 32h40c6 0 8 8 2 10H40c-8 0-14-6-20-12l-6 22h-6l4-34c0-10 0-16 4-18z" fill="#d50000" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M60 96h44" stroke="#fff" stroke-width="2" opacity=".6"/><text x="86" y="50" font-size="14" fill="#fff">✦</text>`},
+  tiara:{t:"ティアラ",e:"👑",svg:`<path d="M14 88q46-26 92 0l-6 10q-40-20-80 0z" fill="#e0e0e0" stroke="#fff" stroke-width="3"/><path d="M22 82l8-30 12 24 18-40 18 40 12-24 8 30" fill="#f5f5f5" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><g fill="#e91e63"><circle cx="60" cy="38" r="6"/></g><g fill="#4fc3f7"><circle cx="30" cy="54" r="4"/><circle cx="90" cy="54" r="4"/></g><g fill="#fff"><text x="54" y="22" font-size="12">✦</text><text x="96" y="40" font-size="9">✦</text></g>`},
+  bizcard:{t:"社長の名刺",e:"📇",svg:`<rect x="14" y="30" width="92" height="56" rx="4" fill="#fff" stroke="#c9a14a" stroke-width="3" transform="rotate(6 60 58)"/><rect x="10" y="34" width="92" height="56" rx="4" fill="#fffdf5" stroke="#c9a14a" stroke-width="3"/><text x="22" y="56" font-size="9" font-weight="900" fill="#c9a14a">CEO</text><text x="22" y="74" font-size="11" font-weight="900" fill="#222">欺流亭 ことみ</text><path d="M22 82h50" stroke="#ccc" stroke-width="2"/>`},
+  cosme:{t:"自社コスメ",e:"🧴",svg:`<rect x="24" y="44" width="34" height="62" rx="8" fill="#f8bbd0" stroke="#fff" stroke-width="3"/><rect x="32" y="26" width="18" height="18" rx="3" fill="#c9a14a"/><text x="41" y="80" font-size="9" font-weight="900" fill="#fff" text-anchor="middle">K</text><rect x="66" y="74" width="40" height="32" rx="6" fill="#fff" stroke="#f48fb1" stroke-width="3"/><rect x="64" y="66" width="44" height="10" rx="3" fill="#c9a14a"/><text x="86" y="96" font-size="8" font-weight="900" fill="#f06292" text-anchor="middle">KOTOMI</text><text x="96" y="40" font-size="12" fill="#fff">✦</text>`},
+  flyer:{t:"高額セミナーのチラシ",e:"📄",svg:`<rect x="22" y="8" width="76" height="104" fill="#fff59d" stroke="#fff" stroke-width="3"/><rect x="22" y="8" width="76" height="22" fill="#e53935"/><text x="60" y="24" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">月収100万</text><text x="60" y="56" font-size="20" font-weight="900" fill="#e53935" text-anchor="middle">¥30万</text><path d="M32 70h56M32 80h56M32 90h40" stroke="#999" stroke-width="2.5"/><text x="88" y="106" font-size="8" fill="#555" text-anchor="end">※効果には個人差</text>`},
+  chart:{t:"売上グラフ",e:"📈",svg:`<rect x="12" y="14" width="96" height="88" rx="4" fill="#fff" stroke="#c9a14a" stroke-width="3"/><g fill="#81c784"><rect x="24" y="74" width="12" height="20"/><rect x="42" y="62" width="12" height="32"/><rect x="60" y="48" width="12" height="46"/><rect x="78" y="30" width="12" height="64"/></g><path d="M24 70l20-12 18-12 26-20" stroke="#e53935" stroke-width="3" fill="none"/><path d="M82 24l8 2-2 8" stroke="#e53935" stroke-width="3" fill="none"/>`},
+});
+
+const PHASES3 = [
+  {key:"minato",name:"港区デビュー期",label:"🍸 港区デビュー期",
+   bgs:["lounge","towerman","sushi","brandshop","nightpool"], subs:["champagne","blackcard","selfie","patronhand","heels"],
+   prob:PHASES[0].prob, gain:{calm:[1200,2300],buzz:[9600,19300],fire:[11000,22000]}, heat:[14,21], mine:.25},
+  {key:"rise",name:"成り上がり期",label:"💴 成り上がり期",
+   bgs:["jet","cruiser","casino","villa","party"], subs:["watch","bag","cash","car","roses"],
+   prob:PHASES[1].prob, gain:{calm:[3100,5800],buzz:[23100,46200],fire:[26400,52800]}, heat:[20,28], mine:.4},
+  {key:"empress",name:"女帝期",label:"👑 女帝期",
+   bgs:["salon","seminar","mansion","launch","heliport"], subs:["tiara","bizcard","cosme","flyer","chart"],
+   prob:PHASES[2].prob, gain:{calm:[7700,15400],buzz:[57800,107800],fire:[66000,123200]}, heat:[22,32], mine:.45},
+];
+
+const CAPS3 = [
+/* ===== 港区デビュー期 ===== */
+/* 会員制ラウンジ × シャンパン / ブラックカード / 自撮り / パトロンの手元 / ハイヒール */
+"F:会員制ラウンジでシャンパン開けてもらった🥂 庶民のみんな、ここまでおいで>>「庶民」呼ばわりで大炎上|B:ラウンジのシャンパン、値段を聞いたら家賃3ヶ月分で手が震えた #港区>>正直すぎる震えがウケた|B:シャンパンの泡を数えてたら、黒服さんに心配された #港区デビュー>>港区に馴染めてない感がバズ|N:今夜はラウンジで乾杯🥂 #港区>>数件のいいね",
+"F:お会計？ブラックカード出したら終わり。財布の中身で人は決まるよね>>拝金発言で炎上|F:ラウンジでカード出したら店員の態度が変わった。貧乏人には見せない顔だよね #ラウンジ>>店員を見下したと炎上|B:ブラックカード、自分のじゃないから財布にしまう手がぎこちない #港区>>自虐がバズ|N:ラウンジにて💳>>反応は控えめ",
+"F:ラウンジの照明だと私が一番かわいい。ほかの女の子たちごめんね🤳>>同席者を見下して炎上|N:ラウンジの鏡で自撮りしたら、暗すぎて目しか写らない>>ネタが伝わらず、反応は控えめ|B:ラウンジで自撮りしたら、後ろのVIP席の人が全力でピースしてた #港区>>写り込みがバズ|B:今夜のことみ🤳 #港区>>何気ない1枚が「急に港区の顔になった」と謎にバズった",
+"F:手元だけ写ってる人、誰でしょう？♡ 当ててみて #匂わせ>>露骨な匂わせで大炎上|F:隣の人の時計、私の年収より高い。乗り換えて正解だった>>元彼のファンも含めて総攻撃|B:パトロンの手元、指輪が多すぎて手が重そう>>ツッコミが殺到してバズ|N:ラウンジでおしゃべり🥂 #港区>>反応は控えめ",
+"F:このヒール、歩かない人用。歩くのは庶民の仕事>>庶民を見下して炎上|B:ヒールが高すぎて、ラウンジの入口で一回転んだ #港区>>ドジ話がウケた|B:ラウンジの絨毯にヒールが刺さって抜けない #港区デビュー>>実況がバズ|N:新しいヒール👠>>数件のいいね",
+/* タワマンの部屋 */
+"F:タワマン52階から見下ろす街、みんな小さすぎて笑う🥂 #タワマン>>「見下ろす」で大炎上|B:タワマンでシャンパン開けたら、コルクが天井まで飛んで火災報知器が鳴りかけた>>ハプニングがバズ|N:タワマンでシャンパン。窓に私が映りすぎて夜景が見えない #夜景>>ネタが伝わらず、反応は控えめ|B:52階の夜🥂>>夜景と泡が重なる1枚が謎にバズった",
+"F:タワマンの家賃、ブラックカードで一括。普通の人ってローン組むんでしょ？かわいそう>>大炎上|B:ブラックカードの使い方が分からなくて、コンシェルジュに聞いた #タワマン>>素直さが好評|B:コンシェルジュにカードキーと間違えてブラックカードを渡した>>天然ぶりがバズ|N:新しい部屋で💳 #タワマン>>反応は控えめ",
+"F:タワマンからの自撮り。下の階の人たちには見られない景色 #上層階>>階級マウントで炎上|B:タワマンの窓で自撮りしたら、窓拭きのゴンドラの人と目が合った>>まさかの写り込みがバズ|B:部屋が広すぎて、自撮りすると私が米粒 #タワマン>>自虐がウケた|N:新居で自撮り🤳 #タワマン>>数件のいいね",
+"F:この部屋、誰が払ってるでしょう？ヒントは手だけ♡>>匂わせで大炎上|N:タワマンで食事会。手元だけ失礼します>>反応は控えめ|B:パトロンさん、エレベーターのボタンを押すときも小指が立ってる>>ツッコミがバズ|B:夜景と乾杯🥂 #タワマン>>グラスに夜景が映りこんだ1枚が謎にバズった",
+"F:タワマンの廊下、ヒールの音が響くから下の階に聞かせてあげてる>>嫌味が炎上|B:部屋が広すぎて、ヒールで玄関からリビングまで歩くと足が痛い>>贅沢な悩みがネタになってバズ|B:ヒールを脱いだら12センチ縮んで、パトロンさんに驚かれた>>ギャップがウケた|N:今日の靴👠 #タワマン>>反応は控えめ",
+/* 高級寿司店 */
+"F:お寿司にシャンパン。日本酒とか貧乏くさくて飲めない>>日本酒好きから総攻撃|B:大将に「シャンパンは合わない」と言われて日本酒に替えたら最高だった>>素直さが好評|B:回らないお寿司、ネタより値段が回ってた #高級寿司>>うまいこと言ったと拡散|N:お寿司とシャンパン🍣🥂 #高級寿司>>数件のいいね",
+"F:時価って書いてあっても怖くない。ブラックカードがあるから #時価>>成金ぶりで炎上|F:大将のおすすめ、正直スーパーのお寿司と変わらない笑>>大将とお店のファンから非難|B:時価のお会計を見る前に、カードを持つ手が震えてた>>正直さがバズ|N:今日はお寿司🍣>>反応は控えめ",
+"F:お寿司屋さんで自撮りしてたら大将に怒られた。お客様は神様なのに #自撮り>>マナー違反で大炎上|B:大将と同じ角度で自撮りしたら、大将の方が盛れてた #高級寿司>>大将の写りの良さがバズ|N:ネタケースに顔が映りこんで、魚みたいな自撮りになった>>ネタが伝わらず、反応は控えめ|B:お寿司の前で🤳 #高級寿司>>何気ない1枚が「品がある」と謎にバズった",
+"F:隣の人が全部頼んでくれる。私は口を開けて待つだけ♡>>依存アピールで炎上|B:パトロンさん、ウニを3貫まとめて掴んでた #高級寿司>>豪快すぎる手元がバズ|B:大将とパトロンさん、どっちがお寿司を握ってるか分からない写真になった>>謎写真がウケた|N:カウンターで乾杯 #高級寿司>>反応は控えめ",
+"F:お店の床、ヒールで傷つけちゃった。弁償？私が払うわけないじゃん>>大炎上|N:お座敷でヒールを脱いだら、足が解放されて泣いた #ハイヒール>>反応は控えめ|B:お座敷にヒールのまま上がろうとして、大将に止められた #高級寿司>>港区デビューの失敗談がバズ|B:今日のヒールとお寿司👠🍣>>赤いヒールとマグロの色がそろった1枚が謎にバズった",
+/* ブランド店 */
+"F:ブランド店でシャンパンが出るのは当然。出てこない店は二流 #VIP>>店を見下して炎上|B:ブランド店で出されたシャンパン、緊張しすぎて一口で飲み干した>>緊張ぶりがウケた|B:VIPルームでシャンパン飲んでたら、何を買いに来たか忘れた #ブランド店>>天然ぶりがバズ|N:お買い物の合間に🥂>>反応は控えめ",
+"F:「ここからここまで全部」って言ってみた。人生で一回は言うべきだよ #爆買い>>成金ぶりで大炎上|B:ブラックカード出したら、店員さんより私の方が緊張してた #ブランド店>>緊張がバズ|N:ブランド店でお買い物💳>>反応は控えめ|B:お店の照明とカード✨>>カードに照明が反射した1枚が謎にバズった",
+"F:試着室で自撮り。まだ買ってないけど似合うから買ったも同然>>店への迷惑行為と批判|F:ブランド店の店員さん、私より地味。ブランドが泣いてる>>店員いじりで炎上|B:試着室が三面鏡で、私が3人いて全員迷ってた>>三面鏡ネタがバズ|N:試着中🤳 #ブランド店>>反応は控えめ",
+"F:お会計の時、隣から手が伸びてくるの最高♡ #パパ活>>パパ活疑惑で大炎上|B:パトロンさんのバッグを選ぶ手、真剣すぎて商品が震えてる #ブランド店>>手元の真剣さがウケた|B:パトロンさんが店員さんと同時にカードを出して、なぜか揉めてた>>謎の譲り合いがバズ|N:お買い物デート🛍️ #ブランド店>>反応は控えめ",
+"F:このヒール、店員さんが履かせてくれた。シンデレラは私 #プリンセス>>勘違いが炎上|B:試し履きしたヒールが高すぎて、店内を壁伝いに歩いた #ブランド店>>実況がバズ|N:新作のヒール、値札のゼロが多すぎて数えるのをやめた #ハイヒール>>ネタが伝わらず、反応は控えめ|B:新作👠>>写真の角度が「広告みたい」と謎にバズった",
+/* ナイトプール */
+"F:ナイトプールでシャンパンタワー。泳ぎに来てる人、何しに来たの？>>他の客を見下して炎上|B:プールにシャンパンをこぼしたら、浮き輪までシャンパン色になった>>ハプニングがバズ|B:シャンパンを持ったまま浮き輪に乗ろうとして、両方沈んだ #ナイトプール>>失敗談がバズ|N:ナイトプールで乾杯🥂>>数件のいいね",
+"F:ナイトプールのVIP席、カード一枚で貸切。庶民エリアはあっち>>庶民呼ばわりで炎上|N:防水ケースにカードを入れたら、何のケースか分からなくなった #ナイトプール>>ネタが伝わらず、反応は控えめ|B:浮き輪の上に置いたカードが流されて、全員で追いかけた>>大捜索がバズ|B:夜のプールと💳>>光の反射が綺麗な1枚が謎にバズった",
+"F:ナイトプールで一番映えてるの私。加工なしでこれはずるいよね #無加工>>加工疑惑で炎上|B:ナイトプールで自撮りしたら、ライトで顔が紫一色になった #ナイトプール>>紫の顔がバズ|B:防水ケース越しの自撮り、全部くもってた #ナイトプール>>くもり自撮りがウケた|N:ナイトプールの夜🤳>>数件のいいね",
+"F:浮き輪を押してくれる手、誰でしょう？♡ #匂わせ>>匂わせで大炎上|F:パトロンさんがナイトプールを貸切にしてくれた。一般のお客さんには帰ってもらった笑>>一般客を追い出したと炎上|B:パトロンさん、プールでも腕時計を外さないから水没が心配 #ナイトプール>>手元の時計がバズ|N:ナイトプールで乾杯 #ナイトプール>>反応は控えめ",
+"F:ヒールでプールサイドを歩いたら滑った。床が悪いよね、訴えようかな>>クレーマーぶりで炎上|B:ナイトプールにヒールで来たのは私だけだった>>場違いぶりがウケた|N:プールに足だけ入れたら、脱いだヒールの方が浮いてた>>ネタが伝わらず、反応は控えめ|B:プールサイドの👠 #ナイトプール>>ヒールとネオンの1枚が謎にバズった",
+/* ===== 成り上がり期 ===== */
+/* プライベートジェット × 高級時計 / ブランドバッグ / 札束・金塊 / 高級車 / 100本のバラ */
+"F:プライベートジェットだと時差ボケしないの。エコノミーの人は大変だね>>エコノミー客から総攻撃|B:機内で時計を現地時間に合わせようとして、3回やり直した>>時差ネタがウケた|B:窓に時計をかざしたら、雲の上で針が光ってた>>写真の美しさがバズ|N:機内にて⌚ #ジェット>>反応は控えめ",
+"F:ジェットではバッグを床に置かない。床は庶民の荷物用 #プライベートジェット>>嫌味で炎上|B:ジェットのシートより、私のバッグの方が座り心地よさそうに座ってた>>擬人化がバズ|N:荷物棚が大きすぎて、バッグがどこにあるか分からない #ジェット>>ネタが伝わらず、反応は控えめ|B:空の上の👜>>雲とバッグの1枚が謎にバズった",
+"F:ジェットの燃料代、札束で払った。現金の方がかっこいいから #現金主義>>拝金主義で炎上|F:機内で札束を数えるのが趣味。みんなの年収、数えてあげようか？>>大炎上|B:機内で札束を数えてたら、揺れて全部散らばった #ジェット>>大惨事がバズ|N:出張の準備💰>>反応は控えめ",
+"F:空港まで高級車、そのままジェット。電車って何？>>電車通勤の人から総攻撃|B:車からジェットまで3メートル。歩かなさすぎて足がなまる #ジェット>>贅沢な悩みがネタ化|B:滑走路でジェットと並んだら、高級車がおもちゃみたい>>比較写真がバズ|N:今日の移動🚗✈️ #ジェット>>反応は控えめ",
+"F:機内にバラ100本。CAさんは片付けが大変そうだけど仕事だもんね>>CAへの配慮のなさで炎上|B:機内のバラの香りが強すぎて、パイロットさんがくしゃみしてた>>ほのぼのエピソードがバズ|N:バラを100本持ち込んだら、座る場所がなくなった #ジェット>>ネタが伝わらず、反応は控えめ|B:空の上のバラ🌹>>窓の光とバラの1枚が「映画みたい」と謎にバズった",
+/* クルーザー */
+"F:クルーザーで海の上。時間に追われる人生はもう終わったの #自由>>働く人を見下して炎上|B:時計を海に落としかけたら、パトロンさんが自分の時計の腕で受け止めた #クルーザー>>神キャッチがバズ|B:日焼けして、時計の跡だけ白く残った>>日焼け跡がウケた|N:海の上の時間⌚>>反応は控えめ",
+"F:クルーザーにブランドバッグを10個持ってきた。使わないけど見せたいから>>見せびらかしで炎上|N:潮風でバッグがベタベタになった #クルーザー>>反応は控えめ|B:船酔いして、ブランドバッグをエチケット袋にしかけた>>危機一髪の話がバズ|B:デッキとバッグ👜 #クルーザー>>海の青とバッグの色の1枚が謎にバズった",
+"F:クルーザーから札束を撒いてみた。拾えた人にはあげる #お金配り>>拝金ムーブで大炎上|F:稼いだお金の話をしたら友達が減った。嫉妬って醜い>>大炎上|B:札束を扇子代わりにしたら、1枚飛んでカモメが咥えていった #クルーザー>>カモメがバズ|N:クルーザーにて💰 #クルーザー>>反応は控えめ",
+"F:港まで高級車で乗りつけたら、漁師さんの車がボロくて笑った>>漁師さんを笑って大炎上|B:港に車を停めたら、漁師さんに魚をもらった>>交流がほっこりと話題に|N:車から船に乗り換えるだけで移動が大変>>反応は控えめ|B:港の🚗 #クルーザー>>夕焼けと車の1枚が謎にバズった",
+"F:クルーザーからバラ100本を海に投げた。映えるでしょ？>>海を汚したと大炎上|B:バラ100本を積んだら、船が少し傾いた>>ネタがバズ|B:デッキに並べたバラが風で全部パトロンさんの顔に飛んでいった>>オチがバズ|N:海とバラ🌹 #クルーザー>>反応は控えめ",
+/* 海外カジノ */
+"F:カジノで一晩で時計1個分負けた。でもまた買ってもらうから大丈夫 #カジノ>>依存体質で炎上|B:カジノに時計がないのは本当だった。自分の時計を見たら朝の6時だった #カジノ>>カジノあるあるがバズ|N:海外のカジノへ⌚>>反応は控えめ|B:カジノのテーブルと⌚ #カジノ>>照明と時計の1枚が謎にバズった",
+"F:カジノの勝ち分でバッグを買った。働くよりギャンブルの方が早いよ #カジノ>>ギャンブル推奨で大炎上|B:チップをバッグに入れすぎて、帰りに底が抜けた>>大惨事がウケた|B:ディーラーさんにバッグを褒められて、勝負に集中できなかった>>単純さがバズ|N:カジノの夜👜>>反応は控えめ",
+"F:カジノで勝ったお金、全部寄付…するわけないじゃん笑>>悪ふざけで炎上|F:カジノで100万円溶かしたけど、パトロンのお金だから痛くない>>大炎上|B:ルーレットで1回当たって、嬉しくて全額賭けたらすぐ消えた #カジノ>>一瞬の夢がウケた|N:カジノにて💰 #カジノ>>反応は控えめ",
+"F:カジノで勝って車を買った。負けた人たちは歩いて帰るのかな #カジノ>>負けた人を煽って炎上|N:景品の車、当たっても運転できないから困る>>ネタが伝わらず、反応は控えめ|B:カジノの前に停めた車、ドアの開け方が分からなくて閉じ込められた #カジノ>>失敗談がバズ|B:カジノの夜と🚗 #カジノ>>ネオンと車の1枚が謎にバズった",
+"F:ディーラーさんにバラを渡して、勝たせてってお願いした♡ 不正じゃないよ笑>>不正をほのめかして炎上|B:バラを持ってたら、ディーラーさんに恋人と間違えられた>>勘違いがバズ|B:バラの花びらで数字を選んだら、本当にルーレットが当たった #カジノ>>奇跡がバズ|N:カジノでバラ🌹>>反応は控えめ",
+/* 海外ヴィラ */
+"F:海外のヴィラで時間を忘れる生活。満員電車の人たち、おつかれ #ヴィラ>>大炎上|B:ヴィラで時計を外したら、3日間曜日が分からなくなった #海外ヴィラ>>脱力ぶりがバズ|N:ヴィラのプールサイドで⌚ #海外ヴィラ>>反応は控えめ|B:プールサイドの⌚>>水面のきらめきの1枚が謎にバズった",
+"F:ヴィラにブランドバッグを並べて撮影。ホテル代より高い>>見せびらかしで炎上|B:ヴィラのサルに、ブランドバッグを持っていかれた #海外ヴィラ>>サル事件がバズ|B:ベッドが広すぎて、置いたバッグが迷子になった>>ネタがウケた|N:ヴィラの朝👜>>反応は控えめ",
+"F:ヴィラのスタッフにチップを札束で渡したら泣いて喜んでた。かわいい>>見下しで大炎上|N:現地のお金、桁が多すぎて計算できない #海外ヴィラ>>反応は控えめ|B:札束を数えてたら、ヤモリが札の上で寝てた>>ヤモリがバズ|B:旅のお財布💰>>現地のお札のデザインが綺麗と謎にバズった",
+"F:ヴィラの前まで車で来たら、現地の子どもたちが群がった。サインしてあげた #人気者>>勘違いで炎上|F:現地の車はボロすぎて乗れない。日本から自分の車を運ばせた>>大炎上|B:借りた高級車が左ハンドルで、30分出発できなかった #海外ヴィラ>>失敗談がバズ|N:ヴィラまでドライブ🚗>>反応は控えめ",
+"F:ヴィラのプールにバラを浮かべた。掃除はスタッフの仕事 #映え>>スタッフ軽視で炎上|B:プールに浮かべたバラ、全部排水口に吸い込まれていった #海外ヴィラ>>オチがバズ|B:バラ風呂の花びらが多すぎて、自分がどこにいるか分からない #海外ヴィラ>>ネタがバズ|N:ヴィラのバラ🌹 #海外ヴィラ>>反応は控えめ",
+/* 誕生日パーティー */
+"F:誕生日プレゼントの時計、3本もらった。1本くらい売ってもバレないよね>>転売発言で炎上|B:時計を3本もらって両手に付けたら、手首が重すぎた>>ネタがバズ|N:誕生日プレゼント⌚ #誕生日>>反応は控えめ|B:ケーキと⌚>>ケーキと時計の1枚が謎にバズった",
+"F:誕生日プレゼントがブランドバッグじゃない人はセンスない>>友人への失礼で大炎上|F:誕生日に呼んでない子がバッグを持ってきた。安いのはいらないかな #本音>>大炎上|B:誕生日パーティーで、バッグの山に埋もれて自分が見つからない>>写真がバズ|N:誕生日パーティー👜>>反応は控えめ",
+"F:誕生日に札束のケーキをもらった。食べられないけど一番うれしい #誕生日>>拝金で炎上|B:札束ケーキのろうそくに火をつけたら、パトロンさんが慌てて消しにきた #誕生日>>ハプニングがバズ|N:誕生日に現金をもらうと、お礼の言い方が分からない>>ネタが伝わらず、反応は控えめ|B:誕生日の💰 #誕生日>>ケーキに見えて実は札束、という1枚が謎にバズった",
+"F:誕生日プレゼントが車だった。免許ないけど運転手をつけてもらうからいいの>>大炎上|B:プレゼントの車、リボンが大きすぎて前が見えない>>ネタがバズ|B:車の前で喜びすぎてジャンプしたら、ヒールが折れた>>オチがバズ|N:プレゼントでもらった車🚗 #誕生日>>反応は控えめ",
+"F:誕生日のバラ、100本に1本でも足りなかったら受け取らない #誕生日>>わがままで炎上|B:バラを数えたら101本あって、1本はパトロンさんの胸ポケットのだった #誕生日>>オチがバズ|B:バラ100本を抱えたら前が見えなくて、ケーキに突っ込んだ #誕生日>>大惨事がバズ|N:誕生日のバラ🌹>>反応は控えめ",
+/* ===== 女帝期 ===== */
+/* 自分のサロン × ティアラ / 社長の名刺 / 自社コスメ / 高額セミナーのチラシ / 売上グラフ */
+"F:サロンの会員さんには、ティアラの私を「女王様」と呼んでもらってる #サロン>>宗教っぽいと大炎上|B:サロンでティアラを付けたら、ドアにぶつかって3回外れた #サロン>>ドジがバズ|N:サロンの記念日に👑>>反応は控えめ|B:サロンにて👑 #オンラインサロン>>ティアラの1枚が謎にバズった",
+"F:名刺の肩書きは「CEO」。働いたことないけど、社長ってこういうことでしょ？>>社会人から総攻撃|B:社長の名刺、自分の名前を間違えて印刷してた>>ミスがバズ|B:名刺交換の練習をしてたら、チワワにも名刺を渡してた #社長>>ほのぼのとウケた|N:サロンの名刺ができました #サロン>>反応は控えめ",
+"F:自社コスメの原価は100円。でもみんな5万円で買ってくれる♡ #サロン>>原価発言で大炎上|F:私のコスメを使えば誰でも私みたいになれる…わけないけど笑>>購入者を馬鹿にして炎上|B:自社コスメのパッケージ、私の顔が大きすぎてフタが閉まらない>>自虐がバズ|N:自社コスメ🧴 #サロン>>反応は控えめ",
+"F:サロンの入会金は30万円。成功したいなら安いものだよね #自己投資>>高額商法で炎上|B:チラシの私が盛りすぎで、本人と気づかれなかった #サロン>>盛りすぎネタがバズ|N:チラシを自分でデザインしたら目がチカチカした>>ネタが伝わらず、反応は控えめ|B:新しいチラシ📄>>デザインが「昭和レトロ」と謎にバズった",
+"F:今月のサロン売上、右肩上がり📈 会員さんの貯金は右肩下がりかもね笑>>大炎上|B:売上グラフを逆さまに貼ってて、ずっと下がってると勘違いしてた #サロン>>ミスがバズ|B:売上グラフを会計士さんに見せたら「これ心電図ですか」と言われた>>ネタがバズ|N:今月の振り返り📈>>反応は控えめ",
+/* セミナー会場 */
+"F:セミナーの最後に、受講生がティアラにキスする儀式をやってる #セミナー>>宗教だと大炎上|B:登壇中、ティアラがマイクのコードと絡まった #セミナー>>ハプニングがバズ|N:セミナーに登壇しました👑 #セミナー>>反応は控えめ|B:登壇の前に👑 #セミナー>>舞台袖の1枚が謎にバズった",
+"F:セミナーで名刺を配ったら、みんな私と繋がりたがる。成功者だから当然 #セミナー>>自意識過剰で炎上|F:名刺交換で、肩書きが平社員の人とは話さないようにしてる>>大炎上|B:名刺を500枚配ろうとしたら、名刺入れに10枚しか入らなかった>>オチがバズ|N:セミナーで名刺交換しました>>反応は控えめ",
+"F:セミナーの最後に自社コスメを売ったら完売。洗脳って楽しい笑>>洗脳発言で大炎上|B:自社コスメの実演で塗りすぎて、顔がテカった #セミナー>>実演失敗がバズ|N:物販コーナーにコスメを並べました #自社コスメ>>反応は控えめ|B:物販コーナー🧴>>並べたコスメの1枚が謎にバズった",
+"F:「1日5分で月収100万」のセミナー。中身は私も知らない #セミナー>>詐欺だと大炎上|B:チラシの「月収」が「月収穫」と誤植されてて、農業セミナーと間違えられた #セミナー>>誤植がバズ|B:チラシを配る前に、自分のチラシで紙飛行機を作ってた>>ネタがウケた|N:次回セミナーのお知らせ📄 #セミナー>>反応は控えめ",
+"F:受講生の成果グラフ、ちょっとだけ盛った。誰も確認しないし #セミナー>>データ捏造で大炎上|N:グラフを出そうとしたら、プロジェクターが映らなかった>>ネタが伝わらず、反応は控えめ|B:グラフを指す指し棒を伸ばしすぎて、前の列の人に当たった>>ハプニングがバズ|B:今日の資料📈 #セミナー>>グラフの形がハートに見えると謎にバズった",
+/* 豪邸 */
+"F:豪邸でもティアラを付けて過ごしてる。家でも女王だから>>痛いと炎上|B:ティアラを付けたまま掃除してたら、宅配の人に二度見された>>二度見がバズ|B:豪邸が広すぎて、ティアラをどこに置いたか3日探した>>迷子ネタがバズ|N:おうち時間👑 #豪邸>>反応は控えめ",
+"F:豪邸の表札も名刺と同じ「CEO」にした。近所に覚えてもらわなきゃ #豪邸>>痛すぎると炎上|N:豪邸のポストに自分の名刺が入ってた。誰が入れたの #豪邸>>ネタが伝わらず、反応は控えめ|B:名刺のデザイナーさんを豪邸に呼んだら、迷子になって1時間出てこなかった #豪邸>>迷子がバズ|B:名刺とお花📇 #社長>>シンプルな1枚が謎にバズった",
+"F:豪邸のバスルームを自社コスメで埋め尽くした。売れ残りじゃないよ笑 #豪邸>>在庫疑惑で炎上|B:自社コスメの在庫が廊下を埋めて、玄関から出られない>>在庫地獄がバズ|N:お風呂の新しいコスメ🧴 #豪邸>>反応は控えめ|B:洗面台のコスメ🧴>>大理石とコスメの1枚が謎にバズった",
+"F:チラシに豪邸の写真を載せて「あなたもこうなれる」と書いたら申込殺到>>誇大広告で大炎上|F:チラシの豪邸、実はレンタル。でも夢を売るのが仕事だから>>大炎上|B:チラシの豪邸写真に犬が写りこんで、犬の方が人気になった #豪邸>>犬がバズ|N:新しいチラシができました📄>>反応は控えめ",
+"F:売上グラフを豪邸の壁に飾ってる。お金が増えるのを見るのが一番の趣味 #豪邸>>拝金で炎上|B:壁の売上グラフ、ホームパーティーの客に絵画だと思われて褒められた>>勘違いがバズ|B:売上グラフを見ながら筋トレしてたら、グラフより腹筋が伸びた #豪邸>>オチがバズ|N:今月の数字📈>>反応は控えめ",
+/* 新商品発表会 */
+"F:新商品発表会にティアラで登場。主役は商品じゃなくて私 #発表会>>大炎上|B:ティアラが照明に反射して、記者さんの写真が全部白飛びした>>白飛び写真がバズ|N:発表会で👑 #発表会>>反応は控えめ|B:発表会の舞台裏👑 #新商品>>舞台裏の1枚が謎にバズった",
+"F:取材に来た記者の名刺が安っぽかったから受け取らなかった>>記者を見下して炎上|B:名刺を出したつもりが、ポイントカードを渡してた>>天然ぶりがバズ|B:名刺交換でお辞儀しすぎて、相手と頭をぶつけた #発表会>>ハプニングがバズ|N:発表会にご来場ありがとうございました #発表会>>反応は控えめ",
+"F:新作コスメの成分は秘密。知ったらみんな買わなくなるから笑 #新作>>成分隠しで大炎上|F:新作がパクリって言われてるけど、私の方がかわいいから問題ない>>パクリ疑惑で炎上|B:新作コスメの発表で、試供品を全部自分で使ってしまった #発表会>>オチがバズ|N:新作コスメ発売です🧴 #新商品>>反応は控えめ",
+"F:チラシに「医師も推薦」って書いた。医師に会ったことはないけど #新商品>>虚偽広告で大炎上|N:チラシを刷りすぎて会場の床が見えない>>ネタが伝わらず、反応は控えめ|B:チラシの裏に、商品名の候補が全部印刷されてた #発表会>>ボツ候補名がバズ|B:発表会のチラシ📄>>デザインの1枚が謎にバズった",
+"F:売上予測グラフ、根拠はないけど右肩上がりにしといた>>根拠なしで炎上|B:売上グラフのスライドが逆さまで、右肩下がりに見えた>>ハプニングがバズ|B:売上目標を発表したら、打ち間違いでゼロが2個多かった #新商品>>ミスがバズ|N:今期の目標です📈>>反応は控えめ",
+/* ヘリポート */
+"F:ヘリで出勤。渋滞なんて知らない、女王の特権👑 #ヘリ>>大炎上|B:ヘリの風でティアラが飛んでいった #ヘリポート>>ハプニングがバズ|B:ティアラを外し忘れて、ヘッドセットが付けられなかった>>ネタがバズ|N:今日の移動👑 #ヘリポート>>反応は控えめ",
+"F:ヘリの中で名刺交換。ヘリに乗れない人とは仕事しない主義 #ヘリ>>選民思想で炎上|B:ヘリの中で名刺を出したら風で全部飛んで、街に名刺の雨が降った>>名刺の雨がバズ|N:ヘリポートで打ち合わせ #ヘリポート>>反応は控えめ|B:ヘリポートと📇>>空と名刺の1枚が謎にバズった",
+"F:ヘリから自社コスメの試供品をばらまいた。拾った人はラッキー>>危険行為で大炎上|F:ヘリから見ると、地上で私のコスメを使ってる人たちがアリみたい>>大炎上|B:ヘリの中でメイク直ししたら、揺れて眉毛が3本になった #ヘリポート>>メイク失敗がバズ|N:移動中のメイク直し🧴>>反応は控えめ",
+"F:「ヘリに乗れる人生へ」ってチラシを作った。乗るのは私だけど #セミナー>>詐欺っぽいと炎上|B:ヘリポートでチラシを撮影しようとしたら、プロペラの風で全部飛んだ #ヘリポート>>ハプニングがバズ|N:ヘリからチラシを配ろうとしたら、ヘリ会社に止められた>>ネタが伝わらず、反応は控えめ|B:空とチラシ📄 #ヘリポート>>青空の1枚が謎にバズった",
+"F:ヘリの高度と売上、どっちも上がりっぱなし。落ちる人の気持ちは分からない #ヘリ>>大炎上|B:ヘリの高度計と売上グラフの形がそっくりで笑った #ヘリポート>>比較写真がバズ|B:ヘリで売上グラフを見ていたら、酔って何も見えなくなった>>オチがバズ|N:空の上で月次チェック📈 #ヘリポート>>反応は控えめ",
+];
+
+/* 地雷キャプション（裏社会ならではの理不尽：パトロン詮索・暴露・曲解） */
+const MINES3 = [
+  [ // 港区デビュー期
+    {t:"努力すれば誰でもここまで来れる！ #夢",why:"「努力って何？」と過去の投稿が掘り返された"},
+    {t:"お金より大切なものがあると思うの♡",why:"写真の{sub}の値段が特定され「説得力ゼロ」と炎上"},
+    {t:"支えてくれる人に感謝🙏",why:"「支えてる人って誰？」とパトロンの正体探しが始まった"},
+    {t:"最近ちょっと疲れちゃった…",why:"「港区疲れ」と揶揄され、ネットニュースになった"},
+    {t:"地元のみんな、元気かな？",why:"地元の同級生が昔の写真を晒し始めた"},
+    {t:"今日は早めに帰ります🌙",why:"背景から店が特定され、店のレビュー欄が荒らされた"},
+    {t:"自分へのご褒美♡ #頑張った",why:"「頑張ったのは誰？」とパトロンへの依存を突っ込まれた"},
+    {t:"素敵な出会いに感謝の夜✨",why:"「出会い＝パパ活」と曲解されて炎上"},
+  ],
+  [ // 成り上がり期
+    {t:"やっぱり窓側の席が好き✈️",why:"「プライベートジェットに窓側も何もない」と嫌味扱い"},
+    {t:"この景色、みんなにも見せたい！",why:"「見せびらかし」と受け取られた"},
+    {t:"旅先でも日本食が恋しくなる🍙",why:"「日本を見下してるくせに」と炎上"},
+    {t:"今年は家族とも旅行したいな",why:"家族が週刊誌の取材に応じてしまった"},
+    {t:"現地の子どもたちから元気をもらった！",why:"「貧困を映えに使うな」と批判された"},
+    {t:"誕生日を祝ってくれてありがとう🎂",why:"プレゼントの総額を計算するスレが立った"},
+    {t:"幸せは自分で掴むもの✨",why:"「掴んだのはパトロンの手」と大喜利化"},
+    {t:"最近、本当の友達って何か考えちゃう",why:"元友人たちが一斉に暴露を始めた"},
+  ],
+  [ // 女帝期
+    {t:"私のサロンで人生が変わった人がたくさんいます！ #感謝",why:"「悪い方に変わった」と元会員が次々に声を上げた"},
+    {t:"税金はちゃんと払おうね！",why:"「お前が言うな」と脱税疑惑が再燃"},
+    {t:"次の目標は世界進出🌏",why:"海外の消費者団体に目をつけられた"},
+    {t:"スタッフのみんなが家族です♡",why:"元スタッフが労働環境を告発した"},
+    {t:"応援してくれる皆さんへ恩返しがしたい",why:"「だったら返金して」というコメントが殺到"},
+    {t:"お金の使い方で人生は変わる",why:"「使ったのは会員のお金」と炎上"},
+    {t:"初心を忘れずに頑張ります🙏",why:"「初心＝パパ活」と過去が掘り返された"},
+    {t:"今日は静かに読書の日📖",why:"読んでいた本が自己啓発商法の手口本だと特定された"},
+  ],
+];
+
 /* 想定と違う結果になったときの理由（理不尽でもOK） */
 const OFF = {
   fire:[
@@ -939,11 +1138,11 @@ const OFF = {
 };
 
 function capsFor(p,b,s){
-  const list=(STG===2?CAPS2:CAPS)[p*25+b*5+s].split("|").map(x=>{const [t,res]=x.slice(2).split(">>");return {type:x[0],t,res};});
+  const list=(STG===3?CAPS3:STG===2?CAPS2:CAPS)[p*25+b*5+s].split("|").map(x=>{const [t,res]=x.slice(2).split(">>");return {type:x[0],t,res};});
   // 時期に応じた確率で、炎上かバズの枠を1つ地雷に差し替える（無風は残す）
   if(Math.random()<PH()[p].mine){
     const sub=SUB[PH()[p].subs[s]].t;
-    const m=pick((STG===2?MINES2:MINES)[p]);
+    const m=pick((STG===3?MINES3:STG===2?MINES2:MINES)[p]);
     const nF=list.filter(x=>x.type==="F").length;
     const target=list.findIndex(x=>x.type===(nF===2?"F":"B"));
     list[target]={type:"M",t:m.t,res:m.why.replace(/\{sub\}/g,sub)};
@@ -972,9 +1171,10 @@ const LIGHT={
    状態
 ===================================================== */
 const GOAL=100000, GOAL2=1000000, TURNS=12, START=300, PATRON_FIRES=3, FAVOR_CLEAR=60;
-let STG=1;   // 現在のステージ（1=下積み編 / 2=表舞台・芸能界編）
-const PH=()=>STG===2?PHASES2:PHASES;
-const goal=()=>STG===2?GOAL2:GOAL;
+let STG=1;   // 現在のステージ（1=下積み編 / 2=表舞台・芸能界編 / 3=STAGE 2 裏ルート・裏社会・カス成金編）
+const PH=()=>STG===3?PHASES3:STG===2?PHASES2:PHASES;
+const goal=()=>STG>=2?GOAL2:GOAL;
+const S2_FRESH=100000;   // HOMEから STAGE 2 を新しく始めるときのフォロワー数
 let S, phase="title", photo=null, opts=[], pickIdx=null;
 let animId=null, likeTimer=null, hidTimer=null, cmtTimers=[], liked=false, likeNow=0, lastType="";
 
@@ -1004,6 +1204,10 @@ const AVATAR={
   break:"img/kotomi-s2-break.jpg",     // ブレイク期：スポットライト
   top:"img/kotomi-s2-top.jpg",         // トップ期：金のライト・レッドカーペット
   scandal:"img/kotomi-s2-scandal.jpg", // スキャンダル：フラッシュとモノクロ
+  // STAGE 2 裏ルート（パトロンルートの顔を使い回し、雰囲気だけ変える）
+  minato:"img/kotomi-p2-minato.jpg",   // 港区デビュー期：ネオン
+  rise:"img/kotomi-p2-rise.jpg",       // 成り上がり期：札束の金色
+  empress:"img/kotomi-p2-empress.jpg", // 女帝期：紫と金・ティアラの輝き
 };
 Object.values(AVATAR).forEach(src=>{ const i=new Image(); i.src=src; });   // 先読みして切り替え時のちらつきを防ぐ
 let currentFace=AVATAR.early;
@@ -1018,17 +1222,30 @@ const subSVG=s=>s===SUB.selfie
   : `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${s.svg}</svg>`;
 function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0,buzzN:0,fireN:0,mineN:0,used:new Set()}; }
 // STAGE 2：フォロワーは STAGE 1 から引き継ぎ。好感度50からスタート
-function newState2(start){ return {...newState(),followers:start,start,favor:50,ignoreN:0,offerN:0}; }
+function newState2(start){ return {...newState(),followers:start,start,favor:50,ignoreN:0,offerN:0,kusoN:0}; }
+// 裏ルートの伸び倍率：好感度が低いほど、炎上するほど伸びる
+const hateMult=st=>(1+(100-st.favor)/100)*(1+st.fireN*.12);
 /* STAGE 2 の仕事オファー（好感度70以上のとき、バズ・無風の投稿で時々届く） */
 const OFFERS=[
   ["深夜ドラマの端役","ローカル局の情報番組リポーター","ファッション誌の読者モデル枠","ネットCMのエキストラ"],
   ["連ドラの準レギュラー","人気バラエティのひな壇","ファッション誌の専属モデル","ラジオの冠番組"],
   ["大手飲料メーカーのCM","大作映画の主演","化粧品ブランドのアンバサダー","ゴールデン帯ドラマの主演"],
 ];
-// STAGE 2 の進行状況（クリア後にもう一度挑戦できるよう、引き継ぎフォロワーを端末に保存）
-const S2KEY="gi_s2_start";
-const loadS2=()=>{ try{ return +localStorage.getItem(S2KEY)||0; }catch(e){ return 0; } };
-const saveS2=n=>{ try{ localStorage.setItem(S2KEY,String(Math.round(n))); }catch(e){} };
+/* 裏ルート：嫌われるほど起きる「クソイベント」。起きるたびにフォロワーは増えるが、好感度はさらに下がる */
+const KUSO=[
+  ["街中で生卵をぶつけられた","行きつけのラウンジを出禁になった","元同級生に暴露動画を出された","アンチに出待ちされて写真を撮られた","ネットに偽の住所が晒された"],
+  ["家が特定され、マンションの住民会議で追い出された","空港で一般客に囲まれて罵声を浴びた","勝手に作られた変な合成画像が拡散された","カジノの監視カメラ映像が流出した","パトロンの奥さんを名乗る人から怪文書が届いた"],
+  ["サロンの元会員が返金を求めてデモを起こした","豪邸の壁に落書きされた","ワイドショーで1時間特集された","「嫌いなインフルエンサー」ランキングで1位になった","実家に記者が押しかけた"],
+];
+/* 最高記録（HOME に表示）：クリアを優先し、同じならフォロワーが多い方 */
+const BEST_KEY="gi_best";
+const loadBest=()=>{ try{ return JSON.parse(localStorage.getItem(BEST_KEY))||{}; }catch(e){ return {}; } };
+function saveBest(mode,kind,followers,clear){
+  const all=loadBest(), cur=all[mode];
+  if(cur && (cur.clear>clear || (cur.clear===clear && cur.f>=followers))) return;
+  all[mode]={kind,f:Math.round(followers),clear:clear?1:0};
+  try{ localStorage.setItem(BEST_KEY,JSON.stringify(all)); }catch(e){}
+}
 
 /* ===== テーマ ===== */
 (function(){
@@ -1060,13 +1277,18 @@ function renderStatus(){
   $("sFire").textContent=Math.round(S.gauge)+"%";
   $("gFire").style.width=S.gauge+"%";
   $("gFireWrap").classList.toggle("danger",S.gauge>=70);
-  const fc=$("sFireN"), s2=STG===2;
-  $("stageLbl").textContent=s2?"STAGE 2 ・ 表舞台・芸能界編":"STAGE 1 ・ 下積み編";
-  $("sGoal").textContent=s2?"/100万":"/10万";
-  $("sFireLbl").textContent=s2?"📰 週刊誌":"🔥 炎上";
-  $("bioTxt").textContent=s2?"ステラ・クリエイティブ所属🎬 半年で100万人＆好感度60いけなかったら契約終了。":"上京したて🗼 半年で10万人いけなかったら田舎に帰ります。";
-  const fv=$("sFavor"); fv.hidden=!s2;
-  if(s2){
+  const fc=$("sFireN"), s2=STG===2, s3=STG===3;
+  $("stageLbl").textContent=s3?"STAGE 2 ・ 裏社会・カス成金編":s2?"STAGE 2 ・ 表舞台・芸能界編":"STAGE 1 ・ 下積み編";
+  $("sGoal").textContent=STG>=2?"/100万":"/10万";
+  $("sFireLbl").textContent=s3?"😈 嫌われ度":s2?"📰 週刊誌":"🔥 炎上";
+  $("bioTxt").textContent=s3?"パトロンの看板娘💎 半年で100万人いけなかったら捨てられます。":s2?"ステラ・クリエイティブ所属🎬 半年で100万人＆好感度60いけなかったら契約終了。":"上京したて🗼 半年で10万人いけなかったら田舎に帰ります。";
+  const fv=$("sFavor"); fv.hidden=STG<2;
+  if(s3){
+    fv.className="fire-count favor ng";
+    fv.textContent=`💔 好感度 ${Math.round(S.favor)}（伸び ×${hateMult(S).toFixed(2)}）`;
+    fc.className="fire-count warn"; fc.textContent=`炎上 ${S.fireN}回・💩 ${S.kusoN}回`;
+  }
+  else if(s2){
     fv.className="fire-count favor "+(S.favor>=FAVOR_CLEAR?"ok":"ng");
     fv.textContent=`💗 好感度 ${Math.round(S.favor)}${S.favor>=FAVOR_CLEAR?" ✓":` / ${FAVOR_CLEAR}`}`;
     fc.className="fire-count"; fc.textContent=`炎上 ${S.fireN}回`;
@@ -1077,7 +1299,10 @@ function renderStatus(){
   $("postsN").textContent=S.posts;
   $("remain").textContent=S.followers>=goal()?"0（達成！）":fmt(goal()-S.followers);
   const b=$("badge");
-  if(s2&&S.gauge>=60){b.className="badge hot";b.textContent="📰 張り込まれ中";}
+  if(s3&&S.gauge>=70){b.className="badge hot";b.textContent="😈 日本中の嫌われ者";}
+  else if(s3&&S.gauge>=40){b.className="badge hot";b.textContent="😈 嫌われ中";}
+  else if(s3){b.className="badge";b.textContent="💎 港区デビュー";}
+  else if(s2&&S.gauge>=60){b.className="badge hot";b.textContent="📰 張り込まれ中";}
   else if(s2&&S.gauge>=30){b.className="badge hot";b.textContent="⚠ 記者の気配";}
   else if(S.gauge>=60){b.className="badge hot";b.textContent="🔥炎上中";}
   else if(S.gauge>=30){b.className="badge hot";b.textContent="⚠ くすぶり中";}
@@ -1187,8 +1412,9 @@ async function spin(){
 function showChoices(){
   opts=shuffle(capsFor(photo.p,photo.b,photo.s));
   pickIdx=null;
-  if(STG===2) managerCheck(opts);
-  $("choices").innerHTML=opts.map((o,i)=>`<button class="cap${o.flag?" flag":""}" data-i="${i}">${o.flag?`<span class="mgr">🗂️ マネージャー「⚠ これはやめて」</span>`:""}${tagify(o.t)}</button>`).join("");
+  if(STG===2) managerCheck(opts); else if(STG===3) secretaryCheck(opts);
+  const flagLbl=STG===3?"💎 パトロンの秘書「これで燃やせ」":"🗂️ マネージャー「⚠ これはやめて」";
+  $("choices").innerHTML=opts.map((o,i)=>`<button class="cap${o.flag?" flag":""}" data-i="${i}">${o.flag?`<span class="mgr">${flagLbl}</span>`:""}${tagify(o.t)}</button>`).join("");
   $("postBtn").disabled=true; $("postBtn").textContent="投稿文を選んでください";
   phase="choose"; setStep(2);
   $("post").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1223,6 +1449,28 @@ function judge(capType,p,gauge){
 }
 /* STAGE 2：好感度で伸び方が変わる・忠告無視のペナルティ・仕事オファー */
 let lastOffer="";
+// 裏ルート：パトロンの秘書が「燃える投稿文」をこっそり教えてくれる（たまに外れる）
+function secretaryCheck(list){
+  const f=list.filter(o=>o.type==="F"), other=list.filter(o=>o.type!=="F");
+  pick(Math.random()<.8&&f.length?f:other).flag=true;
+}
+/* 裏ルート：好感度が低いほど・炎上するほど伸びる。ペナルティはないが、クソイベントで嫌われるのが加速する */
+function stage3Adjust(cap,res,p,st){
+  const r={...res,favorD:0,kuso:null,heat:0};
+  const m=hateMult(st);
+  r.delta=Math.round(r.delta*m);
+  r.favorD = r.type==="buzz" ? Math.round(rr([3,6]))
+           : r.type==="calm" ? -Math.round(rr([1,3]))
+           : -Math.round(rr([8,14])*(1+st.fireN*.1));
+  // 嫌われるほど・燃えるほどクソイベントが起きやすい
+  const pk=Math.min(.85,.1+st.fireN*.12+(r.type==="fire"?.2:0)+Math.max(0,50-st.favor)/150);
+  if(Math.random()<pk){
+    const bonus=Math.round(rr(PH()[p].gain.buzz)*.4*m);
+    r.kuso={t:pick(KUSO[p]),bonus,favorD:-Math.round(rr([5,10])*(1+st.kusoN*.15))};
+    r.delta+=bonus; r.favorD+=r.kuso.favorD;
+  }
+  return r;
+}
 function stage2Adjust(cap,res,p,favor){
   const r={...res,favorD:0,ignored:false,offer:null};
   // 好感度50で等倍。好感度が高いほどバズ・無風の伸びが良く、低いと伸び悩む
@@ -1255,10 +1503,16 @@ function post(){
     S.favor=clamp(S.favor+res.favorD,0,100);
     if(res.ignored) S.ignoreN++; if(res.offer) S.offerN++;
   }
+  if(STG===3){
+    res=stage3Adjust(cap,res,p,S);
+    S.favor=clamp(S.favor+res.favorD,0,100);
+    if(res.kuso) S.kusoN++;
+  }
   const before=S.followers, g0=S.gauge;
   S.followers+=res.delta; S.gauge=clamp(S.gauge+res.heat,0,100); S.posts++;
   if(cap.type==="F") S.fireChoice++;
   if(res.type==="buzz") S.buzzN++; if(res.type==="fire") S.fireN++;
+  if(STG===3) S.gauge=100-S.favor;   // 裏ルートのゲージは「嫌われ度」（100%でもアウトにはならない）
   const mineHit=cap.type==="M"&&res.type==="fire";
   if(mineHit) S.mineN++;
   track("post",{stage:STG,turn:S.turn,phase:PH()[p].key,caption:cap.type,result:res.type});
@@ -1277,7 +1531,7 @@ function post(){
   animateLikes(likes,res.type);
   showComments(res.type,res.delta);
   renderStatus(); animateFollowers(before,S.followers);
-  $("nextBtn").textContent=S.gauge>=100||S.turn>=TURNS?"結果を見る":"次へ進む";
+  $("nextBtn").textContent=(S.gauge>=100&&STG!==3)||S.turn>=TURNS?"結果を見る":"次へ進む";
   if(res.type==="fire"){ $("post").classList.add("shake"); setTimeout(()=>$("post").classList.remove("shake"),600); }
 
   // 結果ポップアップ
@@ -1285,6 +1539,18 @@ function post(){
   const head=mineHit?"💣 地雷を踏んだ…":{buzz:"🎉 万バズ達成！",fire:"🔥 炎上中…",calm:"💤 無風…"}[res.type];
   const label={fire:"炎上理由",buzz:"バズった理由",calm:"無風だった理由"}[res.type];
   const flavor=`${mineHit?"普通の投稿のはずが…<br>":""}<span class="r-why">${label}</span><b>${why}</b>`;
+  if(STG===3){
+    const fd=res.favorD;
+    openModal(`<div class="r-head">${head}</div>
+    <div class="r-delta">+${fmt(res.delta)}人</div>
+    <div class="r-flavor">${flavor}</div>
+    ${res.kuso?`<div class="r-kuso">💩 クソイベント発生！<b>${res.kuso.t}</b>話題になってフォロワー +${fmt(res.kuso.bonus)}人／好感度 ${res.kuso.favorD}</div>`:""}
+    <div class="r-gauge" style="color:var(--fire)">💔 好感度 ${fd>=0?"+":""}${fd}（現在 ${Math.round(S.favor)}）</div>
+    <div class="r-gauge" style="color:var(--gold)">📈 次の投稿の伸び ×${hateMult(S).toFixed(2)}（嫌われるほど・燃えるほど伸びる）</div>
+    <button class="btn-main" id="seeFeed">フィードを見る</button>`,"res-sheet "+res.type);
+    $("seeFeed").onclick=()=>{ closeModal(); phase="result"; $("post").scrollIntoView({behavior:"smooth",block:"start"}); };
+    return;
+  }
   if(s2){
     const fd=res.favorD;
     openModal(`<div class="r-head">${head}</div>
@@ -1346,7 +1612,10 @@ function showComments(type,delta){
 /* ===== 次のターンへ ===== */
 function nextTurn(){
   if(phase!=="result") return;
-  if(STG===2){
+  if(STG===3){
+    if(S.turn>=TURNS) return endStage2(stage3Ending(S));
+  }
+  else if(STG===2){
     if(S.gauge>=100) return endStage2("s2scandal");
     if(S.turn>=TURNS) return endStage2(stage2Ending(S));
   }
@@ -1376,7 +1645,31 @@ function resetForSpin(){
 ===================================================== */
 function openModal(html,cls=""){ $("modalRoot").innerHTML=`<div class="modal"><div class="sheet ${cls}">${html}</div></div>`; }
 function closeModal(){ $("modalRoot").innerHTML=""; }
+/* ===== HOME：3つのモードから選ぶ（それぞれ最高記録を表示） ===== */
+const MODES=[
+  {mode:"s1",stg:1,lbl:"STAGE 1",name:"下積み編",face:"early",cls:"m1",sub:"フォロワー300人から、半年で10万人を目指す"},
+  {mode:"s2",stg:2,lbl:"STAGE 2",name:"表舞台・芸能界編",face:"rookie",cls:"m2",sub:"10万人スタート。100万人＆好感度60で生き残れ"},
+  {mode:"s3",stg:3,lbl:"STAGE 2 裏",name:"裏社会・カス成金編",face:"minato",cls:"m3",sub:"10万人スタート。嫌われるほど伸びる、炎上上等ルート"},
+];
+function bestLine(mode){
+  const b=loadBest()[mode];
+  return b?`🏆 最高記録：${CARDS[b.kind].icon} ${CARDS[b.kind].title}・${man(b.f)}`:"🏆 最高記録：まだなし";
+}
 function titleModal(){
+  phase="title";
+  openModal(`<img class="sheet-face" src="${AVATAR.early}" alt="欺流亭 ことみ">
+    <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
+    <p style="text-align:center">写真ガチャ × 投稿文4択の、SNS炎上シミュレーション。<br>遊ぶモードを選んでください。</p>
+    <div class="modes">${MODES.map(m=>`<button class="mode ${m.cls}" data-stg="${m.stg}">
+      <img src="${AVATAR[m.face]}" alt=""><span class="mtxt"><small>${m.lbl}</small><b>${m.name}</b><span>${m.sub}</span><em>${bestLine(m.mode)}</em></span></button>`).join("")}</div>
+    <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a>
+    <a class="fb-link" href="${feedbackUrl()}" target="_blank" rel="noopener">💬 要望・バグ報告はこちら</a>`);
+  document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{
+    const stg=+b.dataset.stg;
+    if(stg===1) stage1Intro(); else startStage2(S2_FRESH,stg);   // HOME から始める STAGE 2 は10万人固定
+  });
+}
+function stage1Intro(){
   phase="title";
   openModal(`<img class="sheet-face" src="${AVATAR.early}" alt="欺流亭 ことみ">
     <div class="stage">STAGE 1 ・ 下積み編</div>
@@ -1392,17 +1685,32 @@ function titleModal(){
       <li>時期が進むほど、バズも炎上もインフレしていく</li>
     </ul>
     <button class="btn-main" id="startBtn">下積み生活をはじめる</button>
-    ${loadS2()?`<button class="btn-main btn-s2" id="contS2">🎬 STAGE 2 から遊ぶ<small>引き継ぎフォロワー ${man(loadS2())}</small></button>`:""}
-    <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a>
-    <a class="fb-link" href="${feedbackUrl()}" target="_blank" rel="noopener">💬 要望・バグ報告はこちら</a>`);
-  $("startBtn").onclick=()=>{ closeModal(); track("game_start"); autoSpin(); };
-  if($("contS2")) $("contS2").onclick=()=>startStage2(loadS2());
+    <button class="btn-main btn-sub" id="backBtn">← モード選択に戻る</button>`);
+  $("startBtn").onclick=()=>{ closeModal(); track("game_start",{stage:1}); autoSpin(); };
+  $("backBtn").onclick=titleModal;
 }
-/* ===== STAGE 2：開始 ===== */
-function startStage2(start){
+/* ===== STAGE 2：開始（stg=2 芸能界 / 3 裏社会。start=引き継ぎフォロワー） ===== */
+function startStage2(start,stg=2){
   $("dmRoot").innerHTML=""; $("stage2")?.remove(); closeModal();
-  STG=2; S=newState2(start); stopEffect();
-  resetForSpin(); setStep(1); stage2Intro();
+  STG=stg; S=newState2(start); stopEffect();
+  resetForSpin(); setStep(1); stg===3?stage3Intro():stage2Intro();
+}
+function stage3Intro(){
+  phase="title";
+  openModal(`<img class="sheet-face" src="${AVATAR.minato}" alt="港区デビューしたことみ">
+    <div class="stage">STAGE 2 ・ 裏社会・カス成金編</div>
+    <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
+    <p>パトロンに拾われ、港区で暮らし始めたことみ。次の半年で<b>フォロワー100万人</b>に届かなければ、パトロンに飽きられて捨てられる――。</p>
+    <div class="carry">${S.start===S2_FRESH?"スタート時のフォロワー":"STAGE 1 から引き継いだフォロワー"} <b>${fmt(S.followers)}人</b></div>
+    <ul>
+      <li>流れは STAGE 1 と同じ。<b>自動スロット → 投稿文4択 → 結果</b></li>
+      <li>💔 <b>好感度が低いほど</b>、🔥 <b>炎上するほど</b>フォロワーが伸びる。炎上でアウトになることはない</li>
+      <li>💩 嫌われるほど<b>クソイベント</b>（生卵をぶつけられる、家が特定される…）が起きやすくなる。話題になってフォロワーは増えるが、好感度はさらに急降下</li>
+      <li>💎 パトロンの秘書が「これで燃やせ」と<b>燃える投稿文</b>を教えてくれる。たまに外れる</li>
+      <li>称号は<b>最終フォロワー数</b>で決まる</li>
+    </ul>
+    <button class="btn-main" id="startBtn">港区デビューする</button>`);
+  $("startBtn").onclick=()=>{ closeModal(); track("game_start",{stage:3}); autoSpin(); };
 }
 function stage2Intro(){
   phase="title";
@@ -1410,13 +1718,14 @@ function stage2Intro(){
     <div class="stage">STAGE 2 ・ 表舞台・芸能界編</div>
     <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
     <p>スカウトを受け、芸能事務所<b>ステラ・クリエイティブ</b>に所属したことみ。次の半年で<b>フォロワー100万人</b>と<b>好感度${FAVOR_CLEAR}以上</b>を両方達成できなければ、事務所との契約は打ち切り――。</p>
-    <div class="carry">STAGE 1 から引き継いだフォロワー <b>${fmt(S.followers)}人</b></div>
+    <div class="carry">${S.start===S2_FRESH?"スタート時のフォロワー":"STAGE 1 から引き継いだフォロワー"} <b>${fmt(S.followers)}人</b></div>
     <ul>
       <li>流れは STAGE 1 と同じ。<b>自動スロット → 投稿文4択 → 結果</b></li>
       <li>💗 <b>好感度</b>（0〜100）：バズで上がり、炎上で大きく下がる。高いほどフォロワーが伸びやすく、70以上だと<b>仕事のオファー</b>が舞い込むことも</li>
       <li>📰 <b>週刊誌ゲージ</b>：燃えるほど記者が嗅ぎつける。100%で<b>スクープ → 謝罪会見 → 引退</b></li>
       <li>🗂️ <b>マネージャーの事前チェック</b>：危ない投稿文に「これはやめて」と付く。たいてい正しいが、<b>たまに外れる</b>。忠告を無視して燃えると好感度が大きく下がる</li>
       <li>💣 匂わせ疑惑・特定・曲解など、芸能界ならではの<b>地雷</b>も…</li>
+      <li>称号は<b>最終フォロワー数</b>で決まる</li>
     </ul>
     <button class="btn-main" id="startBtn">芸能活動をはじめる</button>`);
   $("startBtn").onclick=()=>{ closeModal(); track("game_start",{stage:2}); autoSpin(); };
@@ -1425,6 +1734,20 @@ function phaseModal(p){
   phase="modal";
   const P=PH()[p];
   const pool=`<div class="newpool">${P.bgs.map(k=>`<span>${BG[k].e} ${BG[k].t}</span>`).join("")}</div><div class="newpool">${P.subs.map(k=>`<span>${SUB[k].e} ${SUB[k].t}</span>`).join("")}</div>`;
+  if(STG===3){
+    const body = p===1
+      ? `<div class="face-swap"><img class="sheet-face old" src="${AVATAR.minato}" alt=""><span>→</span><img class="sheet-face" src="${AVATAR.rise}" alt="成り上がったことみ"></div><h2>3ヶ月目：成り上がり期</h2>
+         <p style="text-align:center;margin-top:0"><b>港区の新顔から、ネットの嫌われ者へ。</b></p>
+         <p>パトロンが「もっと燃やせ」と、ジェットもカジノも用意してくれた。嫌われるほど、燃えるほど、数字は跳ね上がる。<br>そのぶん<b>クソイベント</b>も派手になっていく。</p>${pool}
+         <button class="btn-main" id="okBtn">ジェットに乗る</button>`
+      : `<div class="face-swap"><img class="sheet-face old" src="${AVATAR.rise}" alt=""><span>→</span><img class="sheet-face" src="${AVATAR.empress}" alt="女帝になったことみ"></div><h2>5ヶ月目：女帝期</h2>
+         <p>サロン、セミナー、自社コスメ。ことみはついに「社長」になった。誰もが知っている。そして、誰からも嫌われている。</p>
+         <p>ここからは桁違いの伸び。<b>どこまで嫌われて、どこまで登りつめるか。</b></p>${pool}
+         <button class="btn-main" id="okBtn">女帝として君臨する</button>`;
+    openModal(body,"phase-sheet "+P.key);
+    $("okBtn").onclick=()=>{ closeModal(); autoSpin(); };
+    return;
+  }
   if(STG===2){
     const body = p===1
       ? `<div class="face-swap"><img class="sheet-face old" src="${AVATAR.rookie}" alt=""><span>→</span><img class="sheet-face" src="${AVATAR.break}" alt="ブレイクしたことみ"></div><h2>3ヶ月目：ブレイク期</h2>
@@ -1483,24 +1806,39 @@ const man=n=>n>=10000?`${(Math.floor(n/1000)/10).toLocaleString("ja-JP")}万人`
 // シェア文に入れるゲームURL（本番の公開URL）
 const GAME_URL="https://red-freegames.github.io/guilty-influencer/";
 // リザルトカード3種：star=芸能スカウト / rich=パトロン・成金 / down=ゲームオーバー
+// 称号のしきい値（最終フォロワー数）
+const S2_T={star:2300000,cm:1600000};
+const S3_T={queen:2800000,guru:2000000};
 const CARDS={
   scout:{cls:"star",clear:true,face:"scout",icon:"🎬",title:"芸能界からのスカウト",deco:["✦","★","✧","✦","★"]},
   patron:{cls:"rich",clear:true,face:"patron",icon:"💴",title:"パトロンの飼い犬・カス成金",deco:["💴","💰","💎","💴","🥂"]},
   none:{cls:"down",face:"down",icon:"🚃",title:"東京追放（田舎送り）／炎上敗北",why:"10万人に届かず、半年で上京生活終了",deco:["🚓","🌾","📉","🚃","🔥"]},
   frozen:{cls:"down",face:"down",icon:"🚓",title:"東京追放（田舎送り）／炎上敗北",why:"炎上でアカウント停止",deco:["🚓","🔥","🧊","🚨","🔥"]},
   // STAGE 2：表舞台・芸能界編
-  s2star:{stage:2,cls:"star",clear:true,face:"top",icon:"👑",title:"国民的女優",why:"好感度85以上・フォロワー200万人超え",deco:["👑","★","✦","🏆","★"]},
-  s2cm:{stage:2,cls:"star",clear:true,face:"break",icon:"🥤",title:"CM女王",why:"好感度85以上でCMオファーが殺到",deco:["🥤","✦","📺","★","✧"]},
+  s2star:{stage:2,cls:"star",clear:true,face:"top",icon:"👑",title:"国民的女優",why:`フォロワー${S2_T.star/10000}万人超えの国民的スター`,deco:["👑","★","✦","🏆","★"]},
+  s2cm:{stage:2,cls:"star",clear:true,face:"break",icon:"🥤",title:"CM女王",why:`フォロワー${S2_T.cm/10000}万人超えでCMオファーが殺到`,deco:["🥤","✦","📺","★","✧"]},
   s2asadora:{stage:2,cls:"star",clear:true,face:"rookie",icon:"🌅",title:"朝ドラヒロイン",why:"フォロワー100万人＆好感度60以上を達成",deco:["🌅","✦","🎬","✧","★"]},
   s2scandal:{stage:2,cls:"down",face:"scandal",icon:"📰",title:"スキャンダル引退",why:"週刊誌にスクープされ、謝罪会見の末に引退",deco:["📰","📸","🎙️","📸","⚡"]},
   s2fired:{stage:2,cls:"down",face:"down",icon:"🚃",title:"事務所解雇（田舎送り再び）",why:"",deco:["📉","🚃","🌾","💔","🚃"]},
+  // STAGE 2 裏ルート：裏社会・カス成金編
+  p2queen:{stage:3,cls:"rich",clear:true,face:"empress",icon:"👑",title:"港区の女帝",why:`フォロワー${S3_T.queen/10000}万人超え。日本一の嫌われ者`,deco:["👑","💴","💎","🥂","💴"]},
+  p2guru:{stage:3,cls:"rich",clear:true,face:"rise",icon:"🔮",title:"オンラインサロンの教祖",why:`フォロワー${S3_T.guru/10000}万人超え。信者と同じ数だけアンチがいる`,deco:["🔮","💴","✨","💎","💴"]},
+  p2nouveau:{stage:3,cls:"rich",clear:true,face:"minato",icon:"💴",title:"成金インフルエンサー",why:"フォロワー100万人を達成。中身はからっぽ",deco:["💴","💰","💎","💴","🥂"]},
+  p2dumped:{stage:3,cls:"down",face:"down",icon:"🚃",title:"パトロンに捨てられる（田舎送り）",why:"100万人に届かず、パトロンに飽きられた",deco:["💔","🚃","🌾","📉","💸"]},
 };
-// STAGE 2 の結末：100万人＆好感度60以上でクリア。称号は好感度とフォロワーで決まる
+// STAGE 2 の結末：100万人＆好感度60以上でクリア。称号は最終フォロワー数で決まる
 function stage2Ending(st){
   if(st.followers<GOAL2||st.favor<FAVOR_CLEAR) return "s2fired";
-  if(st.favor>=85&&st.followers>=2000000) return "s2star";
-  if(st.favor>=85) return "s2cm";
+  if(st.followers>=S2_T.star) return "s2star";
+  if(st.followers>=S2_T.cm) return "s2cm";
   return "s2asadora";
+}
+// 裏ルートの結末：100万人でクリア（好感度は問わない）。称号は最終フォロワー数で決まる
+function stage3Ending(st){
+  if(st.followers<GOAL2) return "p2dumped";
+  if(st.followers>=S3_T.queen) return "p2queen";
+  if(st.followers>=S3_T.guru) return "p2guru";
+  return "p2nouveau";
 }
 const firedWhy=()=>S.followers<GOAL2&&S.favor<FAVOR_CLEAR?"フォロワーも好感度も足りず、契約打ち切り":S.followers<GOAL2?"100万人に届かず、契約打ち切り":`好感度${FAVOR_CLEAR}に届かず、契約打ち切り`;
 // エンディングごとのシェア用ページ（X に貼ると称号＋イラストの画像カードが表示される）
@@ -1508,6 +1846,15 @@ const shareUrl=kind=>`${GAME_URL}s/${kind}.html`;
 const shareImg=kind=>`img/share-${kind}.jpg`;
 function tweetText(kind){
   const C=CARDS[kind], tags="#ギルティーインフルエンサー #インディーゲーム";
+  if(C.stage===3){
+    return C.clear
+      ? `裏社会で半年成り上がり、フォロワー【${man(S.followers)}】で【${C.title}】になりました…💴（炎上${S.fireN}回・クソイベント${S.kusoN}回・好感度${Math.round(S.favor)}）
+${tags}
+${shareUrl(kind)}`
+      : `裏社会で100万人に届かず、【パトロンに捨てられ】田舎に帰りました…😭（最終フォロワー${man(S.followers)}・炎上${S.fireN}回）
+${tags}
+${shareUrl(kind)}`;
+  }
   if(C.stage===2){
     const fv=Math.round(S.favor);
     return C.clear
@@ -1533,7 +1880,7 @@ function shareHTML(kind){
   const deco=C.deco.map((d,i)=>`<span style="left:${pos[i][0]}%;top:${pos[i][1]}%;font-size:${pos[i][2]}px">${d}</span>`).join("");
   return `<div class="rcard ${C.cls}">
       <div class="rc-deco">${C.cls==="down"?'<div class="rc-tape"></div>':""}${deco}</div>
-      <div class="rc-top"><span>GUILTY INFLUENCER</span><span>STAGE ${C.stage||1} RESULT</span></div>
+      <div class="rc-top"><span>GUILTY INFLUENCER</span><span>${C.stage===3?"STAGE 2 裏":`STAGE ${C.stage||1}`} RESULT</span></div>
       <div class="rc-head"><div class="rc-main">
       <div class="rc-user"><div>@kotomi_guilty<br><small style="font-weight:600;opacity:.8">欺流亭 ことみ ・ ${Math.min(S.turn,TURNS)}/12ターン</small></div></div>
       <div class="rc-cap">獲得称号</div>
@@ -1542,7 +1889,9 @@ function shareHTML(kind){
       </div><img class="rc-portrait" src="${AVATAR[C.face]}" alt="欺流亭 ことみ"></div>
       <div class="rc-cap">最終フォロワー</div>
       <div class="rc-num">${man(S.followers).replace(/人$/,"")}<small>人</small></div>
-      <div class="rc-stats">${C.stage===2
+      <div class="rc-stats">${C.stage===3
+        ? `<div>好感度<b>${Math.round(S.favor)}</b></div><div>炎上<b>${S.fireN}</b></div><div>クソイベ<b>${S.kusoN}</b></div><div>万バズ<b>${S.buzzN}</b></div>`
+        : C.stage===2
         ? `<div>好感度<b>${Math.round(S.favor)}</b></div><div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>週刊誌<b>${Math.round(S.gauge)}%</b></div>`
         : `<div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>地雷<b>${S.mineN}</b></div><div>炎上G<b>${Math.round(S.gauge)}%</b></div>`}</div>
       <div class="rc-tag">#ギルティーインフルエンサー</div>
@@ -1554,6 +1903,7 @@ function shareHTML(kind){
 async function openDM(kind){
   phase="end"; stopEffect(); closeModal();
   track("game_end",{ending:kind,followers:S.followers,turn:S.turn,fires:S.fireN});
+  saveBest("s1",kind,S.followers,!!CARDS[kind].clear);
   const head=`<div class="dm-head"><span>‹</span><div class="grow">kotomi_guilty<small>半年後 ・ 6ヶ月目の終わり</small></div><span>✎</span></div><div class="dm-search">🔍 検索</div>`;
   if(kind==="frozen"||kind==="none"){
     dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span>リクエスト</span></div>
@@ -1617,18 +1967,15 @@ function stage2Screen(kind){
     <div class="lbl">NEXT STAGE</div>
     <div class="num">STAGE 2</div>
     <h2>${R.route}</h2>
-    ${kind==="scout"
-      ? `<p>オーディション会場の扉の向こうで、ことみの新しい半年が始まる。<br>フォロワー <b>${fmt(S.followers)}人</b> を引き継いで、芸能界へ。</p>
-         <button class="btn-main" id="goS2">🎬 STAGE 2 をはじめる</button>`
-      : `<div class="wait">公開までお待ちください</div>
-         <div class="dots"><i></i><i></i><i></i></div>
-         <p>パトロンの待つ会員制ラウンジで、ことみの新しい半年が始まる。</p>`}
+    <p>${kind==="scout"?"オーディション会場の扉の向こうで、ことみの新しい半年が始まる。":"パトロンの待つ会員制ラウンジで、ことみの新しい半年が始まる。"}<br>フォロワー <b>${fmt(S.followers)}人</b> を引き継いで、${kind==="scout"?"芸能界":"裏社会"}へ。</p>
+    <button class="btn-main" id="goS2">${kind==="scout"?"🎬":"💴"} STAGE 2 をはじめる</button>
     ${shareHTML(kind)}
-    <button class="btn-main ${kind==="scout"?"btn-sub":""}" id="againBtn">STAGE 1 を最初からプレイ</button>
+    <button class="btn-main btn-sub" id="againBtn">HOME に戻る</button>
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
   document.body.appendChild(el);
   $("againBtn").onclick=restart;
-  if(kind==="scout"){ const start=S.followers; saveS2(start); $("goS2").onclick=()=>startStage2(start); }
+  // STAGE 1 からそのまま進むときはフォロワーを引き継ぐ
+  const start=S.followers; $("goS2").onclick=()=>startStage2(start,kind==="scout"?2:3);
 }
 function restart(){ $("dmRoot").innerHTML=""; $("stage2")?.remove(); STG=1; startGame(); }
 
@@ -1644,13 +1991,22 @@ const END2={
     text:"毎朝8時、日本中の食卓にことみが映る。実家の母は録画を3回見て、近所に配るためのチラシを作り始めた。"},
   s2scandal:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"週刊誌「人気女優・欺流亭ことみの“裏の顔”」",
     text:"スクープの翌朝、事務所の会見室には100人の記者が詰めかけた。深々と頭を下げることみに、無数のフラッシュが降り注ぐ。1週間後、芸能界引退が発表された。"},
+  p2queen:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【特集】“令和の女帝”欺流亭ことみ、嫌われ者ランキング殿堂入り",
+    text:"港区のどのラウンジに行っても、ことみの席は空けてある。日本中が彼女を嫌い、日本中が彼女を見ている。パトロンは最近、ことみの機嫌を取るのに必死だ。立場はいつの間にか逆転していた。"},
+  p2guru:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【独占】会員数10万人、“教祖”と呼ばれるインフルエンサー",
+    text:"オンラインサロンの会員は10万人を超えた。月に一度のオフ会では、全員がことみと同じティアラを付けてくる。外を歩けば石を投げられるが、サロンの中では神様だ。"},
+  p2nouveau:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【SNS】フォロワー100万人の成金インフルエンサー、年収を公開",
+    text:"ブランドの紙袋と札束の写真で、フォロワーは100万人を超えた。中身がからっぽだと気づいているのは、たぶん本人だけだ。"},
+  p2dumped:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"パトロン「もう飽きた」",
+    text:"ある朝、カードが止まっていた。タワマンの鍵も、ブランドの紙袋も、全部回収された。ことみの手元に残ったのは、実家までの片道切符だけだった。"},
   s2fired:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"ステラ・クリエイティブ「欺流亭ことみとの契約を終了」",
     text:"事務所のロビーで、マネージャーは最後に「お疲れさまでした」とだけ言った。ことみは再び地元行きの電車に乗る。スマホには、送られなかったオーディションの招待状が残っていた。"},
 };
 function endStage2(kind){
   phase="end"; stopEffect(); closeModal();
-  track("game_end",{stage:2,ending:kind,followers:S.followers,favor:Math.round(S.favor),turn:S.turn,fires:S.fireN});
-  const E=END2[kind], C=CARDS[kind];
+  track("game_end",{stage:STG,ending:kind,followers:S.followers,favor:Math.round(S.favor),turn:S.turn,fires:S.fireN});
+  const E=END2[kind], C=CARDS[kind], stg=STG;
+  saveBest(stg===3?"s3":"s2",kind,S.followers,!!C.clear);
   const el=document.createElement("div"); el.className="stage2 end2 "+E.cls; el.id="stage2";
   el.innerHTML=`<div class="inner">
     <div class="lbl">${E.lbl}</div>
@@ -1660,12 +2016,12 @@ function endStage2(kind){
     <p>${E.text}</p>
     ${C.clear?`<div class="wait">STAGE 3 は公開までお待ちください</div><div class="dots"><i></i><i></i><i></i></div>`:""}
     ${shareHTML(kind)}
-    <button class="btn-main" id="retryS2">🎬 もう一度 STAGE 2 に挑戦</button>
-    <button class="btn-main btn-sub" id="againBtn">STAGE 1 から遊ぶ</button>
+    <button class="btn-main" id="retryS2">${stg===3?"💴":"🎬"} もう一度 STAGE 2${stg===3?"（裏）":""} に挑戦</button>
+    <button class="btn-main btn-sub" id="againBtn">HOME に戻る</button>
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a></div>`;
   document.body.appendChild(el);
   const start=S.start;
-  $("retryS2").onclick=()=>startStage2(start);
+  $("retryS2").onclick=()=>startStage2(start,stg);
   $("againBtn").onclick=restart;
 }
 
