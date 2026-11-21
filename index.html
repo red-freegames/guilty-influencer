@@ -396,6 +396,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .mode em{font-style:normal;font-size:11.5px;font-weight:800;margin-top:3px;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.22);align-self:flex-start}
 .mode.m1{background:linear-gradient(135deg,#feda75,#fa7e1e 45%,#d62976)}
 .mode.m2{background:linear-gradient(135deg,#f6a5c0,#b06ab3 55%,#4f5bd5)}
+.mode.locked{filter:grayscale(1) brightness(.75);opacity:.75;cursor:not-allowed;box-shadow:none}
+.mode.locked img{filter:blur(3px)}
 .mode.m3{background:radial-gradient(circle at 85% 0%,#5a4316,#1a1208 60%,#050403);color:#f7e7b4;border:1.5px solid #c9a14a}
 /* ===== STAGE 2 裏ルート ===== */
 .era.minato{background:linear-gradient(90deg,#ff4fd8,#7c4dff);color:#fff}
@@ -1651,6 +1653,17 @@ const MODES=[
   {mode:"s2",stg:2,lbl:"STAGE 2",name:"表舞台・芸能界編",face:"rookie",cls:"m2",sub:"10万人スタート。100万人＆好感度60で生き残れ"},
   {mode:"s3",stg:3,lbl:"STAGE 2 裏",name:"裏社会・カス成金編",face:"minato",cls:"m3",sub:"10万人スタート。嫌われるほど伸びる、炎上上等ルート"},
 ];
+// STAGE 2 の解放：STAGE 1 で表ルート（スカウト）／裏ルート（パトロン）に到達すると、それぞれ HOME から遊べる
+const UNLOCK_KEY="gi_unlock";
+function isUnlocked(mode){
+  if(mode==="s1") return true;
+  let u={}; try{ u=JSON.parse(localStorage.getItem(UNLOCK_KEY))||{}; }catch(e){}
+  return !!u[mode] || !!loadBest()[mode];   // 以前に遊んだ記録があれば解放済み扱い
+}
+function unlock(mode){
+  try{ const u=JSON.parse(localStorage.getItem(UNLOCK_KEY))||{}; u[mode]=1; localStorage.setItem(UNLOCK_KEY,JSON.stringify(u)); }catch(e){}
+}
+const LOCK_HINT={s2:"🔒 STAGE 1 で芸能界からスカウトされると解放",s3:"🔒 STAGE 1 で裏ルートに進むと解放"};
 function bestLine(mode){
   const b=loadBest()[mode];
   return b?`🏆 最高記録：${CARDS[b.kind].icon} ${CARDS[b.kind].title}・${man(b.f)}`:"🏆 最高記録：まだなし";
@@ -1660,11 +1673,11 @@ function titleModal(){
   openModal(`<img class="sheet-face" src="${AVATAR.early}" alt="欺流亭 ことみ">
     <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
     <p style="text-align:center">写真ガチャ × 投稿文4択の、SNS炎上シミュレーション。<br>遊ぶモードを選んでください。</p>
-    <div class="modes">${MODES.map(m=>`<button class="mode ${m.cls}" data-stg="${m.stg}">
-      <img src="${AVATAR[m.face]}" alt=""><span class="mtxt"><small>${m.lbl}</small><b>${m.name}</b><span>${m.sub}</span><em>${bestLine(m.mode)}</em></span></button>`).join("")}</div>
+    <div class="modes">${MODES.map(m=>{ const ok=isUnlocked(m.mode); return `<button class="mode ${m.cls}${ok?"":" locked"}" data-stg="${m.stg}" ${ok?"":"disabled"}>
+      <img src="${AVATAR[m.face]}" alt=""><span class="mtxt"><small>${m.lbl}</small><b>${ok?m.name:"？？？"}</b><span>${ok?m.sub:"まだ遊べません"}</span><em>${ok?bestLine(m.mode):LOCK_HINT[m.mode]}</em></span></button>`; }).join("")}</div>
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a>
     <a class="fb-link" href="${feedbackUrl()}" target="_blank" rel="noopener">💬 要望・バグ報告はこちら</a>`);
-  document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".mode:not(.locked)").forEach(b=>b.onclick=()=>{
     const stg=+b.dataset.stg;
     if(stg===1) stage1Intro(); else startStage2(S2_FRESH,stg);   // HOME から始める STAGE 2 は10万人固定
   });
@@ -1904,6 +1917,7 @@ async function openDM(kind){
   phase="end"; stopEffect(); closeModal();
   track("game_end",{ending:kind,followers:S.followers,turn:S.turn,fires:S.fireN});
   saveBest("s1",kind,S.followers,!!CARDS[kind].clear);
+  if(kind==="scout") unlock("s2"); if(kind==="patron") unlock("s3");
   const head=`<div class="dm-head"><span>‹</span><div class="grow">kotomi_guilty<small>半年後 ・ 6ヶ月目の終わり</small></div><span>✎</span></div><div class="dm-search">🔍 検索</div>`;
   if(kind==="frozen"||kind==="none"){
     dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span>リクエスト</span></div>
