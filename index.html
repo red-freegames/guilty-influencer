@@ -410,6 +410,48 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .phase-sheet.rise p,.phase-sheet.empress p{color:#e9dcb2}
 .phase-sheet.rise .newpool span,.phase-sheet.empress .newpool span{background:rgba(255,255,255,.1)}
 .end2.dark .end-face{border-color:#c9a14a}
+/* ===== 表：相談・連続バズ・ランク ===== */
+.consult{display:block;width:100%;min-height:46px;margin-top:2px;padding:10px;border-radius:12px;border:1.5px dashed #e0a100;background:transparent;color:#b77900;font-weight:800;font-size:14px}
+.consult:disabled{opacity:.5;border-color:var(--line);color:var(--sub)}
+.res-sheet .r-streak{margin-top:8px;padding:7px 10px;border-radius:10px;background:linear-gradient(135deg,#ffe259,#ffa751);color:#5a2a00;font-size:13px;font-weight:900}
+.res-sheet .r-streak.dim{background:var(--soft);color:var(--sub);font-weight:700}
+.end2 .rank{display:inline-flex;flex-direction:column;align-items:center;margin:4px auto 2px;padding:6px 22px;border-radius:14px;background:rgba(255,255,255,.1);border:2px solid #d4af37;font-weight:900;letter-spacing:3px;font-size:13px}
+.end2 .rank b{font-size:44px;line-height:1;letter-spacing:0;background:linear-gradient(90deg,#c9a14a,#fff3c4,#c9a14a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.end2 .rank small{letter-spacing:0;font-size:11px;font-weight:700;opacity:.85}
+.end2 .rank-S{box-shadow:0 0 24px rgba(255,215,0,.6)}
+/* ===== 投稿図鑑 ===== */
+.btn-zukan{background:linear-gradient(135deg,#43cea2,#185a9d)}
+.zukan-sheet{text-align:left}
+.zukan-sheet h2{text-align:center}
+.zk-tabs{display:flex;gap:6px;margin:8px 0}
+.zk-tabs button{flex:1;min-height:40px;border-radius:10px;background:var(--soft);font-weight:800;font-size:12.5px}
+.zk-tabs button.on{background:var(--grad);color:#fff}
+.zk-sum{text-align:center;font-size:13px;margin-bottom:6px}
+.zk-sum small{color:var(--sub);font-size:11px}
+.zk-list h3{margin:12px 0 4px;font-size:14px}
+.zk-photo{margin:6px 0;padding:8px 10px;border-radius:10px;background:var(--soft)}
+.zk-photo b{font-size:12.5px}
+.zk-photo ul{list-style:none;margin:4px 0 0;padding:0}
+.zk-photo li{font-size:12.5px;line-height:1.5;padding:2px 0;display:flex;gap:6px}
+.zk-photo li.unk{color:var(--sub)}
+.zk-none{font-size:12px;color:var(--sub);text-align:center}
+/* ===== 裏：失ったもの・クソイベントの選択・帳簿・やつれ ===== */
+.res-sheet .r-lost{margin-top:6px;padding:7px 10px;border-radius:10px;background:#2b1d24;color:#f3c1d0;font-size:12.5px;text-align:left}
+.res-sheet .r-lost b{color:#fff}
+.kuso-ch{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.kuso-ch button{min-height:52px;padding:8px 12px;border-radius:12px;text-align:left;background:var(--soft);border:1.5px solid var(--line)}
+.kuso-ch button b{display:block;font-size:14px}
+.kuso-ch button small{font-size:11.5px;color:var(--sub)}
+.kuso-ch button:last-child{border-color:var(--fire)}
+.ledger{margin:10px 0;padding:12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(201,161,74,.4);text-align:left;font-size:12.5px}
+.lg-row{padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.15)}
+.lg-row:last-child{border-bottom:0}
+.lg-row>span{display:block;font-size:11px;font-weight:900;letter-spacing:1px;opacity:.75}
+.lg-row.gain b{font-size:17px;color:#f7e08a}
+.lg-row.loss ul{margin:4px 0 0 16px;padding:0;line-height:1.6;color:#f3c1d0}
+.face.worn1{filter:saturate(.75)}
+.face.worn2{filter:saturate(.45) contrast(1.05) sepia(.15)}
+.face.worn3{filter:grayscale(.75) contrast(1.1) brightness(.9)}
 /* ===== スマホ最適化（タップ領域・文字サイズ・狭幅レイアウト） ===== */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{overflow-x:hidden}
@@ -483,7 +525,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
       <div class="stats">
         <div class="stat"><b id="postsN">0</b><span>投稿</span></div>
         <div class="stat"><b id="followersN">0</b><span>フォロワー</span></div>
-        <div class="stat"><b>48</b><span>フォロー中</span></div>
+        <div class="stat"><b id="followN">48</b><span id="followLbl">フォロー中</span></div>
       </div>
     </div>
   </section>
@@ -802,13 +844,13 @@ SUB.kyoen.svg=SUB.friend.svg;
 const PHASES2 = [
   {key:"rookie",name:"新人期",label:"🌱 新人期",
    bgs:["lesson","studio","gakuya","audition","handshake"], subs:["script","sashiire","kyoen","selfie","fanletter"],
-   prob:PHASES[0].prob, gain:{calm:[3600,7300],buzz:[30000,60500],fire:[5000,10000]}, heat:[14,21], mine:.25},
+   prob:{F:{fire:.85,buzz:.05,calm:.10},B:{buzz:.85,calm:.12,fire:.03},N:{calm:.88,buzz:.07,fire:.05},M:{fire:.80,buzz:.05,calm:.15}}, gain:{calm:[3200,6600],buzz:[27000,54500],fire:[5000,10000]}, heat:[14,21], mine:.25},
   {key:"break",name:"ブレイク期",label:"⚡ ブレイク期",
    bgs:["location","variety","magazine","radio","fanmeet"], subs:["costume","bouquet","manager","bento","poster"],
-   prob:PHASES[1].prob, gain:{calm:[9700,18200],buzz:[72600,145200],fire:[10000,20000]}, heat:[20,28], mine:.4},
+   prob:{F:{fire:.88,buzz:.07,calm:.05},B:{buzz:.85,calm:.08,fire:.07},N:{calm:.85,buzz:.07,fire:.08},M:{fire:.85,buzz:.05,calm:.10}}, gain:{calm:[8700,16400],buzz:[65300,130700],fire:[10000,20000]}, heat:[20,28], mine:.4},
   {key:"top",name:"トップ期",label:"👑 トップ期",
    bgs:["redcarpet","butai","press","awards","cm"], subs:["trophy","dress","flash","producer","cmproduct"],
-   prob:PHASES[2].prob, gain:{calm:[24200,48400],buzz:[181500,338800],fire:[25000,50000]}, heat:[22,32], mine:.45},
+   prob:{F:{fire:.90,buzz:.10,calm:0},B:{buzz:.85,fire:.08,calm:.07},N:{calm:.85,buzz:.07,fire:.08},M:{fire:.90,buzz:.05,calm:.05}}, gain:{calm:[21800,43600],buzz:[163400,304900],fire:[25000,50000]}, heat:[22,32], mine:.45},
 ];
 
 /* 投稿文：75写真 × 4択（書式は STAGE 1 と同じ「種類:投稿文>>理由」） */
@@ -1140,7 +1182,7 @@ const OFF = {
 };
 
 function capsFor(p,b,s){
-  const list=(STG===3?CAPS3:STG===2?CAPS2:CAPS)[p*25+b*5+s].split("|").map(x=>{const [t,res]=x.slice(2).split(">>");return {type:x[0],t,res};});
+  const list=(STG===3?CAPS3:STG===2?CAPS2:CAPS)[p*25+b*5+s].split("|").map((x,i)=>{const [t,res]=x.slice(2).split(">>");return {type:x[0],t,res,i};});
   // 時期に応じた確率で、炎上かバズの枠を1つ地雷に差し替える（無風は残す）
   if(Math.random()<PH()[p].mine){
     const sub=SUB[PH()[p].subs[s]].t;
@@ -1163,6 +1205,12 @@ function reasonFor(cap,type){
 const NAMES1=["mofu","kuro","yuki","neet","sakura","tanaka","shiro","anti","nemui","gal","ojisan","oshi","riko","hanage","takoyaki","ramen","yami","pon","kenta","mina"];
 const NAMES2=["_x","_official",".gram","__","_2525","_life","_desu","0721","_chan","_88","_ura","_sub"];
 const COLORS=["#f39c12","#e74c3c","#9b59b6","#3498db","#1abc9c","#e67e22","#2ecc71","#d62976","#34495e","#16a085"];
+const HATE1={
+  buzz:["嫌いだけど見ちゃう","どうせ炎上商法でしょ","伸びてるのが腹立つ","アンチだけどいいね押した","また調子乗ってる"],
+  calm:["で？","誰も興味ない","今日は燃えてないんだ","つまんな","次はいつ燃えるの？"],
+  fire:["またかよ","安定のクズ","スクショ回ってきた","ほんと懲りないね","擁護してた人どこ行った"],
+};
+const HATE2=["見てるだけで不快","地元の恥","親が泣いてるぞ","もう誰も味方いないよ","フォロワーの9割アンチで草","通報しといた","この人の友達って実在するの？","嫌われる才能だけはある"];
 const LIGHT={
   buzz:["草","天才すぎる","わかる〜","これは伸びる","保存した","おすすめから来ました","センスの塊","朝から笑った","友達に送った","推せる","今年一笑った","フォローしました！"],
   fire:["性格悪w","炎上中w","消した方がいいよ","魚拓とった","これはアウト","引くわ…","擁護不可能","スクショ回ってきた","特定班まだ？","謝罪文はよ"],
@@ -1224,7 +1272,23 @@ const subSVG=s=>s===SUB.selfie
   : `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${s.svg}</svg>`;
 function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0,buzzN:0,fireN:0,mineN:0,used:new Set()}; }
 // STAGE 2：フォロワーは STAGE 1 から引き継ぎ。好感度50からスタート
-function newState2(start){ return {...newState(),followers:start,start,favor:50,ignoreN:0,offerN:0,kusoN:0}; }
+function newState2(start){ return {...newState(),followers:start,start,favor:50,ignoreN:0,offerN:0,kusoN:0,streak:0,maxStreak:0,consult:CONSULTS,lost:[]}; }
+const CONSULTS=3;                       // 表：マネージャーに相談できる回数（1ゲーム）
+const STREAK=[1,1,1.2,1.5,1.8,2.0];     // 表：連続バズの倍率（2連続目から）
+const streakMult=n=>STREAK[Math.min(n,STREAK.length-1)];
+// 表：クリア時のランク
+function rankOf(st){ return st.buzzN>=10&&st.favor>=85?"S":st.buzzN>=8?"A":st.buzzN>=6?"B":"C"; }
+/* 裏：失っていくもの（軽いものから順に、取り返しのつかないものへ） */
+const LOSSES=[
+  "親友（LINEをブロックされた）","大学の友達グループ（勝手に退会させられた）","行きつけの美容室（出禁になった）","地元の幼なじみ（「もう話しかけないで」）",
+  "バイト時代の店長（「あの子とは無関係です」と声明）","本名（ネットに晒された）","昔の夢ノート（配信で朗読された）","ペットの猫（実家に引き取られた）",
+  "妹（結婚式に呼ばれなかった）","父（実家の電話番号を変えられた）","地元に帰る場所","祖母（「テレビで見るたびに泣いてる」）",
+  "母からの毎朝のLINE","最後の味方だったはずのパトロン","鏡を見る勇気",
+];
+const FRIENDS0=8;   // 裏：本当の友達（失うたびに減る）
+const friendsLeft=st=>Math.max(0,FRIENDS0-st.lost.length);
+const antiRate=st=>Math.round(30+(100-st.favor)*.65);
+function loseSomething(st,n=1){ const got=[]; for(let i=0;i<n&&st.lost.length<LOSSES.length;i++){ const x=LOSSES[st.lost.length]; st.lost.push(x); got.push(x);} return got; }
 // 裏ルートの伸び倍率：好感度が低いほど、炎上するほど伸びる
 const HATE_K=200, FIRE_K=.04;   // 好感度0で伸び×1.5、炎上1回ごとに+4%
 const hateMult=st=>(1+(100-st.favor)/HATE_K)*(1+st.fireN*FIRE_K);
@@ -1243,6 +1307,13 @@ const KUSO=[
   ["サロンの元会員が返金を求めてデモを起こした","豪邸の壁に落書きされた","ワイドショーで1時間特集された","「嫌いなインフルエンサー」ランキングで1位になった","実家に記者が押しかけた",
    "元夫の実業家が暴露本を出版した","オープンマリッジ相手が3人同時に名乗り出た","自伝を出したら、ゴーストライターが告発した","炎上中に「休養します」と言った翌日、パーティー写真が流出した","母校から「卒業生として紹介しないでほしい」と声明が出た"],
 ];
+/* 投稿図鑑：一度投稿した投稿文の傾向（🔥炎上／✨バズ／💤無風）を端末に記録する */
+const ZUKAN_KEY="gi_zukan";
+const loadZukan=()=>{ try{ return JSON.parse(localStorage.getItem(ZUKAN_KEY))||{}; }catch(e){ return {}; } };
+function zukanAdd(stg,key,i,type){
+  const z=loadZukan(); z[stg]=z[stg]||{}; z[stg][key]=z[stg][key]||{}; z[stg][key][i]=type;
+  try{ localStorage.setItem(ZUKAN_KEY,JSON.stringify(z)); }catch(e){}
+}
 /* 最高記録（HOME に表示）：クリアを優先し、同じならフォロワーが多い方 */
 const BEST_KEY="gi_best";
 const loadBest=()=>{ try{ return JSON.parse(localStorage.getItem(BEST_KEY))||{}; }catch(e){ return {}; } };
@@ -1289,9 +1360,13 @@ function renderStatus(){
   $("sFireLbl").textContent=s3?"😈 嫌われ度":s2?"📰 週刊誌":"🔥 炎上";
   $("bioTxt").textContent=s3?"パトロンの看板娘💎 半年で100万人いけなかったら捨てられます。":s2?"ステラ・クリエイティブ所属🎬 半年で100万人＆好感度60いけなかったら契約終了。":"上京したて🗼 半年で10万人いけなかったら田舎に帰ります。";
   const fv=$("sFavor"); fv.hidden=STG<2;
+  $("followN").textContent=s3?friendsLeft(S):48; $("followLbl").textContent=s3?"本当の友達":"フォロー中";
+  // 裏：好感度が下がるほど、アイコンのことみがやつれていく（アイコンだけ。画面は暗くしない）
+  const worn=s3?(S.favor<15?3:S.favor<35?2:S.favor<60?1:0):0;
+  ["avatarImg","miniAvatar"].forEach(id=>$(id).className="face"+(worn?" worn"+worn:""));
   if(s3){
     fv.className="fire-count favor ng";
-    fv.textContent=`💔 好感度 ${Math.round(S.favor)}（伸び ×${hateMult(S).toFixed(2)}）`;
+    fv.textContent=`💔 好感度 ${Math.round(S.favor)}・アンチ率 ${antiRate(S)}%`;
     fc.className="fire-count warn"; fc.textContent=`炎上 ${S.fireN}回・💩 ${S.kusoN}回`;
   }
   else if(s2){
@@ -1418,9 +1493,7 @@ async function spin(){
 function showChoices(){
   opts=shuffle(capsFor(photo.p,photo.b,photo.s));
   pickIdx=null;
-  if(STG===2) managerCheck(opts);
-  const flagLbl=STG===3?"💎 パトロンの秘書「これで燃やせ」":"🗂️ マネージャー「⚠ これはやめて」";
-  $("choices").innerHTML=opts.map((o,i)=>`<button class="cap${o.flag?" flag":""}" data-i="${i}">${o.flag?`<span class="mgr">${flagLbl}</span>`:""}${tagify(o.t)}</button>`).join("");
+  renderChoices();
   $("postBtn").disabled=true; $("postBtn").textContent="投稿文を選んでください";
   phase="choose"; setStep(2);
   $("post").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1431,6 +1504,12 @@ function managerCheck(list){
   const bad=list.filter(o=>o.type==="F"||o.type==="M"), safe=list.filter(o=>o.type==="B"||o.type==="N");
   const f=(Math.random()<MGR_HIT&&bad.length)?pick(bad):pick(safe);
   f.flag=true;
+}
+function renderChoices(){
+  const asked=opts.some(o=>o.flag);
+  $("choices").innerHTML=opts.map((o,i)=>`<button class="cap${o.flag?" flag":""}${i===pickIdx?" sel":""}" data-i="${i}">${o.flag?`<span class="mgr">🗂️ マネージャー「⚠ これはやめて」</span>`:""}${tagify(o.t)}</button>`).join("")
+    +(STG===2?`<button class="consult" id="consultBtn" ${asked||S.consult<=0?"disabled":""}>${asked?"🗂️ 相談済み":S.consult>0?`🗂️ マネージャーに相談する（残り${S.consult}回）`:"🗂️ 相談できる回数を使い切った"}</button>`:"");
+  if($("consultBtn")) $("consultBtn").onclick=()=>{ if(phase!=="choose"||S.consult<=0||opts.some(o=>o.flag)) return; S.consult--; managerCheck(opts); renderChoices(); };
 }
 $("choices").addEventListener("click",e=>{
   const b=e.target.closest(".cap"); if(!b||phase!=="choose") return;
@@ -1475,10 +1554,15 @@ function stage3Adjust(cap,res,p,st){
     st.kusoUsed=st.kusoUsed||new Set();
     const left=KUSO[p].filter(k=>!st.kusoUsed.has(k)), t=pick(left.length?left:KUSO[p]); st.kusoUsed.add(t);
     r.kuso={t,bonus,favorD:-Math.round(rr([5,10])*(1+st.kusoN*.15))};
-    r.delta+=bonus; r.favorD+=r.kuso.favorD;
   }
   return r;
 }
+// 裏：クソイベントへの対応（f=フォロワー倍率, h=好感度ダウン倍率, lose=失う数）
+const KUSO_CH=[
+  {t:"謝罪動画を出す",d:"伸びは控えめ。少しだけ許される",f:.4,h:.4,lose:0,say:"「誠意が伝わった」のは、ごく一部だけだった。"},
+  {t:"開き直る",d:"そこそこ伸びる。そこそこ嫌われる",f:1,h:1,lose:1,say:"「別に悪いことしてないし」の一言が切り抜かれた。"},
+  {t:"乗っかってネタにする",d:"大きく伸びる。大きく嫌われる",f:1.5,h:1.8,lose:2,say:"自虐ネタにしたら大ウケ。そして大炎上。"},
+];
 function stage2Adjust(cap,res,p,favor){
   const r={...res,favorD:0,ignored:false,offer:null};
   // 好感度50で等倍。好感度が高いほどバズ・無風の伸びが良く、低いと伸び悩む
@@ -1514,11 +1598,21 @@ function post(){
   if(STG===3){
     res=stage3Adjust(cap,res,p,S);
     S.favor=clamp(S.favor+res.favorD,0,100);
-    if(res.kuso) S.kusoN++;
   }
   const before=S.followers, g0=S.gauge;
   S.followers+=res.delta; S.gauge=clamp(S.gauge+res.heat,0,100); S.posts++;
   if(cap.type==="F") S.fireChoice++;
+  // 図鑑：投稿した投稿文の傾向を記録（地雷はランダムなので記録しない）
+  if(cap.type!=="M") zukanAdd(STG,`${p}-${photo.b}-${photo.s}`,cap.i,cap.type);
+  // 表：連続バズのボーナス
+  let streakBonus=0;
+  if(s2){
+    if(res.type==="buzz"){ S.streak++; S.maxStreak=Math.max(S.maxStreak,S.streak); streakBonus=Math.round(res.delta*(streakMult(S.streak)-1)); S.followers+=streakBonus; }
+    else S.streak=0;
+  }
+  // 裏：炎上するたびに何かを失う（4割）
+  let lostNow=[];
+  if(STG===3&&res.type==="fire"&&Math.random()<.4) lostNow=loseSomething(S);
   if(res.type==="buzz") S.buzzN++; if(res.type==="fire") S.fireN++;
   if(STG===3) S.gauge=100-S.favor;   // 裏ルートのゲージは「嫌われ度」（100%でもアウトにはならない）
   const mineHit=cap.type==="M"&&res.type==="fire";
@@ -1552,18 +1646,35 @@ function post(){
     openModal(`<div class="r-head">${head}</div>
     <div class="r-delta">+${fmt(res.delta)}人</div>
     <div class="r-flavor">${flavor}</div>
-    ${res.kuso?`<div class="r-kuso">💩 クソイベント発生！<b>${res.kuso.t}</b>話題になってフォロワー +${fmt(res.kuso.bonus)}人／好感度 ${res.kuso.favorD}</div>`:""}
+    ${lostNow.map(x=>`<div class="r-lost">🥀 失ったもの：<b>${x}</b></div>`).join("")}
     <div class="r-gauge" style="color:var(--fire)">💔 好感度 ${fd>=0?"+":""}${fd}（現在 ${Math.round(S.favor)}）</div>
-    <div class="r-gauge" style="color:var(--gold)">📈 次の投稿の伸び ×${hateMult(S).toFixed(2)}（嫌われるほど・燃えるほど伸びる）</div>
-    <button class="btn-main" id="seeFeed">フィードを見る</button>`,"res-sheet "+res.type);
-    $("seeFeed").onclick=()=>{ closeModal(); phase="result"; $("post").scrollIntoView({behavior:"smooth",block:"start"}); };
+    <div id="kusoBox"></div>
+    <div id="resTail"></div>`,"res-sheet "+res.type);
+    const tail=()=>{ $("resTail").innerHTML=`<div class="r-gauge" style="color:var(--gold)">📈 次の投稿の伸び ×${hateMult(S).toFixed(2)}（アンチ率 ${antiRate(S)}%・本当の友達 ${friendsLeft(S)}人）</div>
+      <button class="btn-main" id="seeFeed">フィードを見る</button>`;
+      $("seeFeed").onclick=()=>{ closeModal(); phase="result"; $("post").scrollIntoView({behavior:"smooth",block:"start"}); }; };
+    if(!res.kuso){ tail(); return; }
+    // クソイベント：対応を選ぶ。乗っかるほど伸びるが、さらに嫌われて失う
+    const K=res.kuso;
+    $("kusoBox").innerHTML=`<div class="r-kuso">💩 クソイベント発生！<b>${K.t}</b>どうする？</div>
+      <div class="kuso-ch">${KUSO_CH.map((c,i)=>`<button data-k="${i}"><b>${c.t}</b><small>${c.d}</small></button>`).join("")}</div>`;
+    $("kusoBox").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      const c=KUSO_CH[+b.dataset.k], f0=S.followers;
+      const add=Math.round(K.bonus*c.f), fdd=Math.round(K.favorD*c.h);
+      S.followers+=add; S.favor=clamp(S.favor+fdd,0,100); S.gauge=100-S.favor; S.kusoN++;
+      const lost=loseSomething(S,c.lose);
+      $("kusoBox").innerHTML=`<div class="r-kuso">💩 ${K.t}<b>→ ${c.t}</b>${c.say}<br>フォロワー +${fmt(add)}人／好感度 ${fdd}</div>
+        ${lost.map(x=>`<div class="r-lost">🥀 失ったもの：<b>${x}</b></div>`).join("")}`;
+      renderStatus(); animateFollowers(f0,S.followers); tail();
+    });
     return;
   }
   if(s2){
     const fd=res.favorD;
     openModal(`<div class="r-head">${head}</div>
-    <div class="r-delta">+${fmt(res.delta)}人</div>
+    <div class="r-delta">+${fmt(res.delta+streakBonus)}人</div>
     <div class="r-flavor">${flavor}</div>
+    ${streakBonus?`<div class="r-streak">🔥 ${S.streak}連続バズ！ ボーナス ×${streakMult(S.streak)}（+${fmt(streakBonus)}人）</div>`:S.streak===1?`<div class="r-streak dim">次もバズれば連続バズボーナス ×${streakMult(2)}</div>`:res.type!=="buzz"&&S.maxStreak>=2?`<div class="r-streak dim">連続バズが途切れた…</div>`:""}
     ${res.offer?`<div class="r-offer">📺 好感度が高いので仕事のオファー！<b>「${res.offer.t}」</b>が決定（フォロワー +${fmt(res.offer.bonus)}人）</div>`:""}
     ${res.ignored?`<div class="r-warn">🗂️ マネージャーの忠告を無視して炎上…<br>好感度 −15・週刊誌 +8%（追加ペナルティ）</div>`:""}
     <div class="r-gauge" style="color:${fd>=0?"var(--ok)":"var(--fire)"}">💗 好感度 ${fd>=0?"+":""}${fd}（現在 ${Math.round(S.favor)}）</div>
@@ -1601,7 +1712,10 @@ function addComment(text,type){
 function showComments(type,delta){
   cmtTimers.forEach(clearTimeout); cmtTimers=[]; clearInterval(hidTimer);
   $("comments").innerHTML=""; const hc=$("hiddenCmts"); hc.hidden=true;
-  const pool=shuffle([...LIGHT[type]]);
+  // 裏：好感度が低いほど、何を投稿してもコメント欄が荒れる
+  const lv=STG===3?(S.favor<15?2:S.favor<40?1:0):0;
+  const pool=shuffle([...(lv===2?HATE2:lv===1?HATE1[type]||HATE1.calm:LIGHT[type])]);
+  if(lv) type="fire";
   [0,1,2].forEach(i=>cmtTimers.push(setTimeout(()=>addComment(pool[i],type),400+i*450)));
   if(type==="buzz"){
     let n=0; const target=Math.round(delta*rr([.15,.3]));
@@ -1681,12 +1795,38 @@ function titleModal(){
     <p style="text-align:center">写真ガチャ × 投稿文4択の、SNS炎上シミュレーション。<br>遊ぶモードを選んでください。</p>
     <div class="modes">${MODES.map(m=>{ const ok=isUnlocked(m.mode); return `<button class="mode ${m.cls}${ok?"":" locked"}" data-stg="${m.stg}" ${ok?"":"disabled"}>
       <img src="${AVATAR[m.face]}" alt=""><span class="mtxt"><small>${m.lbl}</small><b>${ok?m.name:"？？？"}</b><span>${ok?m.sub:"まだ遊べません"}</span><em>${ok?bestLine(m.mode):LOCK_HINT[m.mode]}</em></span></button>`; }).join("")}</div>
+    <button class="btn-main btn-zukan" id="zukanBtn">📖 投稿図鑑</button>
     <a class="more-link" href="${SITE_URL}">🎮 他のゲームを見る</a>
     <a class="fb-link" href="${feedbackUrl()}" target="_blank" rel="noopener">💬 要望・バグ報告はこちら</a>`);
+  $("zukanBtn").onclick=()=>zukanModal(1);
   document.querySelectorAll(".mode:not(.locked)").forEach(b=>b.onclick=()=>{
     const stg=+b.dataset.stg;
     if(stg===1) stage1Intro(); else startStage2(S2_FRESH,stg);   // HOME から始める STAGE 2 は10万人固定
   });
+}
+function zukanModal(stg){
+  const tabs=MODES.filter(m=>isUnlocked(m.mode));
+  const z=(loadZukan()[stg])||{}, D=stg===3?{ph:PHASES3,caps:CAPS3}:stg===2?{ph:PHASES2,caps:CAPS2}:{ph:PHASES,caps:CAPS};
+  const ICON={F:"🔥",B:"✨",N:"💤"};
+  let photos=0, known=0;
+  const body=D.ph.map((P,p)=>{
+    const rows=[];
+    P.bgs.forEach((bk,b)=>P.subs.forEach((sk,si)=>{
+      const rec=z[`${p}-${b}-${si}`]; if(!rec) return;
+      photos++;
+      const caps=D.caps[p*25+b*5+si].split("|");
+      const lines=caps.map((x,i)=>{ if(rec[i]==null) return `<li class="unk">？？？（まだ投稿していない）</li>`; known++; return `<li><span>${ICON[rec[i]]}</span><span>${tagify(x.slice(2).split(">>")[0])}</span></li>`; }).join("");
+      rows.push(`<div class="zk-photo"><b>${BG[bk].e} ${BG[bk].t} × ${SUB[sk].e} ${SUB[sk].t}</b><ul>${lines}</ul></div>`);
+    }));
+    return `<h3>${P.label}</h3>${rows.join("")||`<p class="zk-none">まだ撮影した写真がありません</p>`}`;
+  }).join("");
+  openModal(`<h2>📖 投稿図鑑</h2>
+    <div class="zk-tabs">${tabs.map(m=>`<button data-stg="${m.stg}" class="${m.stg===stg?"on":""}">${m.lbl}</button>`).join("")}</div>
+    <div class="zk-sum">写真 <b>${photos}</b>/75 ・ 投稿文 <b>${known}</b>/300<br><small>🔥炎上しやすい ✨バズりやすい 💤無風になりやすい（地雷は毎回ランダムなので記録しません）</small></div>
+    <div class="zk-list">${body}</div>
+    <button class="btn-main btn-sub" id="zkBack">← HOME に戻る</button>`,"zukan-sheet");
+  document.querySelectorAll(".zk-tabs button").forEach(b=>b.onclick=()=>zukanModal(+b.dataset.stg));
+  $("zkBack").onclick=titleModal;
 }
 function stage1Intro(){
   phase="title";
@@ -1724,7 +1864,8 @@ function stage3Intro(){
     <ul>
       <li>流れは STAGE 1 と同じ。<b>自動スロット → 投稿文4択 → 結果</b></li>
       <li>💔 <b>好感度が低いほど</b>、🔥 <b>炎上するほど</b>フォロワーが伸びる。炎上でアウトになることはない</li>
-      <li>💩 嫌われるほど<b>クソイベント</b>（生卵をぶつけられる、カスYouTuberと交際、電撃結婚→1か月で離婚…）が起きやすくなる。話題になってフォロワーは増えるが、好感度はさらに急降下</li>
+      <li>💩 嫌われるほど<b>クソイベント</b>（生卵をぶつけられる、カスYouTuberと交際、電撃結婚→1か月で離婚…）が起きやすくなる。<b>謝罪する／開き直る／乗っかる</b>から対応を選ぶ。乗っかるほど伸びて、もっと嫌われる</li>
+      <li>🥀 燃えるたび、クソイベントのたびに<b>何かを失っていく</b>。親友、地元、家族……本当の友達は8人から減っていく</li>
       <li>どれが燃えるかは、一見ふつうの投稿文にまぎれている。<b>見極めはあなた次第</b></li>
       <li>称号は<b>最終フォロワー数</b>で決まる</li>
     </ul>
@@ -1742,7 +1883,9 @@ function stage2Intro(){
       <li>流れは STAGE 1 と同じ。<b>自動スロット → 投稿文4択 → 結果</b></li>
       <li>💗 <b>好感度</b>（0〜100）：バズで上がり、炎上で大きく下がる。高いほどフォロワーが伸びやすく、70以上だと<b>仕事のオファー</b>が舞い込むことも</li>
       <li>📰 <b>週刊誌ゲージ</b>：燃えるほど記者が嗅ぎつける。100%で<b>スクープ → 謝罪会見 → 引退</b></li>
-      <li>🗂️ <b>マネージャーの事前チェック</b>：危ない投稿文に「これはやめて」と付く。たいてい正しいが、<b>たまに外れる</b>。忠告を無視して燃えると好感度が大きく下がる</li>
+      <li>🔥 <b>連続バズボーナス</b>：バズが続くほど伸びが ×1.2 → ×1.5 → ×1.8 → ×2.0。1回でも外すとリセット</li>
+      <li>🗂️ <b>マネージャーに相談</b>（1ゲーム3回まで）：危ない投稿文に「これはやめて」と付く。たいてい正しいが<b>たまに外れる</b>。忠告を無視して燃えると好感度が大きく下がる</li>
+      <li>🏆 クリアすると、万バズ回数と好感度で <b>S〜C のランク</b>が付く</li>
       <li>💣 匂わせ疑惑・特定・曲解など、芸能界ならではの<b>地雷</b>も…</li>
       <li>称号は<b>最終フォロワー数</b>で決まる</li>
     </ul>
@@ -1826,7 +1969,7 @@ const man=n=>n>=10000?`${(Math.floor(n/1000)/10).toLocaleString("ja-JP")}万人`
 const GAME_URL="https://red-freegames.github.io/guilty-influencer/";
 // リザルトカード3種：star=芸能スカウト / rich=パトロン・成金 / down=ゲームオーバー
 // 称号のしきい値（最終フォロワー数）
-const S2_T={star:2300000,cm:1600000};
+const S2_T={star:3500000,cm:2200000};
 const S3_T={queen:1350000,guru:1200000};
 const CARDS={
   scout:{cls:"star",clear:true,face:"scout",icon:"🎬",title:"芸能界からのスカウト",deco:["✦","★","✧","✦","★"]},
@@ -1867,7 +2010,7 @@ function tweetText(kind){
   const C=CARDS[kind], tags="#ギルティーインフルエンサー #インディーゲーム";
   if(C.stage===3){
     return C.clear
-      ? `裏社会で半年成り上がり、フォロワー【${man(S.followers)}】で【${C.title}】になりました…💴（炎上${S.fireN}回・クソイベント${S.kusoN}回・好感度${Math.round(S.favor)}）
+      ? `裏社会で半年成り上がり、フォロワー【${man(S.followers)}】で【${C.title}】になりました…💴 代わりに失ったもの${S.lost.length}個、本当の友達は残り${friendsLeft(S)}人（炎上${S.fireN}回・アンチ率${antiRate(S)}%）
 ${tags}
 ${shareUrl(kind)}`
       : `裏社会で100万人に届かず、【パトロンに捨てられ】田舎に帰りました…😭（最終フォロワー${man(S.followers)}・炎上${S.fireN}回）
@@ -1877,7 +2020,7 @@ ${shareUrl(kind)}`;
   if(C.stage===2){
     const fv=Math.round(S.favor);
     return C.clear
-      ? `芸能界で半年活動し、フォロワー【${man(S.followers)}】・好感度【${fv}】で【${C.title}】になりました…！✨（万バズ${S.buzzN}回・炎上${S.fireN}回）\n${tags}\n${shareUrl(kind)}`
+      ? `芸能界で半年活動し、フォロワー【${man(S.followers)}】・好感度【${fv}】で【${C.title}】になりました…！✨（ランク${rankOf(S)}・万バズ${S.buzzN}回・最大${S.maxStreak}連続）\n${tags}\n${shareUrl(kind)}`
       : kind==="s2scandal"
       ? `芸能界で週刊誌にスクープされ、謝罪会見の末に【スキャンダル引退】しました…😭（最終フォロワー${man(S.followers)}・好感度${fv}）\n${tags}\n${shareUrl(kind)}`
       : `芸能界で${firedWhy().replace("、契約打ち切り","")}、【事務所解雇】でまた田舎に帰りました…😭（最終フォロワー${man(S.followers)}・好感度${fv}）\n${tags}\n${shareUrl(kind)}`;
@@ -1909,9 +2052,9 @@ function shareHTML(kind){
       <div class="rc-cap">最終フォロワー</div>
       <div class="rc-num">${man(S.followers).replace(/人$/,"")}<small>人</small></div>
       <div class="rc-stats">${C.stage===3
-        ? `<div>好感度<b>${Math.round(S.favor)}</b></div><div>炎上<b>${S.fireN}</b></div><div>クソイベ<b>${S.kusoN}</b></div><div>万バズ<b>${S.buzzN}</b></div>`
+        ? `<div>好感度<b>${Math.round(S.favor)}</b></div><div>炎上<b>${S.fireN}</b></div><div>失ったもの<b>${S.lost.length}</b></div><div>友達<b>${friendsLeft(S)}人</b></div>`
         : C.stage===2
-        ? `<div>好感度<b>${Math.round(S.favor)}</b></div><div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>週刊誌<b>${Math.round(S.gauge)}%</b></div>`
+        ? `<div>${C.clear?`ランク<b>${rankOf(S)}</b>`:`好感度<b>${Math.round(S.favor)}</b>`}</div><div>万バズ<b>${S.buzzN}</b></div><div>最大連続<b>${S.maxStreak}</b></div><div>${C.clear?`好感度<b>${Math.round(S.favor)}</b>`:`週刊誌<b>${Math.round(S.gauge)}%</b>`}</div>`
         : `<div>万バズ<b>${S.buzzN}</b></div><div>炎上<b>${S.fireN}</b></div><div>地雷<b>${S.mineN}</b></div><div>炎上G<b>${Math.round(S.gauge)}%</b></div>`}</div>
       <div class="rc-tag">#ギルティーインフルエンサー</div>
     </div>
@@ -1930,6 +2073,7 @@ async function openDM(kind){
       ${kind==="frozen"?`<div class="frozen-banner">⚠ このアカウントはコミュニティガイドラインに違反したため停止されています。</div>`:""}
       <div class="dm-body"><div class="dm-empty" id="dmEmpty"><div class="big">✉️</div><h3>メッセージはありません</h3><div>新着メッセージを確認中…</div><div class="refresh"></div></div></div>`);
     await sleep(3500);
+    if(!$("dmEmpty")) return;   // 待っている間に HOME に戻った
     $("dmEmpty").innerHTML=`<div class="big">📭</div><h3>……何も、届かなかった。</h3>
       <div class="reveal-box lose"><div style="font-size:36px">🚃🌾</div><h3 style="color:var(--fire)">東京追放・田舎強制送還</h3>
         <div class="exile"><span class="tokyo">🗼</span><span class="train">🚃</span><span class="rice">🌾🌾</span><span class="home">🏚️</span></div>
@@ -1942,6 +2086,7 @@ async function openDM(kind){
   dmShell(`${head}<div class="dm-tabs"><span class="on">メッセージ</span><span class="req">リクエスト (1)</span></div>
     <div class="dm-body" id="dmBody"><div class="dm-empty"><div class="big">✉️</div><h3>メッセージはありません</h3><div class="refresh"></div></div></div>`);
   await sleep(2200);
+  if(!$("dmBody")) return;   // 待っている間に HOME に戻った
   const n=document.createElement("div"); n.className="notify";
   n.innerHTML=`<div class="ic">✉️</div><div><b>新しいメッセージリクエスト</b><small>${s.id}：はじめまして。突然のご連絡失礼いたします…</small></div>`;
   document.body.appendChild(n); setTimeout(()=>n.remove(),3500);
@@ -2012,16 +2157,21 @@ const END2={
   s2scandal:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"週刊誌「人気女優・欺流亭ことみの“裏の顔”」",
     text:"スクープの翌朝、事務所の会見室には100人の記者が詰めかけた。深々と頭を下げることみに、無数のフラッシュが降り注ぐ。1週間後、芸能界引退が発表された。"},
   p2queen:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【特集】“令和の女帝”欺流亭ことみ、嫌われ者ランキング殿堂入り",
-    text:"港区のどのラウンジに行っても、ことみの席は空けてある。日本中が彼女を嫌い、日本中が彼女を見ている。パトロンは最近、ことみの機嫌を取るのに必死だ。立場はいつの間にか逆転していた。"},
+    text:"誕生日の夜。豪邸のテーブルには、誰も座らない椅子が12脚。スマホの通知は10万件を超えたが、「おめでとう」は一つもなかった。ことみはひとりでケーキのろうそくを吹き消し、その写真を投稿した。いいねは、また100万を超えた。"},
   p2guru:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【独占】会員数10万人、“教祖”と呼ばれるインフルエンサー",
-    text:"オンラインサロンの会員は10万人を超えた。月に一度のオフ会では、全員がことみと同じティアラを付けてくる。外を歩けば石を投げられるが、サロンの中では神様だ。"},
+    text:"オンラインサロンの会員は10万人を超えた。オフ会では全員がことみを「先生」と呼び、同じティアラを付けてくる。帰りのタクシーで、ことみは母の番号を表示したまま、発信ボタンを押せずにいた。"},
   p2nouveau:{cls:"dark",lbl:"STAGE 2 CLEAR",news:"【SNS】フォロワー100万人の成金インフルエンサー、年収を公開",
-    text:"ブランドの紙袋と札束の写真で、フォロワーは100万人を超えた。中身がからっぽだと気づいているのは、たぶん本人だけだ。"},
+    text:"ブランドの紙袋と札束の写真で、フォロワーは100万人を超えた。タワマンの部屋は広いのに、話し相手はスマートスピーカーだけ。「おやすみ」と言うと、「アラームを設定しますか？」と返ってきた。"},
   p2dumped:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"パトロン「もう飽きた」",
     text:"ある朝、カードが止まっていた。タワマンの鍵も、ブランドの紙袋も、全部回収された。ことみの手元に残ったのは、実家までの片道切符だけだった。"},
   s2fired:{cls:"dark",lbl:"STAGE 2 GAME OVER",news:"ステラ・クリエイティブ「欺流亭ことみとの契約を終了」",
     text:"事務所のロビーで、マネージャーは最後に「お疲れさまでした」とだけ言った。ことみは再び地元行きの電車に乗る。スマホには、送られなかったオーディションの招待状が残っていた。"},
 };
+function ledgerHTML(){
+  return `<div class="ledger"><div class="lg-row gain"><span>得たもの</span><b>フォロワー ${fmt(S.followers)}人</b><small>（うちアンチ ${antiRate(S)}%）</small></div>
+    <div class="lg-row loss"><span>失ったもの（${S.lost.length}）</span>${S.lost.length?`<ul>${S.lost.map(x=>`<li>${x}</li>`).join("")}</ul>`:"<small>まだ何も失っていない</small>"}</div>
+    <div class="lg-row"><span>本当の友達</span><b>${friendsLeft(S)}人</b></div></div>`;
+}
 function endStage2(kind){
   phase="end"; stopEffect(); closeModal();
   track("game_end",{stage:STG,ending:kind,followers:S.followers,favor:Math.round(S.favor),turn:S.turn,fires:S.fireN});
@@ -2033,7 +2183,9 @@ function endStage2(kind){
     <div class="news-flash">${E.news}</div>
     <img class="end-face" src="${AVATAR[C.face]}" alt="欺流亭 ことみ">
     <h2>${C.icon} ${C.title}</h2>
+    ${stg===2&&C.clear?`<div class="rank rank-${rankOf(S)}">RANK <b>${rankOf(S)}</b><small>万バズ${S.buzzN}回・最大${S.maxStreak}連続・好感度${Math.round(S.favor)}</small></div>`:""}
     <p>${E.text}</p>
+    ${stg===3?ledgerHTML():""}
     ${shareHTML(kind)}
     <button class="btn-main" id="retryS2">${stg===3?"💴":"🎬"} もう一度 STAGE 2${stg===3?"（裏）":""} に挑戦</button>
     <button class="btn-main btn-sub" id="againBtn">HOME に戻る</button>
