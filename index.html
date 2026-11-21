@@ -1273,6 +1273,7 @@ const subSVG=s=>s===SUB.selfie
 function newState(){ return {turn:1,followers:START,gauge:0,posts:0,fireChoice:0,buzzN:0,fireN:0,mineN:0,used:new Set()}; }
 // STAGE 2：フォロワーは STAGE 1 から引き継ぎ。好感度50からスタート
 function newState2(start){ return {...newState(),followers:start,start,favor:50,ignoreN:0,offerN:0,kusoN:0,streak:0,maxStreak:0,consult:CONSULTS,lost:[]}; }
+const S2_FAVOR0=65;   // 表：開始時の好感度
 const CONSULTS=3;                       // 表：マネージャーに相談できる回数（1ゲーム）
 const STREAK=[1,1,1.2,1.5,1.8,2.0];     // 表：連続バズの倍率（2連続目から）
 const streakMult=n=>STREAK[Math.min(n,STREAK.length-1)];
@@ -1852,6 +1853,7 @@ function stage1Intro(){
 function startStage2(start,stg=2){
   $("dmRoot").innerHTML=""; $("stage2")?.remove(); closeModal();
   STG=stg; S=newState2(start); stopEffect();
+  if(stg===2) S.favor=S2_FAVOR0;   // 芸能界編は「事務所の売り出し」で好感度高めからスタート（入口だけやさしく）
   resetForSpin(); setStep(1); stg===3?stage3Intro():stage2Intro();
 }
 function stage3Intro(){
@@ -1878,7 +1880,7 @@ function stage2Intro(){
     <div class="stage">STAGE 2 ・ 表舞台・芸能界編</div>
     <h1 class="gradtxt">ギルティー・インフルエンサー</h1>
     <p>スカウトを受け、芸能事務所<b>ステラ・クリエイティブ</b>に所属したことみ。次の半年で<b>フォロワー100万人</b>と<b>好感度${FAVOR_CLEAR}以上</b>を両方達成できなければ、事務所との契約は打ち切り――。</p>
-    <div class="carry">${S.start===S2_FRESH?"スタート時のフォロワー":"STAGE 1 から引き継いだフォロワー"} <b>${fmt(S.followers)}人</b></div>
+    <div class="carry">${S.start===S2_FRESH?"スタート時のフォロワー":"STAGE 1 から引き継いだフォロワー"} <b>${fmt(S.followers)}人</b><br>事務所の売り出しで、好感度 <b>${S2_FAVOR0}</b> からスタート</div>
     <ul>
       <li>流れは STAGE 1 と同じ。<b>自動スロット → 投稿文4択 → 結果</b></li>
       <li>💗 <b>好感度</b>（0〜100）：バズで上がり、炎上で大きく下がる。高いほどフォロワーが伸びやすく、70以上だと<b>仕事のオファー</b>が舞い込むことも</li>
